@@ -38,11 +38,10 @@ batch_correction = function(mat = NULL,meta = NULL,method,batch.1 = NULL,batch.2
       total_covariates <- paste0(treatment,collapse = "+")
       model_matrix <- stats::model.matrix(reformulate(total_covariates), data = as.data.frame(meta))
     }
-
     batch_corrected_list$limma_corrected <- limma::removeBatchEffect(
       mat,
-      batch = meta[,batch.1],
-      batch2 = NULL,
+      batch = if(is.null(batch.1)) NULL else {meta[,batch.1]},
+      batch2 = if(is.null(batch.2)) NULL else {meta[,batch.2]},
       covariates = model_matrix
     )
 
