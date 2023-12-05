@@ -10,8 +10,9 @@ batch_correction(
   method,
   batch.1 = NULL,
   batch.2 = NULL,
+  log2_tranformed = TRUE,
   treatment = NULL,
-  housekeeping,
+  housekeeping = NULL,
   k = 2,
   drop = 0,
   center = FALSE,
@@ -30,6 +31,8 @@ batch_correction(
 \item{batch.1}{Column name from the meta file of the column that will be used for batch one information}
 
 \item{batch.2}{Column name from the meta file of the column that will be used for batch two information}
+
+\item{log2_tranformed}{logical whether the data is alrady transformed}
 
 \item{treatment}{Column name from the meta file of the column that will be used for treatment information}
 

@@ -1,0 +1,48 @@
+---
+title: "Using BatchFlex to Perform Batch Correction"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using BatchFlex to Perform Batch Correction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Background 
+
+- importance of adjusting for batches
+- tools out there right now to do it - they're separate; bringing them together provides value to researchers
+
+## Methods
+
+- combat
+- RUVg
+- Limma
+- etc
+
+## Using BatchFlex
+
+**don't know voice liked for vignettes**
+
+```{r setup}
+library(BATCHFLEX)
+```
+
+Package has example data
+
+```{r}
+#load(example_meta)
+#load(example_mat)
+```
+
+RUVg takes in house keeping genes to for.... BatchFlex has a few house keeping genes to select from for both mouse and human.
+
+**list the options**
+
+
