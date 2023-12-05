@@ -1,1 +1,1 @@
-# BATCH-FLEX
+# BATCH-FLEX Pipeline Mode
