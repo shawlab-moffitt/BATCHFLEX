@@ -19,16 +19,17 @@
 #'
 #' @examples
 #' set.seed(101)
-batch_correction = function(mat = NULL,meta = NULL,method,batch.1 = NULL,batch.2 = NULL,treatment = NULL,housekeeping,
+batch_correction = function(mat = NULL,meta = NULL,method,batch.1 = NULL,batch.2 = NULL,treatment = NULL,housekeeping = NULL,
                             k = 2,drop = 0,center = FALSE,round = FALSE,tolerance = 1e-8,par.prior = TRUE) {
 
   if (is.null(mat)) stop("Must provide matrix")
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
   if (is.null(meta)) stop("Must provide meta data")
   if (!all(method %in% c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg"))) stop("Batch correction methods not found")
-  if (is.null(housekeeping)) stop("Must provide name of housekeeping gene set or vector of housekeeping genes")
+  #if (!is.null(housekeeping)) stop("Must provide name of housekeeping gene set or vector of housekeeping genes")
 
-  meta <- meta[match(colnames(mat), meta[,1]),]
+
+  meta <- meta[match(colnames(mat), meta[[1]]),]
   batch_corrected_list <- list()
   if ("Limma" %in% method){
     if (is.null(treatment)){
@@ -37,16 +38,17 @@ batch_correction = function(mat = NULL,meta = NULL,method,batch.1 = NULL,batch.2
       total_covariates <- paste0(treatment,collapse = "+")
       model_matrix <- stats::model.matrix(reformulate(total_covariates), data = as.data.frame(meta))
     }
+
     batch_corrected_list$limma_corrected <- limma::removeBatchEffect(
       mat,
       batch = meta[,batch.1],
-      batch2 = meta[,batch.2],
+      batch2 = NULL,
       covariates = model_matrix
     )
 
   }
   if("ComBat" %in% method){
-    if (is.null(batch.1)) {
+    if (!is.null(batch.1)) {
       batch_combat <- meta[,batch.1]
       modcombat <-  stats::model.matrix(~1, data = as.data.frame(meta))
       batch_corrected_list$ComBat_corrected <- sva::ComBat(
@@ -58,7 +60,7 @@ batch_correction = function(mat = NULL,meta = NULL,method,batch.1 = NULL,batch.2
     }
   }
   if("Mean Centering" %in% method){
-    if (is.null(batch.1)) {
+    if (!is.null(batch.1)) {
       mean_centering_batch = meta[,batch.1]
       mean_centering_data = t(mat)
       mean_center <- bapred::meancenter(as.matrix(mean_centering_data), as.factor(mean_centering_batch))
