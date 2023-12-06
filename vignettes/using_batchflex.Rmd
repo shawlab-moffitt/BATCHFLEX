@@ -21,16 +21,14 @@ knitr::opts_chunk$set(
 
 ## Methods
 
-- Limma
-- ComBat
-- Mean Centering
-- ComBatseq
-- Harman
-- RUVg
+- Limma (`limma::removeBatchEffect`)
+- ComBat (`sva::ComBat`)
+- Mean Centering (`bapred::meancenter`)
+- ComBatseq (`sva::ComBat_seq`)
+- Harman (`Harman::harman`)
+- RUVg (`RUVSeq::RUVg`)
 
 ## Using BatchFlex
-
-**don't know voice liked for vignettes**
 
 ```{r setup}
 library(BATCHFLEX)
@@ -41,7 +39,7 @@ library(ggpubr)
 
 ### Example Data
 
-Package has example data from several GEO studies that can be explored in the `?example_mat` help page. The number of samples was subset to include 48 to keep processing time and data size small. The data object `example_mat` includes the expression data for these 48 samples where the samples are in columns and genes in the rows. Sample level information can be found in `example_meta` like the cell type the sample is and the study from which it came. 
+`BATCHFLEX` has example data from several GEO studies that can be explored in the `?example_mat` help page. The number of samples was subset to include 48 to keep processing time and data size small. The data object `example_mat` includes the expression data for these 48 samples where the samples are in columns and genes in the rows. Sample level information can be found in `example_meta` such as the cell type the sample is and the study from which it came. 
 
 ```{r}
 data(example_meta)
@@ -52,12 +50,19 @@ data(example_mat)
 
 RUVg takes in house keeping genes to for.... BatchFlex has a few house keeping genes to select from for both mouse and human.
 
+Mouse:
+
+Human: 
+- `data(eisenberg)`
+- `data(lin500)`
+- `data(hsiao)`
+
 The important parameters for adjusted batches are the expression matrix, the meta data associated with those samples, and which methods to use for adjustment. Each method has slightly different parameters that are required. 
 
 ```{r}
 adjusted_data = batch_correction(mat = example_mat,
                                  meta = example_meta,
-                                 method = c("Limma", "ComBat", "Mean Centering"),
+                                 method = c("Limma", "ComBat"),
                                  batch.1 = "Study",
                                  log2_transformed = TRUE)
 ```

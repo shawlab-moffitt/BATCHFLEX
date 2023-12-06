@@ -26,9 +26,9 @@ plot_umaps = function(adjusted_list, meta, color = NULL, method = NULL){
   })
 
   plotlist = lapply(c("Unadjusted", method), function(x){
-    bind_cols(meta,
+    dplyr::bind_cols(meta,
               as.data.frame(umap_res[[x]]$layout) %>%
-                rename("x" = 1, "y" = 2)) %>%
+                dplyr::rename("x" = 1, "y" = 2)) %>%
       ggplot(aes(x = x, y = y)) +
       geom_point(aes(color = get(color))) +
       theme_bw() +
