@@ -3,7 +3,7 @@
 \docType{data}
 \name{hsaio}
 \alias{hsaio}
-\title{Eisenberg's housekeeping genes}
+\title{HSAIO's housekeeping genes}
 \format{
 \subsection{\code{hsaio}}{
 
@@ -17,6 +17,6 @@ a vector with house keeping genes
 hsaio
 }
 \description{
-Eisenberg's housekeeping genes
+HSAIO's housekeeping genes
 }
 \keyword{datasets}

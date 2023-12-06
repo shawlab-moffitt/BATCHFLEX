@@ -3,7 +3,7 @@
 \docType{data}
 \name{lin500}
 \alias{lin500}
-\title{Eisenberg's housekeeping genes}
+\title{LIN500's housekeeping genes}
 \format{
 \subsection{\code{lin500}}{
 
@@ -17,6 +17,6 @@ a vector with house keeping genes
 lin500
 }
 \description{
-Eisenberg's housekeeping genes
+LIN500's housekeeping genes
 }
 \keyword{datasets}
