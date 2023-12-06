@@ -4,7 +4,7 @@
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param batch.1 Column name from the meta file of the column that will be used for batch one information
 #' @param batch.2 Column name from the meta file of the column that will be used for batch two information
-#' @param log2_tranformed logical whether the data is alrady transformed
+#' @param log2_transformed logical whether the data is alrady transformed
 #' @param treatment Column name from the meta file of the column that will be used for treatment information
 #' @param housekeeping Name of housekeeping gene set or character vector of housekeeping genes
 #' @param k Used in the RUVg method, the number of factors of unwanted variation to be estimated from the data
@@ -13,7 +13,7 @@
 #' @param round Used in the RUVg method, if TRUE, the normalized measures are rounded to form pseudo-counts
 #' @param tolerance Used in the RUVg method, tolerance in the selection of the number of positive singular values, i.e., a singular value must be larger than tolerance to be considered positive
 #' @param par.prior Used in the ComBat method, TRUE indicates parametric adjustments will be used, FALSE indicates non-parametric adjustments will be used
-#' @param method A character vector of batch correction methods
+#' @param method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg")
 #'
 #' @return List object of length of method
 #' @export
@@ -25,7 +25,7 @@ batch_correction = function(mat = NULL,
                             method,
                             batch.1 = NULL,
                             batch.2 = NULL,
-                            log2_tranformed = TRUE,
+                            log2_transformed = TRUE,
                             treatment = NULL,
                             housekeeping = NULL,
                             k = 2,
@@ -40,7 +40,7 @@ batch_correction = function(mat = NULL,
   if (is.null(meta)) stop("Must provide meta data")
   if (!all(method %in% c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg"))) stop("Batch correction methods not found")
   #if (!is.null(housekeeping)) stop("Must provide name of housekeeping gene set or vector of housekeeping genes")
-  if(method == "all") method = c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg")
+  if("all" %in% method) method = c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg")
   if(!is.null(batch.1))
     if(!(batch.1 %in% colnames(meta)))
         stop("batch.1 needs to be a column name in the metadata")
@@ -52,81 +52,30 @@ batch_correction = function(mat = NULL,
 
   meta <- meta[match(colnames(mat), meta[[1]]),]
   batch_corrected_list <- list()
+  batch_corrected_list$Unadjusted = mat
   if ("Limma" %in% method){
-    if (is.null(treatment)){
-      model_matrix <- NULL
-    } else {
-      total_covariates <- paste0(treatment,collapse = "+")
-      model_matrix <- stats::model.matrix(reformulate(total_covariates), data = as.data.frame(meta))
-    }
-    #get the values associated with batch 1 and batch 2
-    #input for 'removeBatchEffect is vectors
-    batch.1 = if(is.null(batch.1)) NULL else {meta[,batch.1]}
-    batch.2 = if(is.null(batch.2)) NULL else {meta[,batch.2]}
-    batch_corrected_list$limma_corrected <- limma::removeBatchEffect(
-      if(!log2_tranformed) log2(mat) else {mat},
-      batch = batch.1,
-      batch2 = batch.2,
-      covariates = model_matrix
-    )
-
+    cat("\tAdjusting Limma\n")
+    batch_corrected_list$Limma <- adjust_limma(mat, meta, treatment, batch.1, batch.2)
   }
   if("ComBat" %in% method){
-    if (is.null(batch.1)) stop("ComBat requires a batch.1 input")
-    batch_combat <- meta[,batch.1]
-    modcombat <-  stats::model.matrix(~1, data = as.data.frame(meta))
-    batch_corrected_list$ComBat_corrected <- sva::ComBat(
-      dat = if(!log2_tranformed) log2(mat) else {mat},
-      batch = batch_combat,
-      mod = modcombat,
-      par.prior = par.prior
-    )
+    cat("\tAdjusting ComBat\n")
+    batch_corrected_list$ComBat = adjust_combat(mat, meta, batch.1, log2_transformed, par.prior)
   }
   if("Mean Centering" %in% method){
-    if (is.null(batch.1)) stop("Mean Centering requires a batch.1 input")
-    mean_centering_batch = meta[,batch.1]
-    mean_centering_data = t(if(!log2_tranformed) log2(mat) else {mat})
-    mean_center <- bapred::meancenter(as.matrix(mean_centering_data), as.factor(mean_centering_batch))
-    batch_corrected_list$mean_center_correction <- as.data.frame(t(mean_center$xadj))
+    cat("\tAdjusting Mean Centering\n")
+    batch_corrected_list$`Mean Centering` = adjust_mean_centering(mat, meta, batch.1, log2_transformed)
   }
   if("ComBatseq" %in% method){
-    if (is.null(treatment)){
-      model_matrix <- NULL
-    } else {
-      total_covariates <- paste0(treatment,collapse = "+")
-      model_matrix <- stats::model.matrix(reformulate(total_covariates), data = as.data.frame(meta))
-    }
-    combatseq_corrected <- sva::ComBat_seq(
-      if(!log2_tranformed) log2(mat) else {mat},
-      batch = meta[,batch.1],
-      covar_mod = model_matrix
-    )
-    batch_corrected_list$combatseq_corrected <- log2(combatseq_corrected + 1)
+    cat("\tAdjusting ComBatseq\n")
+    batch_corrected_list$ComBatseq <- adjust_combatseq(mat, meta, batch.1, treatment, log2_transformed)
   }
   if("Harman" %in% method){
-    harman_correction_PCA <- Harman::harman(
-      if(!log2_tranformed) log2(mat) else {mat},
-      expt = meta[,treatment],
-      batch = meta[,batch.1],
-      limit = 0.95,
-      printInfo = T
-    )
-    batch_corrected_list$harman_corrected <- Harman::reconstructData(harman_correction_PCA)
+    cat("\tAdjusting Harman\n")
+    batch_corrected_list$Harman <- adjust_harman(mat, meta, batch.1, treatment, log2_transformed)
   }
   if("RUVg" %in% method){
-    h_i_m = housekeeping %in% row.names(mat)
-    message(sum(h_i_m), " genes of ", length(h_i_m), " found in data")
-    RUVg_correction <- RUVSeq::RUVg(
-      if(!log2_tranformed) log2(mat) else {mat},
-      cIdx = housekeeping,
-      k = k,
-      drop = drop,
-      center = center,
-      round = round,
-      tolerance = tolerance,
-      isLog = T
-    )
-    batch_corrected_list$RUVg_corrected <- as.data.frame(RUVg_correction$normalizedCounts)
+    cat("\tAdjusting RUVg\n")
+    batch_corrected_list$RUVg <- adjust_ruvg(mat, housekeeping, k, drop, center, round, tolerannce)
   }
   return(batch_corrected_list)
 }

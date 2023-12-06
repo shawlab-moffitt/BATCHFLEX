@@ -10,7 +10,7 @@ batch_correction(
   method,
   batch.1 = NULL,
   batch.2 = NULL,
-  log2_tranformed = TRUE,
+  log2_transformed = TRUE,
   treatment = NULL,
   housekeeping = NULL,
   k = 2,
@@ -26,13 +26,13 @@ batch_correction(
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
-\item{method}{A character vector of batch correction methods}
+\item{method}{A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg")}
 
 \item{batch.1}{Column name from the meta file of the column that will be used for batch one information}
 
 \item{batch.2}{Column name from the meta file of the column that will be used for batch two information}
 
-\item{log2_tranformed}{logical whether the data is alrady transformed}
+\item{log2_transformed}{logical whether the data is alrady transformed}
 
 \item{treatment}{Column name from the meta file of the column that will be used for treatment information}
 
