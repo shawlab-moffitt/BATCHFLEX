@@ -18,16 +18,20 @@ RoxygenNote: 7.2.3
 Imports:
     dplyr,
     tidyr,
+    ggplot2,
     limma,
     RUVSeq,
     immunedeconv,
     sva,
     Harman,
-    affyPLM
+    affyPLM,
+    umap,
+    ggpubr
 Depends: 
     R (>= 2.10)
 LazyData: true
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    ComplexHeatmap
 VignetteBuilder: knitr
