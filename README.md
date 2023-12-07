@@ -1,1 +1,1 @@
-# BATCH-FLEX Pipeline Mode
+# BATCH-FLEX R package
