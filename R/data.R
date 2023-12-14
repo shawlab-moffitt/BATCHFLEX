@@ -1,6 +1,6 @@
 #' Eisenberg's housekeeping genes
 #'
-#' @format ## `eisenbert`
+#' @format ## `eisenberg`
 #' a vector with house keeping genes
 #'
 #' @source <https://pubmed.ncbi.nlm.nih.gov/23810203/>
@@ -8,11 +8,11 @@
 
 #' HSAIO's housekeeping genes
 #'
-#' @format ## `hsaio`
+#' @format ## `hsiao`
 #' a vector with house keeping genes
 #'
 #' @source <https://www.gsea-msigdb.org/gsea/msigdb/cards/HSIAO_HOUSEKEEPING_GENES>
-"hsaio"
+"hsiao"
 
 #' LIN500's housekeeping genes
 #'
@@ -21,6 +21,30 @@
 #'
 #' @source <https://pubmed.ncbi.nlm.nih.gov/23810203/>
 "lin500"
+
+#' Eisenberg's mouse housekeeping genes
+#'
+#' @format ## `eisenberg_mouse`
+#' a vector with house keeping genes
+#'
+#' @source <https://pubmed.ncbi.nlm.nih.gov/23810203/>
+"eisenberg_mouse"
+
+#' HSAIO's mouse housekeeping genes
+#'
+#' @format ## `hsiao_mouse`
+#' a vector with house keeping genes
+#'
+#' @source <https://www.gsea-msigdb.org/gsea/msigdb/cards/HSIAO_HOUSEKEEPING_GENES>
+"hsiao_mouse"
+
+#' LIN500's mouse housekeeping genes
+#'
+#' @format ## `lin500_mouse`
+#' a vector with house keeping genes
+#'
+#' @source <https://pubmed.ncbi.nlm.nih.gov/23810203/>
+"lin500_mouse"
 
 #' Example expression data
 #'
