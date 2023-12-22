@@ -1,0 +1,5 @@
+^renv$
+^renv\.lock$
+^BATCHFLEX\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$

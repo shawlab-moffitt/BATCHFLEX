@@ -1,0 +1,86 @@
+---
+title: "Using BatchFlex to Perform Batch Correction"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using BatchFlex to Perform Batch Correction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Background 
+
+- importance of adjusting for batches
+- tools out there right now to do it - they're separate; bringing them together provides value to researchers
+
+## Methods
+
+- Limma (`limma::removeBatchEffect`)
+- ComBat (`sva::ComBat`)
+- Mean Centering (`bapred::meancenter`)
+- ComBatseq (`sva::ComBat_seq`)
+- Harman (`Harman::harman`)
+- RUVg (`RUVSeq::RUVg`)
+
+## Using BatchFlex
+
+```{r setup}
+library(BATCHFLEX)
+library(ggplot2)
+library(umap)
+library(ggpubr)
+```
+
+### Example Data
+
+`BATCHFLEX` has example data from several GEO studies that can be explored in the `?example_mat` help page. The number of samples was subset to include 48 to keep processing time and data size small. The data object `example_mat` includes the expression data for these 48 samples where the samples are in columns and genes in the rows. Sample level information can be found in `example_meta` such as the cell type the sample is and the study from which it came. 
+
+```{r}
+data(example_meta)
+data(example_mat)
+```
+
+### Batch Correcting
+
+RUVg takes in house keeping genes to for.... BatchFlex has a few house keeping genes to select from for both mouse and human.
+
+Mouse:
+
+Human: 
+- `data(eisenberg)`
+- `data(lin500)`
+- `data(hsiao)`
+
+The important parameters for adjusted batches are the expression matrix, the meta data associated with those samples, and which methods to use for adjustment. Each method has slightly different parameters that are required. 
+
+```{r}
+adjusted_data = batch_correction(mat = example_mat,
+                                 meta = example_meta,
+                                 method = c("Limma", "ComBat"),
+                                 batch.1 = "Study",
+                                 log2_transformed = TRUE)
+```
+
+### Visualize
+
+The function `plot_umaps` takes in the list from `batch_correction` and then creates a plot list for all of the method that are specified. The `color` parameter can be used to color the points based on a column in the meta data that you are interested in. Here we will look at "Study" since that is what we adjusted for with in the batch correction function. This function is a nice wrapper for `ggplot2`, meaning that the output plots can then be further colored/added to the same way that one would with other `ggplot2` plots.
+
+```{r}
+plots = plot_umaps(adjusted_list = adjusted_data,
+                   meta = example_meta,
+                   color = "Study",
+                   method = "Limma")
+```
+
+`ggpubr` has a functioned called `ggarrange` that allows for combining plots into plates, so can visualize both the unadjusted and the Limma adjusted expression together. This allows us to see the impact that 1) the study has on the expression profiles and 2) the 
+
+```{r, fig.width = 8}
+ggarrange(plots$Unadjusted, plots$Limma, common.legend = TRUE)
+```
+
