@@ -27,5 +27,8 @@ repos = NULL, type = 'source')
 #https://bioconductor.org/packages/release/bioc/html/RUVSeq.html
 install.packages("https://bioconductor.org/packages/release/bioc/bin/macosx/big-sur-x86_64/contrib/4.3/RUVSeq_1.36.0.tgz",
 repos = NULL, type = 'source')
+#https://github.com/omnideconv/immunedeconv
+devtools::install_github("omnideconv/immunedeconv")
+
 devtools::install_github('shawlab-moffitt/BATCHFLEX')
 ```
