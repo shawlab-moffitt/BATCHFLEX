@@ -32,7 +32,9 @@ devtools::install_github("omnideconv/immunedeconv")
 #https://bioconductor.org/packages/release/bioc/html/Harman.html
 install.packages("https://bioconductor.org/packages/release/bioc/bin/macosx/big-sur-x86_64/contrib/4.3/Harman_1.30.0.tgz",
 repos = NULL, type = 'source')
-
+#https://www.bioconductor.org/packages/release/bioc/html/affyPLM.html
+install.packages("https://www.bioconductor.org/packages/release/bioc/bin/macosx/big-sur-x86_64/contrib/4.3/affyPLM_1.78.0.tgz",
+repos = NULL, type = 'source')
 
 devtools::install_github('shawlab-moffitt/BATCHFLEX')
 ```
