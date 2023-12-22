@@ -10,7 +10,7 @@
 a data frame containing sample level information line name and study
 \describe{
 \item{Name}{sample name}
-\itme{Study}{GSE study that the sampel came from}
+\item{Study}{GSE study that the sampel came from}
 \item{CellType}{cell type that was assigned to the sample}
 }
 }

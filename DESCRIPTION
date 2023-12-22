@@ -3,13 +3,13 @@ Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
     c(
-      person("Alyssa", "Obermeyer", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID")),
-      person("Josh", "Obermeyer", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+      person("Alyssa", "Obermeyer", role = c("aut"),
+      email = "Alyssa.Obermeyer@moffitt.org",
+           comment = c(ORCID = "")),
+      person("Josh", "Davis", role = c("aut", "cre"),
+      email = "Joshua.Davis@moffitt.org",
+           comment = c(ORCID = ""))
     )
-    person("Alyssa", "Obermeyer", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
