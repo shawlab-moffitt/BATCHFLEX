@@ -26,7 +26,8 @@ Imports:
     Harman,
     affyPLM,
     umap,
-    ggpubr
+    ggpubr,
+    magrittr
 Depends: 
     R (>= 2.10)
 LazyData: true
