@@ -1,4 +1,4 @@
-# BATCH-FLEX
+# BatchFLEX
 
 An R package for correct batch effects in numeric data (typically RNA sequencing data). Companion to the BatchFlex Shiny Application at:
 
