@@ -39,4 +39,4 @@ repos = NULL, type = 'source')
 devtools::install_github('shawlab-moffitt/BATCHFLEX')
 ```
 
-test2
+test3
