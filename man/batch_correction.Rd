@@ -32,7 +32,7 @@ batch_correction(
 
 \item{batch.2}{Column name from the meta file of the column that will be used for batch two information}
 
-\item{log2_transformed}{logical whether the data is alrady transformed}
+\item{log2_transformed}{logical whether the data is already transformed}
 
 \item{treatment}{Column name from the meta file of the column that will be used for treatment information}
 
