@@ -23,7 +23,7 @@ preprocess_matrix = function(data = NULL,
   if (raw.counts)
     if (!raw.norm.method %in% c("TMM","upperquartile")) stop("raw.norm.method not found")
   #if (is.data.frame(data))
-    if (is.character(data[,1]) & all(apply(data[,2:ncol(data)],2,is.numeric))) {
+    if (is.character(as.data.frame(data)[,1]) & all(apply(data[,2:ncol(data)],2,is.numeric))) {
       data <- as.data.frame(data)
       if (TRUE %in% duplicated(data[, 1])) {
         if (remove.duplicates) {
