@@ -2,6 +2,7 @@
 #'
 #' @param mat Numeric matrix with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
+#' @param method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg")
 #' @param batch.1 Column name from the meta file of the column that will be used for batch one information
 #' @param batch.2 Column name from the meta file of the column that will be used for batch two information
 #' @param log2_transformed logical whether the data is already transformed
@@ -13,7 +14,6 @@
 #' @param round Used in the RUVg method, if TRUE, the normalized measures are rounded to form pseudo-counts
 #' @param tolerance Used in the RUVg method, tolerance in the selection of the number of positive singular values, i.e., a singular value must be larger than tolerance to be considered positive
 #' @param par.prior Used in the ComBat method, TRUE indicates parametric adjustments will be used, FALSE indicates non-parametric adjustments will be used
-#' @param method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg")
 #'
 #' @return List object of length of method
 #' @export
@@ -34,7 +34,7 @@ batch_correction = function(mat = NULL,
                             round = FALSE,
                             tolerance = 1e-8,
                             par.prior = TRUE) {
-  #checks to make sure teh data is in the right format
+  #checks to make sure the data is in the right format
   if (is.null(mat)) stop("Must provide matrix")
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
   if (is.null(meta)) stop("Must provide meta data")
