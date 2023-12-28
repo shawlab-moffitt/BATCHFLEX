@@ -40,7 +40,7 @@ preprocess_matrix = function(data = NULL,
       rownames(data) <- data[,1]
       data <- data[,-1]
       mat <- as.matrix(data)
-    } else if (all(apply(mat,2,is.numeric))) {
+    } else if (all(apply(data,2,is.numeric))) {
       mat <- as.matrix(data)
     } else {
       stop("Must provide count data in one of the following formats:\n\tA numeric matrix\n\tA numeric data frame\n\tA dataframe with the first column consisting of features and the following columns of numeric count data")
