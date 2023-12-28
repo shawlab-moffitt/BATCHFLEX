@@ -13,7 +13,8 @@
 #' @param round Used in the RUVg method, if TRUE, the normalized measures are rounded to form pseudo-counts
 #' @param tolerance Used in the RUVg method, tolerance in the selection of the number of positive singular values, i.e., a singular value must be larger than tolerance to be considered positive
 #' @param par.prior Used in the ComBat method, TRUE indicates parametric adjustments will be used, FALSE indicates non-parametric adjustments will be used
-#' @param method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg")
+#' @param method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA)
+#' @param sva_nsv_method Input method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek"
 #'
 #' @return List object of length of method
 #' @export
@@ -33,14 +34,15 @@ batch_correction = function(mat = NULL,
                             center = FALSE,
                             round = FALSE,
                             tolerance = 1e-8,
-                            par.prior = TRUE) {
+                            par.prior = TRUE,
+                            sva_nsv_method = "be") {
   #checks to make sure teh data is in the right format
   if (is.null(mat)) stop("Must provide matrix")
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
   if (is.null(meta)) stop("Must provide meta data")
-  if (!all(method %in% c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg"))) stop("Batch correction methods not found")
+  if (!all(method %in% c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA"))) stop("Batch correction methods not found")
   #if (!is.null(housekeeping)) stop("Must provide name of housekeeping gene set or vector of housekeeping genes")
-  if("all" %in% method) method = c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg")
+  if("all" %in% method) method = c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA")
   if(!is.null(batch.1))
     if(!(batch.1 %in% colnames(meta)))
         stop("batch.1 needs to be a column name in the metadata")
@@ -76,6 +78,10 @@ batch_correction = function(mat = NULL,
   if("RUVg" %in% method){
     cat("\tAdjusting RUVg\n")
     batch_corrected_list$RUVg <- adjust_ruvg(mat, housekeeping, k, drop, center, round, tolerannce)
+  }
+  if("SVA" %in% method){
+    cat("\tAdjusting SVA\n")
+    batch_corrected_list$SVA <- adjust_sva(mat, meta, treatment, sva_nsv_method)
   }
   return(batch_corrected_list)
 }

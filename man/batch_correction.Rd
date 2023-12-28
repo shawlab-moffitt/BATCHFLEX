@@ -18,7 +18,8 @@ batch_correction(
   center = FALSE,
   round = FALSE,
   tolerance = 1e-08,
-  par.prior = TRUE
+  par.prior = TRUE,
+  sva_nsv_method = "be"
 )
 }
 \arguments{
@@ -26,7 +27,7 @@ batch_correction(
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
-\item{method}{A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg")}
+\item{method}{A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA)}
 
 \item{batch.1}{Column name from the meta file of the column that will be used for batch one information}
 
@@ -49,6 +50,8 @@ batch_correction(
 \item{tolerance}{Used in the RUVg method, tolerance in the selection of the number of positive singular values, i.e., a singular value must be larger than tolerance to be considered positive}
 
 \item{par.prior}{Used in the ComBat method, TRUE indicates parametric adjustments will be used, FALSE indicates non-parametric adjustments will be used}
+
+\item{sva_nsv_method}{Input method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek"}
 }
 \value{
 List object of length of method
