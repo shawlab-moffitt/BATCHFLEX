@@ -1,0 +1,64 @@
+evaluation_cluster_analysis = function(mat = NULL,
+                                    batch_correction = NULL,
+                                    cluster_analysis){
+  if("all" %in% cluster_analysis) cluster_analysis = c("wss", "silhouette", "dunn")
+  if(!all(cluster_analysis %in% c("wss", "silhouette", "dunn"))){
+    stop("Cluster analysis not found")
+  }
+  cluster_plot_list <- list()
+  if ("wss" %in% cluster_analysis){
+    cluster_plot_list$uncwss <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "wss", verbose = T)
+    if (!is.null(batch_correction)){
+      cluster_plot_list$corwss <- factoextra::fviz_nbclust(x = t(batch_correction), FUNcluster = kmeans, method = "wss", verbose = T)
+    }
+  }
+  if ("silhouette" %in% cluster_analysis){
+    cluster_plot_list$UNCSIL <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "silhouette", verbose = T)
+    if (!is.null(batch_correction)){
+      cluster_plot_list$corsil <- factoextra::fviz_nbclust(x = t(batch_correction), FUNcluster = kmeans, method = "silhouette", verbose = T)
+    }
+  }
+  if ("dunn" %in% cluster_analysis){
+    uncorrected_dunn_k <- c(2:10)
+    uncorrected_dunnin <- c()
+    for (i in dunn_k){
+      uncorrected_dunnin[i] <- clValid::dunn(
+        distance = dist(t(mat)),
+        clusters = kmeans(t(mat), i)$cluster
+      )
+    }
+    uncorrected_dunn_index_analysis <- as.data.frame(cbind(uncorrected_dunn_k, uncorrected_dunnin[-1]))
+    colnames(uncorrected_dunn_index_analysis) <- c("cluster_number", "dunn_index")
+    cluster_plot_list$uncdunn <- ggplot(data = uncorrected_dunn_index_analysis, mapping = aes(x = cluster_number, y = dunn_index))+
+      geom_point(color = "dodgerblue1")+
+      geom_line(color = "dodgerblue1")+
+      geom_vline(
+        xintercept = uncorrected_dunn_index_analysis$cluster_number[which(max(uncorrected_dunn_index_analysis$dunn_index) == uncorrected_dunn_index_analysis$dunn_index)],
+        color = "dodgerblue1",
+        linetype = 2
+      ) +
+      theme_classic()
+    if (!is.null(batch_correction)){
+      corrected_dunn_k <- c(2:10)
+      corrected_dunnin <- c()
+      for (i in dunn_k){
+        corrected_dunnin[i] <- clValid::dunn(
+          distance = dist(t(mat)),
+          clusters = kmeans(t(mat), i)$cluster
+        )
+      }
+      corrected_dunn_index_analysis <- as.data.frame(cbind(corrected_dunn_k, corrected_dunnin[-1]))
+      colnames(corrected_dunn_index_analysis) <- c("cluster_number", "dunn_index")
+      cluster_plot_list$cordunn <- ggplot(data = corrected_dunn_index_analysis, mapping = aes(x = cluster_number, y = dunn_index))+
+        geom_point(color = "dodgerblue1")+
+        geom_line(color = "dodgerblue1")+
+        geom_vline(
+          xintercept = corrected_dunn_index_analysis$cluster_number[which(max(corrected_dunn_index_analysis$dunn_index) == corrected_dunn_index_analysis$dunn_index)],
+          color = "dodgerblue1",
+          linetype = 2
+        ) +
+        theme_classic()
+    }
+  }
+  return(cluster_plot_list)
+}
