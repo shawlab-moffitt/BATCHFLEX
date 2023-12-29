@@ -38,6 +38,7 @@ batch_correction = function(mat = NULL,
   if (is.null(mat)) stop("Must provide matrix")
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
   if (is.null(meta)) stop("Must provide meta data")
+  if (!all(meta[,1] %in% colnames(mat))) stop("Sample names must match between matrix and meta data")
   if("all" %in% method) method = c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg")
   if (!all(method %in% c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg"))) stop("Batch correction methods not found")
   #if (!is.null(housekeeping)) stop("Must provide name of housekeeping gene set or vector of housekeeping genes")
