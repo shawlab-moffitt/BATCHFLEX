@@ -1,12 +1,12 @@
-evaluation_pca = function(mat = NULL,
-                          batch_correction = NULL,
-                          meta = NULL,
+evaluation_pca = function(mat,
+                          batch_correction,
+                          meta,
                           annotation,
-                          uncorrected_cluster_number = NULL,
-                          corrected_cluster_number = NULL,
-                          batch = NULL,
-                          variable_of_interest = NULL,
-                          color_by = "batch"){
+                          uncorrected_cluster_number,
+                          corrected_cluster_number,
+                          batch,
+                          variable_of_interest,
+                          color_by){
   pca_plot_list <- list()
   if("all" %in% annotation) annotation = c("cluster", "meta")
   if (!all(annotation %in% c("cluster", "meta"))){

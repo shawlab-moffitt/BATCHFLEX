@@ -1,6 +1,6 @@
-evaluation_cluster_analysis = function(mat = NULL,
-                                       batch_correction = NULL,
-                                       cluster_analysis){
+evaluation_cluster_analysis = function(mat,
+                                       batch_correction,
+                                       cluster_analysis_method){
   if("all" %in% cluster_analysis) cluster_analysis = c("wss", "silhouette", "dunn")
   if(!all(cluster_analysis %in% c("wss", "silhouette", "dunn"))){
     stop("Cluster analysis not found")
