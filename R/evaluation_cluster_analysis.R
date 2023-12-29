@@ -13,7 +13,7 @@ evaluation_cluster_analysis = function(mat = NULL,
     }
   }
   if ("silhouette" %in% cluster_analysis){
-    cluster_plot_list$UNCSIL <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "silhouette", verbose = T)
+    cluster_plot_list$uncsil <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "silhouette", verbose = T)
     if (!is.null(batch_correction)){
       cluster_plot_list$corsil <- factoextra::fviz_nbclust(x = t(batch_correction), FUNcluster = kmeans, method = "silhouette", verbose = T)
     }
