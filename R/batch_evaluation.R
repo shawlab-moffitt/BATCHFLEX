@@ -9,10 +9,10 @@ batch_evaluation = function(mat = NULL,
                             variable_of_interest = "CellType",
                             cluster_analysis = NULL,
                             color_by = "batch"){
-  batch_evaluation_list <- list()
+  batch_evaluation_list <- list("Graphs", "Matrices")
   if ("pca" %in% evaluation_method){
     cat("\tConducting PCA analysis\n")
-    batch_evaluation_list$pca <-  evaluation_pca(mat,
+    batch_evaluation_list$Graphs$pca <-  evaluation_pca(mat,
                                                  batch_correction,
                                                  meta,
                                                  annotation,
@@ -24,7 +24,7 @@ batch_evaluation = function(mat = NULL,
   }
   if("cluster_analysis" %in% evaluation_method){
     cat("\tConducting cluster analysis\n")
-    batch_evaluation_list$cluster_analysis <- evaluation_cluster_analysis(mat,
+    batch_evaluation_list$Graphs$cluster_analysis <- evaluation_cluster_analysis(mat,
                                                                           batch_correction,
                                                                           cluster_analysis)
   }
