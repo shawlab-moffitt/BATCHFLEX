@@ -1,6 +1,6 @@
 evaluation_cluster_analysis = function(mat = NULL,
-                                    batch_correction = NULL,
-                                    cluster_analysis){
+                                       batch_correction = NULL,
+                                       cluster_analysis){
   if("all" %in% cluster_analysis) cluster_analysis = c("wss", "silhouette", "dunn")
   if(!all(cluster_analysis %in% c("wss", "silhouette", "dunn"))){
     stop("Cluster analysis not found")
@@ -21,7 +21,7 @@ evaluation_cluster_analysis = function(mat = NULL,
   if ("dunn" %in% cluster_analysis){
     uncorrected_dunn_k <- c(2:10)
     uncorrected_dunnin <- c()
-    for (i in dunn_k){
+    for (i in uncorrected_dunn_k){
       uncorrected_dunnin[i] <- clValid::dunn(
         distance = dist(t(mat)),
         clusters = kmeans(t(mat), i)$cluster
@@ -41,7 +41,7 @@ evaluation_cluster_analysis = function(mat = NULL,
     if (!is.null(batch_correction)){
       corrected_dunn_k <- c(2:10)
       corrected_dunnin <- c()
-      for (i in dunn_k){
+      for (i in corrected_dunn_k){
         corrected_dunnin[i] <- clValid::dunn(
           distance = dist(t(mat)),
           clusters = kmeans(t(mat), i)$cluster

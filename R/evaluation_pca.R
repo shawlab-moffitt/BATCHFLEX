@@ -15,7 +15,7 @@ evaluation_pca = function(mat = NULL,
   if ("cluster" %in% annotation & is.null(uncorrected_cluster_number) ){
     uncorrected_dunn_k <- c(2:10)
     uncorrected_dunnin <- c()
-    for (i in dunn_k){
+    for (i in uncorrected_dunn_k){
       uncorrected_dunnin[i] <- clValid::dunn(
         distance = dist(t(mat)),
         clusters = kmeans(t(mat), i)$cluster
@@ -28,7 +28,7 @@ evaluation_pca = function(mat = NULL,
   if ("cluster" %in% annotation & !is.null(batch_correction) & is.null(corrected_cluster_number) ){
     corrected_dunn_k <- c(2:10)
     corrected_dunnin <- c()
-    for (i in dunn_k){
+    for (i in corrected_dunn_k){
       corrected_dunnin[i] <- clValid::dunn(
         distance = dist(t(batch_correction)),
         clusters = kmeans(t(batch_correction), i)$cluster
@@ -67,14 +67,16 @@ evaluation_pca = function(mat = NULL,
         uncorrected_PCA_data,
         color = batch,
         shape = variable_of_interest
-      )
+      )+
+        ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
     }else if (color_by == "voi"){
       pca_plot_list$uncpcameta <- ggplot2::autoplot(
         uncorrected_PCA,
         uncorrected_PCA_data,
         color = variable_of_interest,
         shape = batch
-      )
+      )+
+        ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
     }
     if (!is.null(batch_correction)){
       corrected_PCA <- stats::prcomp(t(batch_correction), scale. = TRUE)
@@ -85,14 +87,16 @@ evaluation_pca = function(mat = NULL,
           corrected_PCA_data,
           color = batch,
           shape = variable_of_interest
-        )
+        )+
+          ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
       }else if (color_by == "voi"){
         pca_plot_list$corpcameta <- ggplot2::autoplot(
           corrected_PCA,
           corrected_PCA_data,
           color = variable_of_interest,
           shape = batch
-        )
+        )+
+          ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
       }
     }
   }
