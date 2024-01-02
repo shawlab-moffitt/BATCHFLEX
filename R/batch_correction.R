@@ -1,4 +1,4 @@
-#' Batch Correction
+#' Batch Correct
 #'
 #' @param mat Numeric matrix with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
@@ -21,7 +21,7 @@
 #'
 #' @examples
 #' set.seed(101)
-batch_correction = function(mat = NULL,
+batch_correct = function(mat = NULL,
                             meta = NULL,
                             correction_method,
                             batch.1 = NULL,

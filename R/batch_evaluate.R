@@ -1,4 +1,4 @@
-#' Batch Evaluation
+#' Batch Evaluate
 #'
 #' @param mat Numeric matrix after pre-processing with features as rownames and sample names as the column names
 #' @param rawmat Numeric matrix before pre-processing with features as rownames and sample names as the column names
@@ -21,7 +21,7 @@
 #' @export
 #'
 #' @examples
-batch_evaluation = function(mat = NULL,
+batch_evaluate = function(mat = NULL,
                             rawmat = NULL,
                             batch_correction = NULL,
                             meta = NULL,
