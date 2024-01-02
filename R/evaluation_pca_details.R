@@ -1,8 +1,24 @@
+#' Evaluation PCA Details
+#'
+#' @param mat Numeric matrix after pre-processing with features as rownames and sample names as the column names
+#' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
+#' @param batch_correction Numeric matrix following batch correction with features as rownames and sample names as the column names
+#' @param batch Column name from the meta file of the column that will be used for batch information
+#' @param pca_factors Column name from the meta file of the column that will be used to group the summary details of the PCA plot. If NULL, batch is selected
+#'
+#' @return A list object of uncorrected and batch corrected PCA details including a scree plot, a matrix of pca components, a matrix of contributions grouped by factor, and a matrix of contribution counts
+#' @export
+#'
+#' @examples
 evaluation_pca_details <- function(mat,
                                    meta,
                                    batch_correction,
+                                   batch,
                                    pca_factors
 ){
+  if (if.null(pca_factors)){
+    pca_factors <- batch
+  }
 
   pca_details_list <- list()
 
@@ -16,7 +32,7 @@ evaluation_pca_details <- function(mat,
   uncorrected_scree_eig$Dimensions <- gsub("Dim\\.","", rownames(uncorrected_scree_eig))
   uncorrected_scree_eig$`Variance Percent` <- paste0(round(uncorrected_scree_eig$variance.percent,1),"%")
   uncorrected_scree_eig_top10 <- uncorrected_scree_eig[1:10,]
-  pca_details_list$Graphs$uncscree <- ggplot(data=uncorrected_scree_eig_top10, aes(x=reorder(Dimensions,-variance.percent), y=variance.percent)) +
+  pca_details_list$Plots$uncscree <- ggplot(data=uncorrected_scree_eig_top10, aes(x=reorder(Dimensions,-variance.percent), y=variance.percent)) +
     geom_bar(stat="identity", fill="steelblue")+
     theme_minimal() +
     geom_text(aes(label=`Variance Percent`), vjust=-0.3,size=4.5) +
@@ -64,7 +80,7 @@ evaluation_pca_details <- function(mat,
     corrected_scree_eig$Dimensions <- gsub("Dim\\.","", rownames(corrected_scree_eig))
     corrected_scree_eig$`Variance Percent` <- paste0(round(corrected_scree_eig$variance.percent,1),"%")
     corrected_scree_eig_top10 <- corrected_scree_eig[1:10,]
-    pca_details_list$Graphs$corscree <- ggplot(data=corrected_scree_eig_top10, aes(x=reorder(Dimensions,-variance.percent), y=variance.percent)) +
+    pca_details_list$Plots$corscree <- ggplot(data=corrected_scree_eig_top10, aes(x=reorder(Dimensions,-variance.percent), y=variance.percent)) +
       geom_bar(stat="identity", fill="steelblue")+
       theme_minimal() +
       geom_text(aes(label=`Variance Percent`), vjust=-0.3,size=4.5) +

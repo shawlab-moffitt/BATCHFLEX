@@ -1,3 +1,13 @@
+#' Evaluation Cluster Analysis
+#'
+#' @param mat Numeric matrix after pre-processing with features as rownames and sample names as the column names
+#' @param batch_correction Numeric matrix following batch correction with features as rownames and sample names as the column names
+#' @param cluster_analysis_method Used to select cluster analysis method. Elbow = "wss", Silhouette = "silhouette", Dunn = "dunn', all generates plots from each method
+#'
+#' @return A list object of uncorrected and batch corrected cluster plots for each selected cluster analysis method
+#' @export
+#'
+#' @examples
 evaluation_cluster_analysis = function(mat,
                                        batch_correction,
                                        cluster_analysis_method){

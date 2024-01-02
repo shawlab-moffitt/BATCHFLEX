@@ -1,3 +1,15 @@
+#' Evaluation Surrogate Variable Analysis
+#'
+#' @param mat Numeric matrix after pre-processing with features as rownames and sample names as the column names
+#' @param batch_correction Numeric matrix following batch correction with features as rownames and sample names as the column names
+#' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
+#' @param variable_of_interest Column name from the meta file of the column that will be used for the variable of interest information
+#' @param sva_method Used by SVA to generate surrogate variables. Choices are "be" and "leek". Default is set to "be"
+#'
+#' @return A list object of uncorrected and batch corrected probability association plots and surrogate variable matrices
+#' @export
+#'
+#' @examples
 evaluation_sva <- function(mat,
                            batch_correction,
                            meta,
@@ -18,7 +30,7 @@ evaluation_sva <- function(mat,
   )
   uncorrected_SVA_probability_df_longer <- pivot_longer(uncorrected_SVA_probability_df, !Genes, names_to = "variable_type")
   uncorrected_SVA_probability_df_longer <- dplyr::rename(uncorrected_SVA_probability_df_longer, "probability_association_of_each_gene" = "value")
-  evaluation_sva_list$Graphs$uncsvaprob <- ggplot(uncorrected_SVA_probability_df_longer,
+  evaluation_sva_list$Plots$uncsvaprob <- ggplot(uncorrected_SVA_probability_df_longer,
                                                   mapping = aes(x = probability_association_of_each_gene, fill = variable_type, alpha = 0.5)
                                                   )+ geom_density()
   evaluation_sva_list$Matrices$uncsv <- uncorrected_SVA_object$sv
@@ -37,7 +49,7 @@ evaluation_sva <- function(mat,
     )
     corrected_SVA_probability_df_longer <- pivot_longer(corrected_SVA_probability_df, !Genes, names_to = "variable_type")
     corrected_SVA_probability_df_longer <- dplyr::rename(corrected_SVA_probability_df_longer, "probability_association_of_each_gene" = "value")
-    evaluation_sva_list$Graphs$corsvaprob <- ggplot(corrected_SVA_probability_df_longer,
+    evaluation_sva_list$Plots$corsvaprob <- ggplot(corrected_SVA_probability_df_longer,
                                                     mapping = aes(x = probability_association_of_each_gene, fill = variable_type, alpha = 0.5)
     )+ geom_density()
     evaluation_sva_list$Matrices$corsv <- corrected_SVA_object$sv
