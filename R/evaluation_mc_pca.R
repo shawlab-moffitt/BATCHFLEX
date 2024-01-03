@@ -1,10 +1,9 @@
 #' Evaluation Multiple Components Plot
 #'
 #' @param mat Numeric matrix after pre-processing with features as rownames and sample names as the column names
-#' @param rawmat Numeric matrix before pre-processing with features as rownames and sample names as the column names
 #' @param batch_correction Numeric matrix following batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
-#' @param batch Column name from the meta file of the column that will be used for batch information
+#' @param batch.1 Column name from the meta file of the column that will be used for batch information
 #' @param variable_of_interest Column name from the meta file of the column that will be used for the variable of interest information
 #' @param ncomponents Used by the multiple components plot to select the number of principal components that will be plotted. Default is set to 5
 #' @param color_by Used by the multiple components plot to select whether "batch" or "variable_of_interest" will be used to color the individuals. Default is set to "batch"
@@ -14,17 +13,16 @@
 #'
 #' @examples
 evaluation_mc_pca <- function(mat,
-                              rawmat,
                               batch_correction,
                               meta,
-                              batch,
+                              batch.1,
                               variable_of_interest,
                               ncomponents,
                               color_by){
   mc_pca_plot_list <- list()
   color_mc_pca <- c()
   if (color_by == "batch"){
-    color_mc_pca <-  batch
+    color_mc_pca <-  batch.1
   }else if (color_by == "variable_of_interest"){
     color_mc_pca <-  variable_of_interest
   }
@@ -33,7 +31,7 @@ evaluation_mc_pca <- function(mat,
   uncorrected_pca_mc_sce <- SingleCellExperiment::SingleCellExperiment(
     assays = list(counts = as.matrix(unc_mat_pca_mc)),
     colData = meta,
-    rowData = rawmat[,1]
+    rowData = rownames(mat)
   )
   SummarizedExperiment::assay(uncorrected_pca_mc_sce, "logcounts") <- SingleCellExperiment::counts(uncorrected_pca_mc_sce)
   uncorrected_pca_mc_sce <- scater::runPCA(uncorrected_pca_mc_sce, ncomponents = 50)
@@ -48,7 +46,7 @@ evaluation_mc_pca <- function(mat,
     corrected_pca_mc_sce <- SingleCellExperiment::SingleCellExperiment(
       assays = list(counts = as.matrix(cor_mat_pca_mc)),
       colData = meta,
-      rowData = rawmat[,1]
+      rowData = rownames(mat)
     )
     SummarizedExperiment::assay(corrected_pca_mc_sce, "logcounts") <- SingleCellExperiment::counts(corrected_pca_mc_sce)
     corrected_pca_mc_sce <- scater::runPCA(corrected_pca_mc_sce, ncomponents = 50)
@@ -57,4 +55,5 @@ evaluation_mc_pca <- function(mat,
       ncomponents = ncomponents,
       colour_by = color_mc_pca)
   }
+  return(mc_pca_plot_list)
 }

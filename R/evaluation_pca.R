@@ -6,7 +6,7 @@
 #' @param annotation Used to select whether a cluster or meta annotated PCA plot is generated. cluster = "cluster", meta = "meta", all = c("cluster", "meta")
 #' @param uncorrected_cluster_number Used to select the number of kmeans generated clusters to display in the uncorrected plot. If NULL is selected, a Dunn generated cluster number is used.
 #' @param corrected_cluster_number Used to select the number of kmeans generated clusters to display in the corrected plot. If NULL is selected, a Dunn generated cluster number is used.
-#' @param batch Column name from the meta file of the column that will be used for batch information
+#' @param batch.1 Column name from the meta file of the column that will be used for batch information
 #' @param variable_of_interest Column name from the meta file of the column that will be used for the variable of interest information
 #' @param color_by Used by the PCA plot to select which feature will be used to color the individuals
 #'
@@ -20,10 +20,12 @@ evaluation_pca = function(mat,
                           annotation,
                           uncorrected_cluster_number,
                           corrected_cluster_number,
-                          batch,
+                          batch.1,
                           variable_of_interest,
                           color_by){
   pca_plot_list <- list()
+  row.names(mat) <- NULL
+  row.names(batch_correction) <- NULL
   if("all" %in% annotation) annotation = c("cluster", "meta")
   if (!all(annotation %in% c("cluster", "meta"))){
     stop("Annotation method not found")
@@ -54,7 +56,7 @@ evaluation_pca = function(mat,
     colnames(corrected_dunn_index_analysis) <- c("cluster_number", "dunn_index")
     corrected_cluster_number = corrected_dunn_index_analysis$cluster_number[which(max(corrected_dunn_index_analysis$dunn_index) == corrected_dunn_index_analysis$dunn_index)]
   }
-  if ("meta" %in% annotation & is.null(batch)){
+  if ("meta" %in% annotation & is.null(batch.1)){
     print("Missing batch information")
   }
   if ("meta" %in% annotation & is.null(variable_of_interest)){
@@ -81,7 +83,7 @@ evaluation_pca = function(mat,
       pca_plot_list$uncpcameta <- ggplot2::autoplot(
         uncorrected_PCA,
         uncorrected_PCA_data,
-        color = batch,
+        color = batch.1,
         shape = variable_of_interest
       )+
         ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
@@ -90,7 +92,7 @@ evaluation_pca = function(mat,
         uncorrected_PCA,
         uncorrected_PCA_data,
         color = variable_of_interest,
-        shape = batch
+        shape = batch.1
       )+
         ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
     }
@@ -101,7 +103,7 @@ evaluation_pca = function(mat,
         pca_plot_list$corpcameta <- ggplot2::autoplot(
           corrected_PCA,
           corrected_PCA_data,
-          color = batch,
+          color = batch.1,
           shape = variable_of_interest
         )+
           ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
@@ -110,7 +112,7 @@ evaluation_pca = function(mat,
           corrected_PCA,
           corrected_PCA_data,
           color = variable_of_interest,
-          shape = batch
+          shape = batch.1
         )+
           ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
       }

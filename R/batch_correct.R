@@ -5,7 +5,7 @@
 #' @param batch.1 Column name from the meta file of the column that will be used for batch one information
 #' @param batch.2 Column name from the meta file of the column that will be used for batch two information
 #' @param log2_transformed logical whether the data is alrady transformed
-#' @param treatment Column name from the meta file of the column that will be used for treatment information
+#' @param variable_of_interest Column name from the meta file of the column that will be used for variable of interest information
 #' @param housekeeping Name of housekeeping gene set or character vector of housekeeping genes
 #' @param k Used in the RUVg correction_method, the number of factors of unwanted variation to be estimated from the data
 #' @param drop Used in the RUVg correction_method, the number of singular values to drop in the estimation of the factors of unwanted variation. This number is usually zero, but might be set to one if the first singular value captures the effect of interest. It must be less than k
@@ -27,7 +27,7 @@ batch_correct = function(mat = NULL,
                             batch.1 = NULL,
                             batch.2 = NULL,
                             log2_transformed = TRUE,
-                            treatment = NULL,
+                            variable_of_interest = NULL,
                             housekeeping = NULL,
                             k = 2,
                             drop = 0,
@@ -57,7 +57,7 @@ batch_correct = function(mat = NULL,
   batch_corrected_list$Unadjusted = mat
   if ("Limma" %in% correction_method){
     cat("\tAdjusting Limma\n")
-    batch_corrected_list$Limma <- adjust_limma(mat, meta, treatment, batch.1, batch.2)
+    batch_corrected_list$Limma <- adjust_limma(mat, meta, variable_of_interest, batch.1, batch.2)
   }
   if("ComBat" %in% correction_method){
     cat("\tAdjusting ComBat\n")
@@ -69,11 +69,11 @@ batch_correct = function(mat = NULL,
   }
   if("ComBatseq" %in% correction_method){
     cat("\tAdjusting ComBatseq\n")
-    batch_corrected_list$ComBatseq <- adjust_combatseq(mat, meta, batch.1, treatment, log2_transformed)
+    batch_corrected_list$ComBatseq <- adjust_combatseq(mat, meta, batch.1, variable_of_interest, log2_transformed)
   }
   if("Harman" %in% correction_method){
     cat("\tAdjusting Harman\n")
-    batch_corrected_list$Harman <- adjust_harman(mat, meta, batch.1, treatment, log2_transformed)
+    batch_corrected_list$Harman <- adjust_harman(mat, meta, batch.1, variable_of_interest, log2_transformed)
   }
   if("RUVg" %in% correction_method){
     cat("\tAdjusting RUVg\n")
@@ -81,7 +81,7 @@ batch_correct = function(mat = NULL,
   }
   if("SVA" %in% correction_method){
     cat("\tAdjusting SVA\n")
-    batch_corrected_list$SVA <- adjust_sva(mat, meta, treatment, sva_nsv_method)
+    batch_corrected_list$SVA <- adjust_sva(mat, meta, variable_of_interest, sva_nsv_method)
   }
   return(batch_corrected_list)
 }

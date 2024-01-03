@@ -3,7 +3,7 @@
 #' @param mat Numeric matrix after pre-processing with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param batch_correction Numeric matrix following batch correction with features as rownames and sample names as the column names
-#' @param batch Column name from the meta file of the column that will be used for batch information
+#' @param batch.1 Column name from the meta file of the column that will be used for batch information
 #' @param pca_factors Column name from the meta file of the column that will be used to group the summary details of the PCA plot. If NULL, batch is selected
 #'
 #' @return A list object of uncorrected and batch corrected PCA details including a scree plot, a matrix of pca components, a matrix of contributions grouped by factor, and a matrix of contribution counts
@@ -13,11 +13,11 @@
 evaluation_pca_details <- function(mat,
                                    meta,
                                    batch_correction,
-                                   batch,
+                                   batch.1,
                                    pca_factors
 ){
-  if (if.null(pca_factors)){
-    pca_factors <- batch
+  if (is.null(pca_factors)){
+    pca_factors <- batch.1
   }
 
   pca_details_list <- list()

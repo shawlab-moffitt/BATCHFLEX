@@ -11,24 +11,26 @@
 evaluation_cluster_analysis = function(mat,
                                        batch_correction,
                                        cluster_analysis_method){
-  if("all" %in% cluster_analysis) cluster_analysis = c("wss", "silhouette", "dunn")
-  if(!all(cluster_analysis %in% c("wss", "silhouette", "dunn"))){
-    stop("Cluster analysis not found")
+  if("all" %in% cluster_analysis_method){
+    cluster_analysis_method = c("wss", "silhouette", "dunn")
+  }
+  if(!all(cluster_analysis_method %in% c("wss", "silhouette", "dunn"))){
+    stop("Cluster analysis method not found")
   }
   cluster_plot_list <- list()
-  if ("wss" %in% cluster_analysis){
+  if ("wss" %in% cluster_analysis_method){
     cluster_plot_list$uncwss <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "wss", verbose = T)
     if (!is.null(batch_correction)){
       cluster_plot_list$corwss <- factoextra::fviz_nbclust(x = t(batch_correction), FUNcluster = kmeans, method = "wss", verbose = T)
     }
   }
-  if ("silhouette" %in% cluster_analysis){
+  if ("silhouette" %in% cluster_analysis_method){
     cluster_plot_list$uncsil <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "silhouette", verbose = T)
     if (!is.null(batch_correction)){
       cluster_plot_list$corsil <- factoextra::fviz_nbclust(x = t(batch_correction), FUNcluster = kmeans, method = "silhouette", verbose = T)
     }
   }
-  if ("dunn" %in% cluster_analysis){
+  if ("dunn" %in% cluster_analysis_method){
     uncorrected_dunn_k <- c(2:10)
     uncorrected_dunnin <- c()
     for (i in uncorrected_dunn_k){
