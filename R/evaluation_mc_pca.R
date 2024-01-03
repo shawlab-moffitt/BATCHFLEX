@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @examples
+#' set.seed(333)
 evaluation_mc_pca <- function(mat,
                               batch_correction,
                               meta,

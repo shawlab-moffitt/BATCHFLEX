@@ -10,6 +10,7 @@
 #' @export
 #'
 #' @examples
+#' set.seed(333)
 evaluation_sva <- function(mat,
                            batch_correction,
                            meta,

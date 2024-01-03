@@ -8,6 +8,7 @@
 #' @export
 #'
 #' @examples
+#' set.seed(333)
 evaluation_cluster_analysis = function(mat,
                                        batch_correction,
                                        cluster_analysis_method){
@@ -31,6 +32,7 @@ evaluation_cluster_analysis = function(mat,
     }
   }
   if ("dunn" %in% cluster_analysis_method){
+    set.seed(333)
     uncorrected_dunn_k <- c(2:10)
     uncorrected_dunnin <- c()
     for (i in uncorrected_dunn_k){
@@ -51,12 +53,13 @@ evaluation_cluster_analysis = function(mat,
       ) +
       theme_classic()
     if (!is.null(batch_correction)){
+      set.seed(333)
       corrected_dunn_k <- c(2:10)
       corrected_dunnin <- c()
       for (i in corrected_dunn_k){
         corrected_dunnin[i] <- clValid::dunn(
-          distance = dist(t(mat)),
-          clusters = kmeans(t(mat), i)$cluster
+          distance = dist(t(batch_correction)),
+          clusters = kmeans(t(batch_correction), i)$cluster
         )
       }
       corrected_dunn_index_analysis <- as.data.frame(cbind(corrected_dunn_k, corrected_dunnin[-1]))

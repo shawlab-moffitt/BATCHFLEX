@@ -20,6 +20,7 @@
 #' @export
 #'
 #' @examples
+#' set.seed(333)
 batch_evaluate = function(mat = NULL,
                             batch_correction = NULL,
                             meta = NULL,
@@ -37,8 +38,10 @@ batch_evaluate = function(mat = NULL,
                             sva_nsv_method = "be"){
 
   batch_evaluation_list <- list()
-  if("all" %in% evaluation_method) method = c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva")
-  if (!all(evaluation_method %in% c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva"))) stop("Evaluation correction method not found")
+  if("all" %in% evaluation_method) {
+    evaluation_method = c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva")}
+  if (!all(evaluation_method %in% c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva"))) {
+    stop("Evaluation correction method not found")}
   if ("pca" %in% evaluation_method){
     cat("\tConducting principal component analysis\n")
     batch_evaluation_list$Plots$pca <-  evaluation_pca(mat,

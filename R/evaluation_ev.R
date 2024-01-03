@@ -11,6 +11,7 @@
 #' @export
 #'
 #' @examples
+#' set.seed(333)
 evaluation_ev <- function(mat,
                           batch_correction,
                           meta,
@@ -38,7 +39,7 @@ evaluation_ev <- function(mat,
   ) +
     ggplot2::scale_color_manual(values = my_colors)
   if(!is.null(batch_correction)){
-    corrected_mat <- mat
+    corrected_mat <- batch_correction
     names(corrected_mat) <- NULL
     corrected_EV_SCE <- SingleCellExperiment::SingleCellExperiment(
       assays = list(counts = as.matrix(corrected_mat)),

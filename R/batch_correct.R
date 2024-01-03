@@ -20,7 +20,7 @@
 #' @export
 #'
 #' @examples
-#' set.seed(101)
+#' set.seed(333)
 batch_correct = function(mat = NULL,
                             meta = NULL,
                             correction_method,

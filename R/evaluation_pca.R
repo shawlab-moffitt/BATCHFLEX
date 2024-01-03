@@ -14,6 +14,7 @@
 #' @export
 #'
 #' @examples
+#' set.seed(333)
 evaluation_pca = function(mat,
                           batch_correction,
                           meta,
@@ -31,30 +32,12 @@ evaluation_pca = function(mat,
     stop("Annotation method not found")
   }
   if ("cluster" %in% annotation & is.null(uncorrected_cluster_number) ){
-    uncorrected_dunn_k <- c(2:10)
-    uncorrected_dunnin <- c()
-    for (i in uncorrected_dunn_k){
-      uncorrected_dunnin[i] <- clValid::dunn(
-        distance = dist(t(mat)),
-        clusters = kmeans(t(mat), i)$cluster
-      )
-    }
-    uncorrected_dunn_index_analysis <- as.data.frame(cbind(uncorrected_dunn_k, uncorrected_dunnin[-1]))
-    colnames(uncorrected_dunn_index_analysis) <- c("cluster_number", "dunn_index")
-    uncorrected_cluster_number = uncorrected_dunn_index_analysis$cluster_number[which(max(uncorrected_dunn_index_analysis$dunn_index) == uncorrected_dunn_index_analysis$dunn_index)]
+    uncorrected_silhouette <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "silhouette", verbose = T)
+    uncorrected_cluster_number = uncorrected_silhouette$data$clusters[which(max(uncorrected_silhouette$data$y) == uncorrected_silhouette$data$y)]
   }
-  if ("cluster" %in% annotation & !is.null(batch_correction) & is.null(corrected_cluster_number) ){
-    corrected_dunn_k <- c(2:10)
-    corrected_dunnin <- c()
-    for (i in corrected_dunn_k){
-      corrected_dunnin[i] <- clValid::dunn(
-        distance = dist(t(batch_correction)),
-        clusters = kmeans(t(batch_correction), i)$cluster
-      )
-    }
-    corrected_dunn_index_analysis <- as.data.frame(cbind(corrected_dunn_k, corrected_dunnin[-1]))
-    colnames(corrected_dunn_index_analysis) <- c("cluster_number", "dunn_index")
-    corrected_cluster_number = corrected_dunn_index_analysis$cluster_number[which(max(corrected_dunn_index_analysis$dunn_index) == corrected_dunn_index_analysis$dunn_index)]
+  if ("cluster" %in% annotation & is.null(corrected_cluster_number) ){
+    corrected_silhouette <- factoextra::fviz_nbclust(x = t(batch_correction), FUNcluster = kmeans, method = "silhouette", verbose = T)
+    corrected_cluster_number = corrected_silhouette$data$clusters[which(max(corrected_silhouette$data$y) == corrected_silhouette$data$y)]
   }
   if ("meta" %in% annotation & is.null(batch.1)){
     print("Missing batch information")

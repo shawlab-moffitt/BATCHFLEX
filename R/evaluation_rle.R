@@ -11,6 +11,7 @@
 #' @export
 #'
 #' @examples
+#' set.seed(333)
 evaluation_rle <- function(mat,
                            batch_correction,
                            meta,
