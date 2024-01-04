@@ -5,21 +5,21 @@
 \title{Batch Correct}
 \usage{
 batch_correct(
-  mat = NULL,
-  meta = NULL,
+  mat,
+  meta,
   correction_method,
-  batch.1 = NULL,
-  batch.2 = NULL,
-  log2_transformed = TRUE,
-  variable_of_interest = NULL,
-  housekeeping = NULL,
-  k = 2,
-  drop = 0,
-  center = FALSE,
-  round = FALSE,
-  tolerance = 1e-08,
-  par.prior = TRUE,
-  sva_nsv_method = "be"
+  batch.1,
+  batch.2,
+  log2_transformed,
+  variable_of_interest,
+  housekeeping,
+  k,
+  drop,
+  center,
+  round,
+  tolerance,
+  par.prior,
+  sva_nsv_method
 )
 }
 \arguments{

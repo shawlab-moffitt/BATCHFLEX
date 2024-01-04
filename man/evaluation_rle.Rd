@@ -15,7 +15,7 @@ evaluation_rle(mat, meta, batch.1, variable_of_interest, color_by)
 
 \item{variable_of_interest}{Column name from the meta file of the column that will be used for the variable of interest information}
 
-\item{color_by}{Used by the RLE plot to select whether "batch" or "variable_of_interest" will be used to color the individuals. Default is set to "batch"}
+\item{color_by}{Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals. Choices are "batch", "variable_of_interest", "BnW", and "all". Default is set to "all"}
 }
 \value{
 A list object of RLE plots

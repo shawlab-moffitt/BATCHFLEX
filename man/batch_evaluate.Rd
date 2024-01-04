@@ -5,19 +5,19 @@
 \title{Batch Evaluate}
 \usage{
 batch_evaluate(
-  mat = NULL,
-  meta = NULL,
+  mat,
+  meta,
   evaluation_method,
-  batch.1 = NULL,
-  annotation = NULL,
-  cluster_number = NULL,
-  variable_of_interest = NULL,
-  cluster_analysis_method = NULL,
-  color_by = "batch",
-  ncomponents = 5,
-  pca_factors = NULL,
-  variable_choices = NULL,
-  sva_nsv_method = "be"
+  batch.1,
+  annotation,
+  cluster_number,
+  variable_of_interest,
+  cluster_analysis_method,
+  color_by,
+  ncomponents,
+  pca_factors,
+  variable_choices,
+  sva_nsv_method
 )
 }
 \arguments{
@@ -37,7 +37,7 @@ batch_evaluate(
 
 \item{cluster_analysis_method}{Used by evaluation cluster analysis to select cluster analysis method. Elbow = "wss", Silhouette = "silhouette", Dunn = "dunn', all generates plots from each method}
 
-\item{color_by}{Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals}
+\item{color_by}{Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals. Choices are "batch", "variable_of_interest", and "all". Default is set to "all"}
 
 \item{ncomponents}{Used by evaluation multiple components to select the number of principal components that will be plotted. Default is set to 5}
 

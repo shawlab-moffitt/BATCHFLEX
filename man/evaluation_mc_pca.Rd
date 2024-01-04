@@ -24,7 +24,7 @@ evaluation_mc_pca(
 
 \item{ncomponents}{Used by the multiple components plot to select the number of principal components that will be plotted. Default is set to 5}
 
-\item{color_by}{Used by the multiple components plot to select whether "batch" or "variable_of_interest" will be used to color the individuals. Default is set to "batch"}
+\item{color_by}{Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals. Choices are "batch", "variable_of_interest", "BnW", and "all". Default is set to "all"}
 }
 \value{
 A list object of multiple components plots

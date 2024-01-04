@@ -5,15 +5,15 @@
 \title{BatchFLEX}
 \usage{
 Batch_FLEX(
-  Batch_FLEX_function = NULL,
+  BatchFLEX_function = c("batch_correct", "batch_evaluate"),
   mat = NULL,
   meta = NULL,
-  correction_method = NULL,
+  correction_method = "all",
   batch.1 = NULL,
   batch.2 = NULL,
   log2_transformed = TRUE,
   variable_of_interest = NULL,
-  housekeeping = NULL,
+  housekeeping = BatchFLEX::hsiao_mouse,
   k = 2,
   drop = 0,
   center = FALSE,
@@ -21,18 +21,18 @@ Batch_FLEX(
   tolerance = 1e-08,
   par.prior = TRUE,
   sva_nsv_method = "be",
-  evaluation_method = NULL,
-  annotation = NULL,
+  evaluation_method = "all",
+  annotation = "all",
   cluster_number = NULL,
-  cluster_analysis_method = NULL,
-  color_by = "batch",
+  cluster_analysis_method = "all",
+  color_by = "all",
   ncomponents = 5,
   pca_factors = NULL,
   variable_choices = NULL
 )
 }
 \arguments{
-\item{Batch_FLEX_function}{A Character vector of BatchFLEX functions in c("retrieve_data", "generate_data", "preprocess_data", "batch_correct", "batch_evaluate")}
+\item{BatchFLEX_function}{A Character vector of BatchFLEX functions in c("retrieve_data", "generate_data", "preprocess_data", "batch_correct", "batch_evaluate")}
 
 \item{mat}{A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names}
 
@@ -48,7 +48,7 @@ Batch_FLEX(
 
 \item{variable_of_interest}{Column name from the meta file of the column that will be used for the variable of interest information}
 
-\item{housekeeping}{Name of housekeeping gene set or character vector of housekeeping genes}
+\item{housekeeping}{Name of housekeeping gene set or character vector of housekeeping genes. Default is set to the preloaded HSIAO human gene list}
 
 \item{k}{Used in the RUVg correction_method, the number of factors of unwanted variation to be estimated from the data}
 
@@ -72,7 +72,7 @@ Batch_FLEX(
 
 \item{cluster_analysis_method}{Used to select cluster analysis method. Elbow = "wss", Silhouette = "silhouette", Dunn = "dunn', all generates plots from each method}
 
-\item{color_by}{Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals}
+\item{color_by}{Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals. Choices are "batch", "variable_of_interest", "BnW", and "all". Default is set to "all"}
 
 \item{ncomponents}{Used by evaluation multiple components to select the number of principal components that will be plotted. Default is set to 5}
 

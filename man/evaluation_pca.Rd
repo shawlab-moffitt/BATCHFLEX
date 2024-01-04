@@ -27,7 +27,7 @@ evaluation_pca(
 
 \item{variable_of_interest}{Column name from the meta file of the column that will be used for the variable of interest information}
 
-\item{color_by}{Used by the PCA plot to select which feature will be used to color the individuals}
+\item{color_by}{Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals. Choices are "batch", "variable_of_interest", "BnW", and "all". Default is set to "all"}
 }
 \value{
 A list object of PCA plots for each annotation method selected
