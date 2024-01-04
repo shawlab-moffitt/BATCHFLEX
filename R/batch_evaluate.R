@@ -8,7 +8,7 @@
 #' @param cluster_number Used by evaluation pca to select the number of kmeans generated clusters to display in the plot. If NULL is selected, a Silhouette generated cluster number is used.
 #' @param variable_of_interest Column name from the meta file of the column that will be used for the variable of interest information
 #' @param cluster_analysis_method Used by evaluation cluster analysis to select cluster analysis method. Elbow = "wss", Silhouette = "silhouette", Dunn = "dunn', all generates plots from each method
-#' @param color_by Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals
+#' @param color_by Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals. Choices are "batch", "variable_of_interest", and "all". Default is set to "all"
 #' @param ncomponents Used by evaluation multiple components to select the number of principal components that will be plotted. Default is set to 5
 #' @param pca_factors Used by evaluation pca details to select the Column name from the meta file of the column that will be used to group the summary details of the PCA plot. If NULL, batch is selected
 #' @param variable_choices Used by evaluation explanatory variables to select which variables to plot. Default is a combination of the batch and variable of interest.
@@ -19,25 +19,32 @@
 #'
 #' @examples
 #' set.seed(333)
-batch_evaluate = function(mat = NULL,
-                            meta = NULL,
+batch_evaluate = function(mat,
+                            meta,
                             evaluation_method,
-                            batch.1 = NULL,
-                            annotation = NULL,
-                            cluster_number = NULL,
-                            variable_of_interest = NULL,
-                            cluster_analysis_method = NULL,
-                            color_by = "batch",
-                            ncomponents = 5,
-                            pca_factors = NULL,
-                            variable_choices = NULL,
-                            sva_nsv_method = "be"){
-
+                            batch.1,
+                            annotation,
+                            cluster_number,
+                            variable_of_interest,
+                            cluster_analysis_method,
+                            color_by,
+                            ncomponents,
+                            pca_factors,
+                            variable_choices,
+                            sva_nsv_method){
   batch_evaluation_list <- list()
-  if("all" %in% evaluation_method) {
+  if ("all" %in% evaluation_method) {
     evaluation_method = c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva")}
+  if (is.null(variable_of_interest)) {
+    evaluation_method = evaluation_method[evaluation_method != "sva"]}
   if (!all(evaluation_method %in% c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva"))) {
     stop("Evaluation correction method not found")}
+  if ("all" %in% color_by){
+    color_by = c("batch", "variable_of_interest", "BnW")
+  }
+  if (is.null(variable_of_interest)){
+    color_by = color_by[color_by != "variable_of_interest"]
+  }
   if ("pca" %in% evaluation_method){
     cat("\tConducting principal component analysis\n")
     batch_evaluation_list$Plots$pca <-  evaluation_pca(mat,

@@ -1,6 +1,6 @@
 #' BatchFLEX
 #'
-#' @param Batch_FLEX_function A Character vector of BatchFLEX functions in c("retrieve_data", "generate_data", "preprocess_data", "batch_correct", "batch_evaluate")
+#' @param BatchFLEX_function A Character vector of BatchFLEX functions in c("retrieve_data", "generate_data", "preprocess_data", "batch_correct", "batch_evaluate")
 #' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param correction_method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA)
@@ -8,7 +8,7 @@
 #' @param batch.2 Column name from the meta file of the column that will be used for batch two information
 #' @param log2_transformed logical whether the data is already transformed. Default is set to TRUE
 #' @param variable_of_interest Column name from the meta file of the column that will be used for the variable of interest information
-#' @param housekeeping Name of housekeeping gene set or character vector of housekeeping genes
+#' @param housekeeping Name of housekeeping gene set or character vector of housekeeping genes. Default is set to the preloaded HSIAO human gene list
 #' @param k Used in the RUVg correction_method, the number of factors of unwanted variation to be estimated from the data
 #' @param drop Used in the RUVg correction_method, the number of singular values to drop in the estimation of the factors of unwanted variation. This number is usually zero, but might be set to one if the first singular value captures the effect of interest. It must be less than k
 #' @param center Used in the RUVg correction_method, if TRUE, the counts are centered, for each gene, to have mean zero across samples. This is important to ensure that the first singular value does not capture the average gene expression
@@ -20,7 +20,7 @@
 #' @param annotation Used by evaluation pca to select whether a cluster or meta annotated PCA plot is generated. cluster = "cluster", meta = "meta", all = c("cluster", "meta")
 #' @param cluster_number Used by evaluation pca to select the number of kmeans generated clusters to display in the uncorrected plot. If NULL is selected, a Dunn generated cluster number is used.
 #' @param cluster_analysis_method Used to select cluster analysis method. Elbow = "wss", Silhouette = "silhouette", Dunn = "dunn', all generates plots from each method
-#' @param color_by Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals
+#' @param color_by Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals. Choices are "batch", "variable_of_interest", "BnW", and "all". Default is set to "all"
 #' @param ncomponents Used by evaluation multiple components to select the number of principal components that will be plotted. Default is set to 5
 #' @param pca_factors Used by evaluation pca details to select the Column name from the meta file of the column that will be used to group the summary details of the PCA plot. If NULL, batch is selected
 #' @param variable_choices Used by the explanatory variables function to select which variables to plot. Default is a combination of the batch and variable of interest
@@ -30,15 +30,15 @@
 #'
 #' @examples
 #' set.seed(333)
-Batch_FLEX = function(Batch_FLEX_function = NULL,
+Batch_FLEX = function(BatchFLEX_function = c("batch_correct", "batch_evaluate"),
                       mat = NULL,
                       meta = NULL,
-                      correction_method = NULL,
+                      correction_method = "all",
                       batch.1 = NULL,
                       batch.2 = NULL,
                       log2_transformed = TRUE,
                       variable_of_interest = NULL,
-                      housekeeping = NULL,
+                      housekeeping = BatchFLEX::hsiao,
                       k = 2,
                       drop = 0,
                       center = FALSE,
@@ -46,11 +46,11 @@ Batch_FLEX = function(Batch_FLEX_function = NULL,
                       tolerance = 1e-8,
                       par.prior = TRUE,
                       sva_nsv_method = "be",
-                      evaluation_method = NULL,
-                      annotation = NULL,
+                      evaluation_method = "all",
+                      annotation = "all",
                       cluster_number = NULL,
-                      cluster_analysis_method = NULL,
-                      color_by = "batch",
+                      cluster_analysis_method = "all",
+                      color_by = "all",
                       ncomponents = 5,
                       pca_factors = NULL,
                       variable_choices = NULL){
@@ -61,46 +61,39 @@ Batch_FLEX = function(Batch_FLEX_function = NULL,
   if (is.null(meta)){
     stop("please provide a meta file or use retrieve_data or generate_data to generate a meta file")
   }
-  if (is.null(batch.1) & "batch_correct" %in% Batch_FLEX_function | "batch_evaluate" %in% Batch_FLEX_function){
-    stop("Please select column for batch information")
+  if (is.null(batch.1) & "batch_correct" %in% BatchFLEX_function | is.null(batch.1) & "batch_evaluate" %in% BatchFLEX_function){
+    stop("Please select column name in the meta file for the batch information")
   }
-  if (is.null(variable_of_interest) & "batch_correct" %in% Batch_FLEX_function | "batch_evaluate" %in% Batch_FLEX_function){
-    stop("Please select the variable of interest")
+  if (is.null(variable_of_interest) & "batch_evaluate" %in% BatchFLEX_function | is.null(variable_of_interest) & "batch_correct" %in% BatchFLEX_function){
+    print("Missing variable of interest. Some correction methods and evaluation techniques are not available.")
   }
-  if (is.null(housekeeping) & "batch_correct" %in% Batch_FLEX_function & "RUVg" %in% correction_method | "all" %in% correction_method){
-    stop("Please provide a list of housekeeping genes")
+  if (is.null(housekeeping) & "batch_correct" %in% BatchFLEX_function & "RUVg" %in% correction_method | is.null(housekeeping) & "batch_correct" %in% BatchFLEX_function & "all" %in% correction_method){
+    stop("Please provide a list of housekeeping genes for the RUVg correction method")
   }
-  if (is.null(Batch_FLEX_function)){
-    Batch_FLEX_function = c("batch_correct", "batch_evaluate")
-  }
-  if (!all(Batch_FLEX_function %in% c("retrieve_data", "generate_data", "preprocess_data", "batch_correct", "batch_evaluate"))){
+  if (!all(BatchFLEX_function %in% c("retrieve_data", "generate_data", "preprocess_data", "batch_correct", "batch_evaluate"))){
     stop("BatchFLEX function not found")
   }
-  if (is.null(correction_method)){
-    correction_method = "all"
-  }
-  if(is.null(evaluation_method)){
-    evaluation_method = "all"
-  }
-  if(is.null(annotation)){
-    annotation = "all"
-  }
-  if(is.null(cluster_analysis_method)){
-    cluster_analysis_method = "all"
-  }
-  if ("batch_correct" %in% Batch_FLEX_function){
-    Batch_FLEX_list$batch_correction <- batch_correct(mat, meta, correction_method, batch.1, batch.2, log2_transformed, variable_of_interest, housekeeping,
+  if ("batch_correct" %in% BatchFLEX_function){
+    Batch_FLEX_list$data_matrices <- batch_correct(mat, meta, correction_method, batch.1, batch.2, log2_transformed, variable_of_interest, housekeeping,
                                           k, drop, center, round, tolerance, par.prior, sva_nsv_method)
   }
-  if ("batch_evaluate" %in% Batch_FLEX_function){
-    for (correction in 1:length(Batch_FLEX_list$batch_correction)){
-      correction_name <- names(Batch_FLEX_list$batch_correction)[[correction]]
-      batch_correction = Batch_FLEX_list$batch_correction[[correction]]
-      Batch_FLEX_list$batch_evaluation[[correction_name]]$batch1 <- batch_evaluate(mat, meta, evaluation_method, batch.1, annotation, cluster_number,
-                                                                                   variable_of_interest, cluster_analysis_method, color_by, ncomponents,
-                                                                                   pca_factors, variable_choices, sva_nsv_method)
+  if (!"batch_correct" %in% BatchFLEX_function){
+    if (is.matrix(mat)){
+      Batch_FLEX_list$data_matrices$Unadjusted <- mat
+    }
+    if (is.list(mat)){
+      Batch_FLEX_list$data_matrices <- mat
+    }
+  }
+  if ("batch_evaluate" %in% BatchFLEX_function){
+    for (matrix in 1:length(Batch_FLEX_list$data_matrices)){
+      matrix_name <- names(Batch_FLEX_list$data_matrices)[[matrix]]
+      all_matrices = Batch_FLEX_list$data_matrices[[matrix]]
+      Batch_FLEX_list$batch_evaluation[[matrix_name]]$batch1 <- batch_evaluate(mat = all_matrices, meta, evaluation_method, batch.1, annotation, cluster_number,
+                                                                               variable_of_interest, cluster_analysis_method, color_by, ncomponents,
+                                                                               pca_factors, variable_choices, sva_nsv_method)
       if (!is.null(batch.2)){
-        Batch_FLEX_list$batch_evaluation[[correction_name]]$batch2 <- batch_evaluate(mat, meta, evaluation_method, batch.1 = batch.2, annotation, cluster_number,
+        Batch_FLEX_list$batch_evaluation[[matrix_name]]$batch2 <- batch_evaluate(mat = all_matrices, meta, evaluation_method, batch.1 = batch.2, annotation, cluster_number,
                                                                                      variable_of_interest, cluster_analysis_method, color_by, ncomponents,
                                                                                      pca_factors, variable_choices, sva_nsv_method)
       }

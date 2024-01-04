@@ -6,7 +6,7 @@
 #' @param cluster_number Used to select the number of kmeans generated clusters to display in the uncorrected plot. If NULL is selected, a Silhouette generated cluster number is used.
 #' @param batch.1 Column name from the meta file of the column that will be used for batch information
 #' @param variable_of_interest Column name from the meta file of the column that will be used for the variable of interest information
-#' @param color_by Used by the PCA plot to select which feature will be used to color the individuals
+#' @param color_by Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals. Choices are "batch", "variable_of_interest", "BnW", and "all". Default is set to "all"
 #'
 #' @return A list object of PCA plots for each annotation method selected
 #' @export
@@ -30,12 +30,6 @@ evaluation_pca = function(mat,
     silhouette <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "silhouette", verbose = T)
     cluster_number = silhouette$data$clusters[which(max(silhouette$data$y) == silhouette$data$y)]
   }
-  if ("meta" %in% annotation & is.null(batch.1)){
-    print("Missing batch information")
-  }
-  if ("meta" %in% annotation & is.null(variable_of_interest)){
-    print("Missing variable of interest")
-  }
   if ("cluster" %in% annotation){
     PCA <- cluster::pam(as.data.frame(t(mat)), cluster_number)
     pca_plot_list$pca_clust <- ggplot2::autoplot(
@@ -46,20 +40,28 @@ evaluation_pca = function(mat,
   if ("meta" %in% annotation){
     PCA <- stats::prcomp(t(mat), scale. = TRUE)
     PCA_data <- cbind(t(mat), meta)
-    if (color_by == "batch"){
-      pca_plot_list$pcameta <- ggplot2::autoplot(
+    if ("batch" %in% color_by){
+      pca_plot_list$pcameta$batch_colored <- ggplot2::autoplot(
         PCA,
         PCA_data,
         color = batch.1,
         shape = variable_of_interest
       )+
         ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
-    }else if (color_by == "voi"){
-      pca_plot_list$pcameta <- ggplot2::autoplot(
+    }
+    if ("variable_of_interest" %in% color_by){
+      pca_plot_list$pcameta$voi_colored <- ggplot2::autoplot(
         PCA,
         PCA_data,
         color = variable_of_interest,
         shape = batch.1
+      )+
+        ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
+    }
+    if ("BnW" %in% color_by){
+      pca_plot_list$pcameta$bnw_colored<- ggplot2::autoplot(
+        PCA,
+        PCA_data
       )+
         ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
     }
