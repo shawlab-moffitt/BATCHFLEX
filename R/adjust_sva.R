@@ -19,7 +19,7 @@ adjust_sva = function(mat,
   if (sva_nsv_method == "be") {
     print("Method 'be' is selected. Input 'leek' to sva_nsv_method if alternative is desired")
   }
-  sva_mod <- stats::model.matrix(reformulatermulate(variable_of_interest), data = meta)
+  sva_mod <- stats::model.matrix(reformulate(variable_of_interest), data = meta)
   sva_mod0 <- stats::model.matrix(~1, data = meta)
   n_sv <- sva::num.sv(mat, sva_mod, method = sva_nsv_method)
   svobj <- sva::sva(mat, sva_mod, sva_mod0, n.sv = n_sv)
