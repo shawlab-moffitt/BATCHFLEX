@@ -4,7 +4,7 @@
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param batch.1 Column name from the meta file of the column that will be used for batch one information
 #' @param batch.2 Column name from the meta file of the column that will be used for batch two information
-#' @param log2_transformed logical whether the data is alrady transformed
+#' @param log2_transformed logical whether the data is already transformed. Default is set to TRUE
 #' @param variable_of_interest Column name from the meta file of the column that will be used for variable of interest information
 #' @param housekeeping Name of housekeeping gene set or character vector of housekeeping genes
 #' @param k Used in the RUVg correction_method, the number of factors of unwanted variation to be estimated from the data

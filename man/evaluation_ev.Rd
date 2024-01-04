@@ -20,7 +20,7 @@ evaluation_ev(
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
-\item{variable_choices}{Used by the explanatory variables function to select which variables to plot. Default is a combination of the batch and variable of interest.}
+\item{variable_choices}{Used by the explanatory variables function to select which variables to plot. Default is a combination of the batch and variable of interest}
 
 \item{batch.1}{Column name from the meta file of the column that will be used for batch information}
 
