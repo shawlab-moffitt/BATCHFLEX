@@ -4,7 +4,7 @@
 \alias{adjust_combatseq}
 \title{Adjust ComBat_Seq}
 \usage{
-adjust_combatseq(mat, meta, batch.1, treatment, log2_transformed)
+adjust_combatseq(mat, meta, batch.1, variable_of_interest, log2_transformed)
 }
 \arguments{
 \item{mat}{Numeric matrix with features as rownames and sample names as the column names}
@@ -13,7 +13,7 @@ adjust_combatseq(mat, meta, batch.1, treatment, log2_transformed)
 
 \item{batch.1}{Column name from the meta file of the column that will be used for batch one information}
 
-\item{treatment}{Column name from the meta file of the column that will be used for treatment information}
+\item{variable_of_interest}{Column name from the meta file of the column that will be used for variable_of_interest information}
 
 \item{log2_transformed}{logical whether the data is alrady transformed}
 }

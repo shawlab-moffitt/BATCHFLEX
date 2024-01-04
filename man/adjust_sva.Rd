@@ -4,14 +4,14 @@
 \alias{adjust_sva}
 \title{Adjust_sva}
 \usage{
-adjust_sva(mat, meta, treatment, sva_nsv_method)
+adjust_sva(mat, meta, variable_of_interest, sva_nsv_method)
 }
 \arguments{
 \item{mat}{Numeric matrix with features as rownames and sample names as the column names}
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
-\item{treatment}{Column name from the meta file of the column that will be used as the variable of interest to generate the model matrix}
+\item{variable_of_interest}{Column name from the meta file of the column that will be used as the variable of interest to generate the model matrix}
 
 \item{sva_nsv_method}{Input method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek"}
 }
