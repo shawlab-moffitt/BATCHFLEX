@@ -1,7 +1,7 @@
 #' BatchFLEX
 #'
 #' @param Batch_FLEX_function A Character vector of BatchFLEX functions in c("retrieve_data", "generate_data", "preprocess_data", "batch_correct", "batch_evaluate")
-#' @param mat Numeric matrix after pre-processing with features as rownames and sample names as the column names
+#' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param correction_method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA)
 #' @param batch.1 Column name from the meta file of the column that will be used for batch information
@@ -16,11 +16,9 @@
 #' @param tolerance Used in the RUVg correction_method, tolerance in the selection of the number of positive singular values, i.e., a singular value must be larger than tolerance to be considered positive
 #' @param par.prior Used in the ComBat correction_method, TRUE indicates parametric adjustments will be used, FALSE indicates non-parametric adjustments will be used
 #' @param sva_nsv_method Input correction_method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek"
-#' @param batch_correction Numeric matrix following batch correction with features as rownames and sample names as the column names. If NULL BatchFLEX will generate using batch_correct
 #' @param evaluation_method A character vector of batch correction methods in c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva")
 #' @param annotation Used by evaluation pca to select whether a cluster or meta annotated PCA plot is generated. cluster = "cluster", meta = "meta", all = c("cluster", "meta")
-#' @param uncorrected_cluster_number Used by evaluation pca to select the number of kmeans generated clusters to display in the uncorrected plot. If NULL is selected, a Dunn generated cluster number is used.
-#' @param corrected_cluster_number Used by evaluation pca to select the number of kmeans generated clusters to display in the corrected plot. If NULL is selected, a Dunn generated cluster number is used.
+#' @param cluster_number Used by evaluation pca to select the number of kmeans generated clusters to display in the uncorrected plot. If NULL is selected, a Dunn generated cluster number is used.
 #' @param cluster_analysis_method Used to select cluster analysis method. Elbow = "wss", Silhouette = "silhouette", Dunn = "dunn', all generates plots from each method
 #' @param color_by Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals
 #' @param ncomponents Used by evaluation multiple components to select the number of principal components that will be plotted. Default is set to 5
@@ -48,20 +46,15 @@ Batch_FLEX = function(Batch_FLEX_function = NULL,
                       tolerance = 1e-8,
                       par.prior = TRUE,
                       sva_nsv_method = "be",
-                      batch_correction = NULL,
                       evaluation_method = NULL,
                       annotation = NULL,
-                      uncorrected_cluster_number = NULL,
-                      corrected_cluster_number = NULL,
+                      cluster_number = NULL,
                       cluster_analysis_method = NULL,
                       color_by = "batch",
                       ncomponents = 5,
                       pca_factors = NULL,
                       variable_choices = NULL){
   Batch_FLEX_list <- list()
-  if (!is.null(batch_correction)){
-    Batch_FLEX_list$batch_correction$User_provided <- batch_correction
-  }
   if (is.null(mat)){
     stop("Please provide a matrix file or use retrieve_data or generate_data to generate a matrix file")
   }
@@ -103,13 +96,13 @@ Batch_FLEX = function(Batch_FLEX_function = NULL,
     for (correction in 1:length(Batch_FLEX_list$batch_correction)){
       correction_name <- names(Batch_FLEX_list$batch_correction)[[correction]]
       batch_correction = Batch_FLEX_list$batch_correction[[correction]]
-      Batch_FLEX_list$batch_evaluation[[correction_name]]$batch1 <- batch_evaluate(mat, batch_correction, meta, evaluation_method, batch.1, annotation, uncorrected_cluster_number,
-                                                         corrected_cluster_number, variable_of_interest, cluster_analysis_method, color_by, ncomponents,
-                                                         pca_factors, variable_choices, sva_nsv_method)
+      Batch_FLEX_list$batch_evaluation[[correction_name]]$batch1 <- batch_evaluate(mat, meta, evaluation_method, batch.1, annotation, cluster_number,
+                                                                                   variable_of_interest, cluster_analysis_method, color_by, ncomponents,
+                                                                                   pca_factors, variable_choices, sva_nsv_method)
       if (!is.null(batch.2)){
-        Batch_FLEX_list$batch_evaluation[[correction_name]]$batch2 <- batch_evaluate(mat, batch_correction, meta, evaluation_method, batch.1 = batch.2, annotation, uncorrected_cluster_number,
-                                                                  corrected_cluster_number, variable_of_interest, cluster_analysis_method, color_by, ncomponents,
-                                                                  pca_factors, variable_choices, sva_nsv_method)
+        Batch_FLEX_list$batch_evaluation[[correction_name]]$batch2 <- batch_evaluate(mat, meta, evaluation_method, batch.1 = batch.2, annotation, cluster_number,
+                                                                                     variable_of_interest, cluster_analysis_method, color_by, ncomponents,
+                                                                                     pca_factors, variable_choices, sva_nsv_method)
       }
     }
   }

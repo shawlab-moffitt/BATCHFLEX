@@ -4,18 +4,10 @@
 \alias{evaluation_sva}
 \title{Evaluation Surrogate Variable Analysis}
 \usage{
-evaluation_sva(
-  mat,
-  batch_correction,
-  meta,
-  variable_of_interest,
-  sva_nsv_method
-)
+evaluation_sva(mat, meta, variable_of_interest, sva_nsv_method)
 }
 \arguments{
 \item{mat}{Numeric matrix after pre-processing with features as rownames and sample names as the column names}
-
-\item{batch_correction}{Numeric matrix following batch correction with features as rownames and sample names as the column names}
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
@@ -24,7 +16,7 @@ evaluation_sva(
 \item{sva_nsv_method}{Used by SVA to generate surrogate variables. Choices are "be" and "leek". Default is set to "be"}
 }
 \value{
-A list object of uncorrected and batch corrected probability association plots and surrogate variable matrices
+A list object of probability association plots and surrogate variable matrices
 }
 \description{
 Evaluation Surrogate Variable Analysis

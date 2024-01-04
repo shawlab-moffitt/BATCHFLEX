@@ -4,17 +4,15 @@
 \alias{evaluation_cluster_analysis}
 \title{Evaluation Cluster Analysis}
 \usage{
-evaluation_cluster_analysis(mat, batch_correction, cluster_analysis_method)
+evaluation_cluster_analysis(mat, cluster_analysis_method)
 }
 \arguments{
 \item{mat}{Numeric matrix after pre-processing with features as rownames and sample names as the column names}
 
-\item{batch_correction}{Numeric matrix following batch correction with features as rownames and sample names as the column names}
-
 \item{cluster_analysis_method}{Used to select cluster analysis method. Elbow = "wss", Silhouette = "silhouette", Dunn = "dunn', all generates plots from each method}
 }
 \value{
-A list object of uncorrected and batch corrected cluster plots for each selected cluster analysis method
+A list object of cluster plots for each selected cluster analysis method
 }
 \description{
 Evaluation Cluster Analysis

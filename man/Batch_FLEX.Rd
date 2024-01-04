@@ -21,11 +21,9 @@ Batch_FLEX(
   tolerance = 1e-08,
   par.prior = TRUE,
   sva_nsv_method = "be",
-  batch_correction = NULL,
   evaluation_method = NULL,
   annotation = NULL,
-  uncorrected_cluster_number = NULL,
-  corrected_cluster_number = NULL,
+  cluster_number = NULL,
   cluster_analysis_method = NULL,
   color_by = "batch",
   ncomponents = 5,
@@ -36,7 +34,7 @@ Batch_FLEX(
 \arguments{
 \item{Batch_FLEX_function}{A Character vector of BatchFLEX functions in c("retrieve_data", "generate_data", "preprocess_data", "batch_correct", "batch_evaluate")}
 
-\item{mat}{Numeric matrix after pre-processing with features as rownames and sample names as the column names}
+\item{mat}{A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names}
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
@@ -66,15 +64,11 @@ Batch_FLEX(
 
 \item{sva_nsv_method}{Input correction_method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek"}
 
-\item{batch_correction}{Numeric matrix following batch correction with features as rownames and sample names as the column names. If NULL BatchFLEX will generate using batch_correct}
-
 \item{evaluation_method}{A character vector of batch correction methods in c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva")}
 
 \item{annotation}{Used by evaluation pca to select whether a cluster or meta annotated PCA plot is generated. cluster = "cluster", meta = "meta", all = c("cluster", "meta")}
 
-\item{uncorrected_cluster_number}{Used by evaluation pca to select the number of kmeans generated clusters to display in the uncorrected plot. If NULL is selected, a Dunn generated cluster number is used.}
-
-\item{corrected_cluster_number}{Used by evaluation pca to select the number of kmeans generated clusters to display in the corrected plot. If NULL is selected, a Dunn generated cluster number is used.}
+\item{cluster_number}{Used by evaluation pca to select the number of kmeans generated clusters to display in the uncorrected plot. If NULL is selected, a Dunn generated cluster number is used.}
 
 \item{cluster_analysis_method}{Used to select cluster analysis method. Elbow = "wss", Silhouette = "silhouette", Dunn = "dunn', all generates plots from each method}
 

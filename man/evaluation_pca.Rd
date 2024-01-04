@@ -6,11 +6,9 @@
 \usage{
 evaluation_pca(
   mat,
-  batch_correction,
   meta,
   annotation,
-  uncorrected_cluster_number,
-  corrected_cluster_number,
+  cluster_number,
   batch.1,
   variable_of_interest,
   color_by
@@ -19,15 +17,11 @@ evaluation_pca(
 \arguments{
 \item{mat}{Numeric matrix after pre-processing with features as rownames and sample names as the column names}
 
-\item{batch_correction}{Numeric matrix following batch correction with features as rownames and sample names as the column names}
-
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
 \item{annotation}{Used to select whether a cluster or meta annotated PCA plot is generated. cluster = "cluster", meta = "meta", all = c("cluster", "meta")}
 
-\item{uncorrected_cluster_number}{Used to select the number of kmeans generated clusters to display in the uncorrected plot. If NULL is selected, a Dunn generated cluster number is used.}
-
-\item{corrected_cluster_number}{Used to select the number of kmeans generated clusters to display in the corrected plot. If NULL is selected, a Dunn generated cluster number is used.}
+\item{cluster_number}{Used to select the number of kmeans generated clusters to display in the uncorrected plot. If NULL is selected, a Silhouette generated cluster number is used.}
 
 \item{batch.1}{Column name from the meta file of the column that will be used for batch information}
 
@@ -36,7 +30,7 @@ evaluation_pca(
 \item{color_by}{Used by the PCA plot to select which feature will be used to color the individuals}
 }
 \value{
-A list object of uncorrected and batch corrected PCA plots for each annotation method selected
+A list object of PCA plots for each annotation method selected
 }
 \description{
 Evaluation Pincipal Component Analysis

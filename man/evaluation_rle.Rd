@@ -4,19 +4,10 @@
 \alias{evaluation_rle}
 \title{Evaluation Relative Log Expression}
 \usage{
-evaluation_rle(
-  mat,
-  batch_correction,
-  meta,
-  batch.1,
-  variable_of_interest,
-  color_by
-)
+evaluation_rle(mat, meta, batch.1, variable_of_interest, color_by)
 }
 \arguments{
 \item{mat}{Numeric matrix after pre-processing with features as rownames and sample names as the column names}
-
-\item{batch_correction}{Numeric matrix following batch correction with features as rownames and sample names as the column names}
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
@@ -27,7 +18,7 @@ evaluation_rle(
 \item{color_by}{Used by the RLE plot to select whether "batch" or "variable_of_interest" will be used to color the individuals. Default is set to "batch"}
 }
 \value{
-A list object of uncorrected and batch corrected RLE plots
+A list object of RLE plots
 }
 \description{
 Evaluation Relative Log Expression

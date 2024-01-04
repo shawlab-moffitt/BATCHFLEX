@@ -4,21 +4,19 @@
 \alias{evaluation_pca_details}
 \title{Evaluation PCA Details}
 \usage{
-evaluation_pca_details(mat, meta, batch_correction, batch.1, pca_factors)
+evaluation_pca_details(mat, meta, batch.1, pca_factors)
 }
 \arguments{
 \item{mat}{Numeric matrix after pre-processing with features as rownames and sample names as the column names}
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
-\item{batch_correction}{Numeric matrix following batch correction with features as rownames and sample names as the column names}
-
 \item{batch.1}{Column name from the meta file of the column that will be used for batch information}
 
 \item{pca_factors}{Column name from the meta file of the column that will be used to group the summary details of the PCA plot. If NULL, batch is selected}
 }
 \value{
-A list object of uncorrected and batch corrected PCA details including a scree plot, a matrix of pca components, a matrix of contributions grouped by factor, and a matrix of contribution counts
+A list object of PCA details including a scree plot, a matrix of pca components, a matrix of contributions grouped by factor, and a matrix of contribution counts
 }
 \description{
 Evaluation PCA Details

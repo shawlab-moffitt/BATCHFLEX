@@ -6,7 +6,6 @@
 \usage{
 evaluation_mc_pca(
   mat,
-  batch_correction,
   meta,
   batch.1,
   variable_of_interest,
@@ -16,8 +15,6 @@ evaluation_mc_pca(
 }
 \arguments{
 \item{mat}{Numeric matrix after pre-processing with features as rownames and sample names as the column names}
-
-\item{batch_correction}{Numeric matrix following batch correction with features as rownames and sample names as the column names}
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
@@ -30,7 +27,7 @@ evaluation_mc_pca(
 \item{color_by}{Used by the multiple components plot to select whether "batch" or "variable_of_interest" will be used to color the individuals. Default is set to "batch"}
 }
 \value{
-A list object of uncorrected and batch corrected multiple components plots
+A list object of multiple components plots
 }
 \description{
 Evaluation Multiple Components Plot

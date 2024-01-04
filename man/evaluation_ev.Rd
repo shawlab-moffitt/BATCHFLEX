@@ -4,19 +4,10 @@
 \alias{evaluation_ev}
 \title{Evaluation Explanatory Variables}
 \usage{
-evaluation_ev(
-  mat,
-  batch_correction,
-  meta,
-  variable_choices,
-  batch.1,
-  variable_of_interest
-)
+evaluation_ev(mat, meta, variable_choices, batch.1, variable_of_interest)
 }
 \arguments{
 \item{mat}{Numeric matrix after pre-processing with features as rownames and sample names as the column names}
-
-\item{batch_correction}{Numeric matrix following batch correction with features as rownames and sample names as the column names}
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
@@ -27,7 +18,7 @@ evaluation_ev(
 \item{variable_of_interest}{Column name from the meta file of the column that will be used for the variable of interest information}
 }
 \value{
-A list object of uncorrected and batch corrected explanatory variables plots
+A list object of explanatory variables plots
 }
 \description{
 Evaluation Explanatory Variables

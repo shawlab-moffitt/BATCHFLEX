@@ -6,13 +6,11 @@
 \usage{
 batch_evaluate(
   mat = NULL,
-  batch_correction = NULL,
   meta = NULL,
   evaluation_method,
   batch.1 = NULL,
   annotation = NULL,
-  uncorrected_cluster_number = NULL,
-  corrected_cluster_number = NULL,
+  cluster_number = NULL,
   variable_of_interest = NULL,
   cluster_analysis_method = NULL,
   color_by = "batch",
@@ -23,9 +21,7 @@ batch_evaluate(
 )
 }
 \arguments{
-\item{mat}{Numeric matrix after pre-processing with features as rownames and sample names as the column names}
-
-\item{batch_correction}{Numeric matrix following batch correction with features as rownames and sample names as the column names}
+\item{mat}{A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names}
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
@@ -35,9 +31,7 @@ batch_evaluate(
 
 \item{annotation}{Used by evaluation pca to select whether a cluster or meta annotated PCA plot is generated. cluster = "cluster", meta = "meta", all = c("cluster", "meta")}
 
-\item{uncorrected_cluster_number}{Used by evaluation pca to select the number of kmeans generated clusters to display in the uncorrected plot. If NULL is selected, a Dunn generated cluster number is used.}
-
-\item{corrected_cluster_number}{Used by evaluation pca to select the number of kmeans generated clusters to display in the corrected plot. If NULL is selected, a Dunn generated cluster number is used.}
+\item{cluster_number}{Used by evaluation pca to select the number of kmeans generated clusters to display in the plot. If NULL is selected, a Silhouette generated cluster number is used.}
 
 \item{variable_of_interest}{Column name from the meta file of the column that will be used for the variable of interest information}
 

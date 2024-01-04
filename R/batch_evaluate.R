@@ -1,13 +1,11 @@
 #' Batch Evaluate
 #'
-#' @param mat Numeric matrix after pre-processing with features as rownames and sample names as the column names
-#' @param batch_correction Numeric matrix following batch correction with features as rownames and sample names as the column names
+#' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param evaluation_method A character vector of batch correction methods in c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva")
 #' @param batch.1 Column name from the meta file of the column that will be used for batch information
 #' @param annotation Used by evaluation pca to select whether a cluster or meta annotated PCA plot is generated. cluster = "cluster", meta = "meta", all = c("cluster", "meta")
-#' @param uncorrected_cluster_number Used by evaluation pca to select the number of kmeans generated clusters to display in the uncorrected plot. If NULL is selected, a Dunn generated cluster number is used.
-#' @param corrected_cluster_number Used by evaluation pca to select the number of kmeans generated clusters to display in the corrected plot. If NULL is selected, a Dunn generated cluster number is used.
+#' @param cluster_number Used by evaluation pca to select the number of kmeans generated clusters to display in the plot. If NULL is selected, a Silhouette generated cluster number is used.
 #' @param variable_of_interest Column name from the meta file of the column that will be used for the variable of interest information
 #' @param cluster_analysis_method Used by evaluation cluster analysis to select cluster analysis method. Elbow = "wss", Silhouette = "silhouette", Dunn = "dunn', all generates plots from each method
 #' @param color_by Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals
@@ -22,13 +20,11 @@
 #' @examples
 #' set.seed(333)
 batch_evaluate = function(mat = NULL,
-                            batch_correction = NULL,
                             meta = NULL,
                             evaluation_method,
                             batch.1 = NULL,
                             annotation = NULL,
-                            uncorrected_cluster_number = NULL,
-                            corrected_cluster_number = NULL,
+                            cluster_number = NULL,
                             variable_of_interest = NULL,
                             cluster_analysis_method = NULL,
                             color_by = "batch",
@@ -45,11 +41,9 @@ batch_evaluate = function(mat = NULL,
   if ("pca" %in% evaluation_method){
     cat("\tConducting principal component analysis\n")
     batch_evaluation_list$Plots$pca <-  evaluation_pca(mat,
-                                                 batch_correction,
                                                  meta,
                                                  annotation,
-                                                 uncorrected_cluster_number,
-                                                 corrected_cluster_number,
+                                                 cluster_number,
                                                  batch.1,
                                                  variable_of_interest,
                                                  color_by)
@@ -57,13 +51,11 @@ batch_evaluate = function(mat = NULL,
   if ("cluster_analysis" %in% evaluation_method){
     cat("\tConducting cluster analysis\n")
     batch_evaluation_list$Plots$cluster_analysis <- evaluation_cluster_analysis(mat,
-                                                                          batch_correction,
                                                                           cluster_analysis_method)
   }
   if ("mc_pca" %in% evaluation_method){
     cat("\tConducting multiple components PCA analysis\n")
     batch_evaluation_list$Plots$mc_pca <- evaluation_mc_pca(mat,
-                                                             batch_correction,
                                                              meta,
                                                              batch.1,
                                                              variable_of_interest,
@@ -74,7 +66,6 @@ batch_evaluate = function(mat = NULL,
     cat("\tConducting PCA details analysis\n")
     evaluation_pca_details_list <- evaluation_pca_details(mat,
                                                           meta,
-                                                          batch_correction,
                                                           batch.1,
                                                           pca_factors)
     batch_evaluation_list$Plots$pca_details <- evaluation_pca_details_list$Plots
@@ -83,7 +74,6 @@ batch_evaluate = function(mat = NULL,
   if ("rle" %in% evaluation_method){
     cat("\tConducting relative log expression analysis\n")
     batch_evaluation_list$Plots$rle <- evaluation_rle(mat,
-                                                       batch_correction,
                                                        meta,
                                                        batch.1,
                                                        variable_of_interest,
@@ -92,7 +82,6 @@ batch_evaluate = function(mat = NULL,
   if ("ev" %in% evaluation_method){
     cat("\tConducting explanatory variables analysis\n")
     batch_evaluation_list$Plots$ev <- evaluation_ev(mat,
-                                                     batch_correction,
                                                      meta,
                                                      variable_choices,
                                                      batch.1,
@@ -101,7 +90,6 @@ batch_evaluate = function(mat = NULL,
   if ("sva" %in% evaluation_method){
     cat("\tConducting surrogate variable analysis\n")
     evaluation_sva_list <- evaluation_sva(mat,
-                                          batch_correction,
                                           meta,
                                           variable_of_interest,
                                           sva_nsv_method)
