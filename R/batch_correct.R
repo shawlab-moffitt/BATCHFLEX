@@ -42,7 +42,8 @@ batch_correct = function(mat,
   if (is.null(meta)) stop("Must provide meta data")
   if("all" %in% correction_method) correction_method = c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA")
   if(is.null(variable_of_interest)) correction_method = correction_method[correction_method != "SVA"]
-  if (!all(correction_method %in% c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA"))) stop("Batch correction method not found")
+  if (!all(correction_method %in% c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA"))) {
+    stop("Batch correction method not found \nAcceptable methods include Limma, ComBat, Mean Centering, Combatseq, Harman, RUVg, and SVA")}
   #if (!is.null(housekeeping)) stop("Must provide name of housekeeping gene set or vector of housekeeping genes")
   if(!is.null(batch.1))
     if(!(batch.1 %in% colnames(meta)))
@@ -78,7 +79,7 @@ batch_correct = function(mat,
   }
   if("RUVg" %in% correction_method){
     cat("\tAdjusting RUVg\n")
-    batch_corrected_list$RUVg <- adjust_ruvg(mat, housekeeping, k, drop, center, round, tolerannce)
+    batch_corrected_list$RUVg <- adjust_ruvg(mat, housekeeping, k, drop, center, round, tolerance, log2_transformed)
   }
   if("SVA" %in% correction_method){
     cat("\tAdjusting SVA\n")

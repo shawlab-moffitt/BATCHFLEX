@@ -21,12 +21,20 @@ adjust_ruvg = function(mat,
                        drop,
                        center,
                        round,
-                       tolerannce){
+                       tolerance,
+                       log2_transformed){
   h_i_m = housekeeping %in% row.names(mat)
+  if (sum(h_i_m) < length(h_i_m)*0.5){
+    message("Check housekeeping gene list. Ensure species is correct")
+  }
   message(sum(h_i_m), " genes of ", length(h_i_m), " found in data")
+  if(!log2_transformed){
+    ruvg_mat <- log2(mat)
+  } else {
+    ruvg_mat <- mat}
   RUVg_correction <- RUVSeq::RUVg(
-    if(!log2_transformed) log2(mat) else {mat},
-    cIdx = housekeeping,
+    ruvg_mat,
+    cIdx = h_i_m,
     k = k,
     drop = drop,
     center = center,
