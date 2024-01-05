@@ -1,6 +1,6 @@
 #' Evaluation Relative Log Expression
 #'
-#' @param mat Numeric matrix after pre-processing with features as rownames and sample names as the column names
+#' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param batch.1 Column name from the meta file of the column that will be used for batch information
 #' @param variable_of_interest Column name from the meta file of the column that will be used for the variable of interest information
@@ -17,7 +17,6 @@ evaluation_rle <- function(mat,
                            variable_of_interest,
                            color_by){
   evaluation_rle_list <- list()
-  color_rle <- c()
   rle_mat <- mat
   names(rle_mat) <- NULL
   RLE_SCE <- SingleCellExperiment::SingleCellExperiment(

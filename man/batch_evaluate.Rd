@@ -5,19 +5,19 @@
 \title{Batch Evaluate}
 \usage{
 batch_evaluate(
-  mat,
-  meta,
-  evaluation_method,
-  batch.1,
-  annotation,
-  cluster_number,
-  variable_of_interest,
-  cluster_analysis_method,
-  color_by,
-  ncomponents,
-  pca_factors,
-  variable_choices,
-  sva_nsv_method
+  mat = NULL,
+  meta = NULL,
+  evaluation_method = "all",
+  batch.1 = NULL,
+  annotation = "all",
+  cluster_number = NULL,
+  variable_of_interest = NULL,
+  cluster_analysis_method = "all",
+  color_by = "all",
+  ncomponents = 5,
+  pca_factors = NULL,
+  variable_choices = NULL,
+  sva_nsv_method = "be"
 )
 }
 \arguments{

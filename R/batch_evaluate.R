@@ -47,10 +47,10 @@ batch_evaluate = function(mat = NULL,
     message("Missing variable of interest. Some correction methods and evaluation techniques are not available.")
   }
   if ("all" %in% evaluation_method) {
-    evaluation_method = c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva")}
+    evaluation_method = c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva", "umap")}
   if (is.null(variable_of_interest)) {
     evaluation_method = evaluation_method[evaluation_method != "sva"]}
-  if (!all(evaluation_method %in% c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva"))) {
+  if (!all(evaluation_method %in% c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva", "umap"))) {
     stop("Evaluation correction method not found")}
   if ("all" %in% color_by){
     color_by = c("batch", "variable_of_interest", "BnW")
@@ -115,6 +115,14 @@ batch_evaluate = function(mat = NULL,
                                           sva_nsv_method)
     batch_evaluation_list$Plots$sva <- evaluation_sva_list$Plots
     batch_evaluation_list$Matrices$sva <- evaluation_sva_list$Matrices
+  }
+  if ("umap" %in% evaluation_method){
+    cat("\tConducting uniform manifold approimation and projection analysis\n")
+    batch_evaluation_list$Plots$umap <- evaluation_umap(mat,
+                                                        meta,
+                                                        batch.1,
+                                                        variable_of_interest,
+                                                        color_by)
   }
   return(batch_evaluation_list)
 }

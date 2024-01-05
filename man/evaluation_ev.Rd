@@ -7,7 +7,7 @@
 evaluation_ev(mat, meta, variable_choices, batch.1, variable_of_interest)
 }
 \arguments{
-\item{mat}{Numeric matrix after pre-processing with features as rownames and sample names as the column names}
+\item{mat}{A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names}
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
