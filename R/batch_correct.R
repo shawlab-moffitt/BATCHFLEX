@@ -44,7 +44,8 @@ batch_correct = function(mat = NULL,
     stop("Please select column name in the meta file for the batch information")
   }
   if (is.null(variable_of_interest)){
-    message("Missing variable of interest. Some correction methods and evaluation techniques are not available.")
+    #message("Missing variable of interest. Some correction methods and evaluation techniques are not available.")
+    message("Missing variable of interest. SVA and Harman correction methods are not available.")
   }
   if (is.null(housekeeping) & "RUVg" %in% correction_method | is.null(housekeeping) & "all" %in% correction_method){
     stop("Please provide a list of housekeeping genes for the RUVg correction method")
