@@ -3,7 +3,7 @@
 #' @param BatchFLEX_function A Character vector of BatchFLEX functions in c("retrieve_data", "generate_data", "preprocess_data", "batch_correct", "batch_evaluate")
 #' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
-#' @param correction_method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA)
+#' @param correction_method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA). Default is set to "all", which excludes ComBatseq as it requires a count matrix
 #' @param batch.1 Column name from the meta file of the column that will be used for batch information
 #' @param batch.2 Column name from the meta file of the column that will be used for batch two information
 #' @param log2_transformed logical whether the data is already transformed. Default is set to TRUE
@@ -65,7 +65,7 @@ Batch_FLEX = function(BatchFLEX_function = c("batch_correct", "batch_evaluate"),
     stop("Please select column name in the meta file for the batch information")
   }
   if (is.null(variable_of_interest) & "batch_evaluate" %in% BatchFLEX_function | is.null(variable_of_interest) & "batch_correct" %in% BatchFLEX_function){
-    print("Missing variable of interest. Some correction methods and evaluation techniques are not available.")
+    message("Missing variable of interest. Some correction methods and evaluation techniques are not available.")
   }
   if (is.null(housekeeping) & "batch_correct" %in% BatchFLEX_function & "RUVg" %in% correction_method | is.null(housekeeping) & "batch_correct" %in% BatchFLEX_function & "all" %in% correction_method){
     stop("Please provide a list of housekeeping genes for the RUVg correction method")

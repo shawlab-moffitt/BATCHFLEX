@@ -40,8 +40,11 @@ batch_correct = function(mat,
   if (is.null(mat)) stop("Must provide matrix")
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
   if (is.null(meta)) stop("Must provide meta data")
-  if("all" %in% correction_method) correction_method = c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA")
-  if(is.null(variable_of_interest)) correction_method = correction_method[correction_method != "SVA"]
+  if("all" %in% correction_method) correction_method = c("Limma", "ComBat", "Mean Centering", "Harman", "RUVg", "SVA")
+  if(is.null(variable_of_interest)) {
+    remove = c("SVA", "Harman")
+    correction_method = correction_method[!correction_method %in% remove]
+  }
   if (!all(correction_method %in% c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA"))) {
     stop("Batch correction method not found \nAcceptable methods include Limma, ComBat, Mean Centering, Combatseq, Harman, RUVg, and SVA")}
   #if (!is.null(housekeeping)) stop("Must provide name of housekeeping gene set or vector of housekeeping genes")
