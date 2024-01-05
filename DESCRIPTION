@@ -27,7 +27,16 @@ Imports:
     affyPLM,
     umap,
     ggpubr,
-    magrittr
+    magrittr,
+    factoextra,
+    ggfortify,
+    clValid,
+    metafolio,
+    SummarizedExperiment,
+    scater,
+    SingleCellExperiment,
+    FactoMineR,
+    cluster
 Depends: 
     R (>= 2.10)
 LazyData: true

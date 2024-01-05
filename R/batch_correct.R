@@ -21,25 +21,34 @@
 #'
 #' @examples
 #' set.seed(333)
-batch_correct = function(mat,
-                            meta,
-                            correction_method,
-                            batch.1,
-                            batch.2,
-                            log2_transformed,
-                            variable_of_interest,
-                            housekeeping,
-                            k,
-                            drop,
-                            center,
-                            round,
-                            tolerance,
-                            par.prior,
-                            sva_nsv_method) {
+batch_correct = function(mat = NULL,
+                            meta = NULL,
+                            correction_method = "all",
+                            batch.1 = NULL,
+                            batch.2 = NULL,
+                            log2_transformed = TRUE,
+                            variable_of_interest = TRUE,
+                            housekeeping = BatchFLEX::hsiao_mouse,
+                            k = 2,
+                            drop = 0,
+                            center = FALSE,
+                            round = FALSE,
+                            tolerance = 1e-8,
+                            par.prior = TRUE,
+                            sva_nsv_method = "be") {
   #checks to make sure teh data is in the right format
   if (is.null(mat)) stop("Must provide matrix")
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
   if (is.null(meta)) stop("Must provide meta data")
+  if (is.null(batch.1)) {
+    stop("Please select column name in the meta file for the batch information")
+  }
+  if (is.null(variable_of_interest)){
+    message("Missing variable of interest. Some correction methods and evaluation techniques are not available.")
+  }
+  if (is.null(housekeeping) & "RUVg" %in% correction_method | is.null(housekeeping) & "all" %in% correction_method){
+    stop("Please provide a list of housekeeping genes for the RUVg correction method")
+  }
   if("all" %in% correction_method) correction_method = c("Limma", "ComBat", "Mean Centering", "Harman", "RUVg", "SVA")
   if(is.null(variable_of_interest)) {
     remove = c("SVA", "Harman")

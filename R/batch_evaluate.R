@@ -19,20 +19,33 @@
 #'
 #' @examples
 #' set.seed(333)
-batch_evaluate = function(mat,
-                            meta,
-                            evaluation_method,
-                            batch.1,
-                            annotation,
-                            cluster_number,
-                            variable_of_interest,
-                            cluster_analysis_method,
-                            color_by,
-                            ncomponents,
-                            pca_factors,
-                            variable_choices,
-                            sva_nsv_method){
+batch_evaluate = function(mat = NULL,
+                            meta = NULL,
+                            evaluation_method = "all",
+                            batch.1 = NULL,
+                            annotation = "all",
+                            cluster_number = NULL,
+                            variable_of_interest = NULL,
+                            cluster_analysis_method = "all",
+                            color_by = "all",
+                            ncomponents = 5,
+                            pca_factors = NULL,
+                            variable_choices = NULL,
+                            sva_nsv_method = "be"){
   batch_evaluation_list <- list()
+  if (is.null(mat)){
+    stop("Please provide a matrix file or use retrieve_data or generate_data to generate a matrix file")
+  }
+  if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
+  if (is.null(meta)){
+    stop("please provide a meta file or use retrieve_data or generate_data to generate a meta file")
+  }
+  if (is.null(batch.1)){
+    stop("Please select column name in the meta file for the batch information")
+  }
+  if (is.null(variable_of_interest)){
+    message("Missing variable of interest. Some correction methods and evaluation techniques are not available.")
+  }
   if ("all" %in% evaluation_method) {
     evaluation_method = c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva")}
   if (is.null(variable_of_interest)) {
