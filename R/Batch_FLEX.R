@@ -58,6 +58,7 @@ Batch_FLEX = function(BatchFLEX_function = c("batch_correct", "batch_evaluate"),
   if (is.null(mat)){
     stop("Please provide a matrix file or use retrieve_data or generate_data to generate a matrix file")
   }
+  if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
   if (is.null(meta)){
     stop("please provide a meta file or use retrieve_data or generate_data to generate a meta file")
   }

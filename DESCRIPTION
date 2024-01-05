@@ -28,8 +28,20 @@ Imports:
     umap,
     ggpubr,
     magrittr,
+<<<<<<< HEAD
     edgeR,
     preprocessCore
+=======
+    factoextra,
+    ggfortify,
+    clValid,
+    metafolio,
+    SummarizedExperiment,
+    scater,
+    SingleCellExperiment,
+    FactoMineR,
+    cluster
+>>>>>>> josh-dev
 Depends: 
     R (>= 2.10)
 LazyData: true
