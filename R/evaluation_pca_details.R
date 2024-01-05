@@ -1,6 +1,6 @@
 #' Evaluation PCA Details
 #'
-#' @param mat Numeric matrix after pre-processing with features as rownames and sample names as the column names
+#' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param batch.1 Column name from the meta file of the column that will be used for batch information
 #' @param pca_factors Column name from the meta file of the column that will be used to group the summary details of the PCA plot. If NULL, batch is selected

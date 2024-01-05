@@ -1,6 +1,6 @@
 #' Evaluation Surrogate Variable Analysis
 #'
-#' @param mat Numeric matrix after pre-processing with features as rownames and sample names as the column names
+#' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param variable_of_interest Column name from the meta file of the column that will be used for the variable of interest information
 #' @param sva_nsv_method Used by SVA to generate surrogate variables. Choices are "be" and "leek". Default is set to "be"

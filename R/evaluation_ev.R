@@ -1,6 +1,6 @@
 #' Evaluation Explanatory Variables
 #'
-#' @param mat Numeric matrix after pre-processing with features as rownames and sample names as the column names
+#' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param variable_choices Used by the explanatory variables function to select which variables to plot. Default is a combination of the batch and variable of interest
 #' @param batch.1 Column name from the meta file of the column that will be used for batch information

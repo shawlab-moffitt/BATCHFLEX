@@ -38,7 +38,7 @@ Batch_FLEX(
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
-\item{correction_method}{A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA)}
+\item{correction_method}{A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA). Default is set to "all", which excludes ComBatseq as it requires a count matrix}
 
 \item{batch.1}{Column name from the meta file of the column that will be used for batch information}
 
