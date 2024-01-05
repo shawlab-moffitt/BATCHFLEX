@@ -1,0 +1,71 @@
+#' Evaluation PCA Details
+#'
+#' @param mat Numeric matrix after pre-processing with features as rownames and sample names as the column names
+#' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
+#' @param batch.1 Column name from the meta file of the column that will be used for batch information
+#' @param pca_factors Column name from the meta file of the column that will be used to group the summary details of the PCA plot. If NULL, batch is selected
+#'
+#' @return A list object of PCA details including a scree plot, a matrix of pca components, a matrix of contributions grouped by factor, and a matrix of contribution counts
+#' @export
+#'
+#' @examples
+#' set.seed(333)
+evaluation_pca_details <- function(mat,
+                                   meta,
+                                   batch.1,
+                                   pca_factors
+){
+  if (is.null(pca_factors)){
+    pca_factors <- batch.1
+  }
+
+  pca_details_list <- list()
+
+  PCA_details <- FactoMineR::PCA(t(mat), graph = F)
+
+  # components matrix
+  pca_details_list$Matrices$components <- PCA_details$x
+
+  # scree plot
+  scree_eig <- as.data.frame(factoextra::get_eig(PCA_details))
+  scree_eig$Dimensions <- gsub("Dim\\.","", rownames(scree_eig))
+  scree_eig$`Variance Percent` <- paste0(round(scree_eig$variance.percent,1),"%")
+  scree_eig_top10 <- scree_eig[1:10,]
+  pca_details_list$Plots$scree <- ggplot(data=scree_eig_top10, aes(x=reorder(Dimensions,-variance.percent), y=variance.percent)) +
+    geom_bar(stat="identity", fill="steelblue")+
+    theme_minimal() +
+    geom_text(aes(label=`Variance Percent`), vjust=-0.3,size=4.5) +
+    labs(x = "Dimensions",y = "Variance Percent") +
+    theme(axis.text = element_text(size = 14),
+          axis.title = element_text(size = 16))
+
+  # contributions matrix
+  PCA_individuals <- PCA_details
+  PCA_factors <- as.data.frame(PCA_individuals$ind$contrib)
+  PCA_factors$factors <- as.vector(meta[,pca_factors])
+  PCA_factors_final_sum <- stats::aggregate(. ~ factors, PCA_factors, sum)
+  PCA_factors_final_mean <- stats::aggregate(. ~ factors, PCA_factors, mean)
+  PCA_factors_final_sdv <- stats::aggregate(. ~ factors, PCA_factors, sd)
+  PCA_factors_final_longer_sum <- tidyr::pivot_longer(PCA_factors_final_sum, !factors, names_to = "PC_Components")
+  PCA_factors_final_longer_mean <- tidyr::pivot_longer(PCA_factors_final_mean, !factors, names_to = "PC_Components")
+  PCA_factors_final_longer_sdv <- tidyr::pivot_longer(PCA_factors_final_sdv, !factors, names_to = "PC_Components")
+  colnames(PCA_factors_final_longer_sum)[3] <- "Sum"
+  colnames(PCA_factors_final_longer_mean)[3] <- "Mean"
+  colnames(PCA_factors_final_longer_sdv)[3] <- "SDV"
+  PCA_factors_final_longer <- PCA_factors_final_longer_sum[,1:2]
+  PCA_factors_final_longer <- cbind(
+    PCA_factors_final_longer,
+    PCA_factors_final_longer_sum[,3],
+    PCA_factors_final_longer_mean[,3],
+    PCA_factors_final_longer_sdv[,3]
+  )
+  colnames(PCA_factors_final_longer)[1] <- pca_factors
+  pca_details_list$Matrices$contribution <- PCA_factors_final_longer
+
+  # counts plot
+  PCA_factors_final_count <- PCA_factors %>% dplyr::group_by(factors) %>% dplyr::summarise(individuals = length(factors))
+  colnames(PCA_factors_final_count)[1] <- pca_factors
+  pca_details_list$Matrices$count <- PCA_factors_final_count
+
+  return(pca_details_list)
+}

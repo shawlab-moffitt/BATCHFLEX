@@ -7,7 +7,7 @@
 adjust_limma(
   mat,
   meta,
-  treatment,
+  variable_of_interest,
   batch.1,
   batch.2,
   log2_transformed = TRUE,
@@ -19,7 +19,7 @@ adjust_limma(
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
-\item{treatment}{Column name from the meta file of the column that will be used for treatment information}
+\item{variable_of_interest}{Column name from the meta file of the column that will be used for variable_of_interest information}
 
 \item{batch.1}{Column name from the meta file of the column that will be used for batch one information}
 
