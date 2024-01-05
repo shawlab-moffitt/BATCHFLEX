@@ -22,25 +22,25 @@
 #' @examples
 #' set.seed(333)
 batch_correct = function(mat = NULL,
-                            meta = NULL,
-                            correction_method = "all",
-                            batch.1 = NULL,
-                            batch.2 = NULL,
-                            log2_transformed = TRUE,
-                            variable_of_interest = TRUE,
-                            housekeeping = BatchFLEX::hsiao_mouse,
-                            k = 2,
-                            drop = 0,
-                            center = FALSE,
-                            round = FALSE,
-                            tolerance = 1e-8,
-                            par.prior = TRUE,
-                            sva_nsv_method = "be") {
-  #checks to make sure teh data is in the right format
+                         meta = NULL,
+                         correction_method = "all",
+                         batch.1 = NULL,
+                         batch.2 = NULL,
+                         log2_transformed = TRUE,
+                         variable_of_interest = NULL,
+                         housekeeping = BatchFLEX::hsiao_mouse,
+                         k = 2,
+                         drop = 0,
+                         center = FALSE,
+                         round = FALSE,
+                         tolerance = 1e-8,
+                         par.prior = TRUE,
+                         sva_nsv_method = "be") {
+  #checks to make sure the data is in the right format
   if (is.null(mat)) stop("Must provide matrix")
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
   if (is.null(meta)) stop("Must provide meta data")
-  if (is.null(batch.1)) {
+  if (is.null(batch.1) & !"SVA" %in% correction_method) {
     stop("Please select column name in the meta file for the batch information")
   }
   if (is.null(variable_of_interest)){
@@ -56,7 +56,6 @@ batch_correct = function(mat = NULL,
   }
   if (!all(correction_method %in% c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA"))) {
     stop("Batch correction method not found \nAcceptable methods include Limma, ComBat, Mean Centering, Combatseq, Harman, RUVg, and SVA")}
-  #if (!is.null(housekeeping)) stop("Must provide name of housekeeping gene set or vector of housekeeping genes")
   if(!is.null(batch.1))
     if(!(batch.1 %in% colnames(meta)))
         stop("batch.1 needs to be a column name in the metadata")
