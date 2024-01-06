@@ -29,7 +29,6 @@ Imports:
     ggpubr,
     magrittr,
     factoextra,
-    ggfortify,
     clValid,
     metafolio,
     SummarizedExperiment,
@@ -38,7 +37,8 @@ Imports:
     FactoMineR,
     cluster
 Depends: 
-    R (>= 2.10)
+    R (>= 2.10),
+    ggfortify
 LazyData: true
 Suggests: 
     knitr,
