@@ -36,6 +36,7 @@ evaluation_ev <- function(mat,
     scale_x_log10(limit = c(0.0001,100),labels = ~ format(.x, scientific = FALSE), breaks = c(0.001,0.01,0.1,1,10,100)) +
       geom_vline(xintercept = 1, linetype="dashed") +
     theme_classic() +
+    labs(x = "% Variance Explained", y = "Density", color = "Variable")
 
   return(evaluation_ev_list)
 }
