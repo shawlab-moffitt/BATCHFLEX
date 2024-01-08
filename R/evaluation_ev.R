@@ -20,7 +20,6 @@ evaluation_ev <- function(mat,
   if (is.null(variable_choices)){
     variable_choices = c(batch.1, variable_of_interest)
   }
-  my_colors <- metafolio::gg_color_hue(length(variable_choices))
   mat <- mat
   names(mat) <- NULL
   EV_SCE <- SingleCellExperiment::SingleCellExperiment(
@@ -30,12 +29,15 @@ evaluation_ev <- function(mat,
   )
   SummarizedExperiment::assay(EV_SCE, "logcounts") <- SingleCellExperiment::counts(EV_SCE)
   EV_SCE_PCA <- scater::runPCA(EV_SCE)
-  evaluation_ev_list$ev <- scater::plotExplanatoryVariables(
-    EV_SCE_PCA,
-    exprs_values = "logcounts",
-    variables = variable_choices
-  ) +
-    ggplot2::scale_color_manual(values = my_colors)
+  EV_SCE_PCA_Vars <- getVarianceExplained(EV_SCE_PCA,exprs_values = "logcounts",variables = variable_choices)
+  EV_SCE_PCA_Vars_melt <- reshape2::melt(EV_SCE_PCA_Vars)
+  evaluation_ev_list$ev <- ggplot(EV_SCE_PCA_Vars_melt, aes(x = value,color = Var2)) +
+    geom_density(linewidth = 1) +
+    scale_x_log10(limit = c(0.0001,100),labels = ~ format(.x, scientific = FALSE), breaks = c(0.001,0.01,0.1,1,10,100)) +
+      geom_vline(xintercept = 1, linetype="dashed") +
+    theme_classic() +
 
   return(evaluation_ev_list)
 }
+
+
