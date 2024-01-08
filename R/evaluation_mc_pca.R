@@ -32,21 +32,21 @@ evaluation_mc_pca <- function(mat,
   pca_mc_sce <- scater::runPCA(pca_mc_sce, ncomponents = 50)
 
   if ("batch" %in% color_by){
-    mc_pca_plot_list$mcpca$batch_colored <- scater::plotPCA(
+    mc_pca_plot_list$batch_colored <- scater::plotPCA(
       pca_mc_sce,
       ncomponents = ncomponents,
       colour_by = batch.1
     )
   }
   if ("variable_of_interest" %in% color_by){
-    mc_pca_plot_list$mcpca$voi_colored <- scater::plotPCA(
+    mc_pca_plot_list$voi_colored <- scater::plotPCA(
       pca_mc_sce,
       ncomponents = ncomponents,
       colour_by = variable_of_interest
     )
   }
   if ("BnW" %in% color_by){
-    mc_pca_plot_list$mcpca$bnw_colored <- scater::plotPCA(
+    mc_pca_plot_list$bnw_colored <- scater::plotPCA(
       pca_mc_sce,
       ncomponents = ncomponents
     )
