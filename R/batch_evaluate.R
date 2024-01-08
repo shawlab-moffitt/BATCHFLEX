@@ -40,7 +40,7 @@ batch_evaluate = function(mat = NULL,
   if (is.null(meta)){
     stop("please provide a meta file or use retrieve_data or generate_data to generate a meta file")
   }
-  if (is.null(batch.1)){
+  if (is.null(batch.1) & !"sva" %in% evaluation_method){
     stop("Please select column name in the meta file for the batch information")
   }
   if (is.null(variable_of_interest)){
