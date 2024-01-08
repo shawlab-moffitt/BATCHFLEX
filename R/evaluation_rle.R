@@ -26,21 +26,21 @@ evaluation_rle <- function(mat,
     rowData = rownames(mat)
   )
   if ("batch" %in% color_by){
-    evaluation_rle_list$rle$batch_colored <- scater::plotRLE(
+    evaluation_rle_list$batch_colored <- scater::plotRLE(
       RLE_SCE,
       exprs_values = "counts",
       color_by = batch.1
     )
   }
   if ("variable_of_interest" %in% color_by){
-    evaluation_rle_list$rle$voi_colored <- scater::plotRLE(
+    evaluation_rle_list$voi_colored <- scater::plotRLE(
       RLE_SCE,
       exprs_values = "counts",
       color_by = variable_of_interest
     )
   }
   if ("BnW" %in% color_by){
-    evaluation_rle_list$rle$BnW_colored <- scater::plotRLE(
+    evaluation_rle_list$BnW_colored <- scater::plotRLE(
       RLE_SCE,
       exprs_values = "counts"
     )
