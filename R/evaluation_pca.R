@@ -41,7 +41,7 @@ evaluation_pca = function(mat,
     PCA <- stats::prcomp(t(mat), scale. = TRUE)
     PCA_data <- cbind(t(mat), meta)
     if ("batch" %in% color_by){
-      pca_plot_list$pcameta$batch_colored <- ggplot2::autoplot(
+      pca_plot_list$pca_meta$batch_colored <- ggplot2::autoplot(
         PCA,
         PCA_data,
         color = batch.1,
@@ -50,7 +50,7 @@ evaluation_pca = function(mat,
         ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
     }
     if ("variable_of_interest" %in% color_by){
-      pca_plot_list$pcameta$voi_colored <- ggplot2::autoplot(
+      pca_plot_list$pca_meta$voi_colored <- ggplot2::autoplot(
         PCA,
         PCA_data,
         color = variable_of_interest,
@@ -59,7 +59,7 @@ evaluation_pca = function(mat,
         ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
     }
     if ("BnW" %in% color_by){
-      pca_plot_list$pcameta$bnw_colored<- ggplot2::autoplot(
+      pca_plot_list$pca_meta$bnw_colored<- ggplot2::autoplot(
         PCA,
         PCA_data
       )+
