@@ -1,20 +1,27 @@
 #' Batch Correct
 #'
-#' @param mat A Numeric matrix after preprocessing with features as rownames and sample names as the column names
-#' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
-#' @param batch.1 Column name from the meta file of the column that will be used for batch one information
-#' @param batch.2 Column name from the meta file of the column that will be used for batch two information
-#' @param log2_transformed logical whether the data is already transformed. Default is set to TRUE
-#' @param variable_of_interest Column name from the meta file of the column that will be used for variable of interest information
-#' @param housekeeping Name of housekeeping gene set or character vector of housekeeping genes
-#' @param k Used in the RUVg correction_method, the number of factors of unwanted variation to be estimated from the data
-#' @param drop Used in the RUVg correction_method, the number of singular values to drop in the estimation of the factors of unwanted variation. This number is usually zero, but might be set to one if the first singular value captures the effect of interest. It must be less than k
-#' @param center Used in the RUVg correction_method, if TRUE, the counts are centered, for each gene, to have mean zero across samples. This is important to ensure that the first singular value does not capture the average gene expression
-#' @param round Used in the RUVg correction_method, if TRUE, the normalized measures are rounded to form pseudo-counts
-#' @param tolerance Used in the RUVg correction_method, tolerance in the selection of the number of positive singular values, i.e., a singular value must be larger than tolerance to be considered positive
-#' @param par.prior Used in the ComBat correction_method, TRUE indicates parametric adjustments will be used, FALSE indicates non-parametric adjustments will be used
-#' @param correction_method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA)
-#' @param sva_nsv_method Input correction_method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek"
+#' @param mat A Numeric matrix after preprocessing with features as rownames and sample names as the column names.
+#' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix.
+#' @param batch.1 Column name from the meta file of the column that will be used for batch one information.
+#' @param batch.2 Column name from the meta file of the column that will be used for batch two information.
+#' @param log2_transformed logical whether the data is already transformed. Default is set to TRUE.
+#' @param variable_of_interest Column name from the meta file of the column that will be used for variable of interest information.
+#' @param housekeeping Name of housekeeping gene set or character vector of housekeeping genes.
+#' @param k Used in the RUVg correction_method, the number of factors of unwanted variation to be estimated from the data.
+#' @param drop Used in the RUVg correction_method, the number of singular values to drop in the estimation of the factors of unwanted variation. This number is usually zero, but might be set to one if the first singular value captures the effect of interest. It must be less than k.
+#' @param center Used in the RUVg correction_method, if TRUE, the counts are centered, for each gene, to have mean zero across samples. This is important to ensure that the first singular value does not capture the average gene expression.
+#' @param round Used in the RUVg correction_method, if TRUE, the normalized measures are rounded to form pseudo-counts.
+#' @param tolerance Used in the RUVg correction_method, tolerance in the selection of the number of positive singular values, i.e., a singular value must be larger than tolerance to be considered positive.
+#' @param par.prior Used in the ComBat correction_method, TRUE indicates parametric adjustments will be used, FALSE indicates non-parametric adjustments will be used.
+#' @param correction_method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA).
+#' @param sva_nsv_method Input correction_method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek".
+#' @param prep_matrix Logical. If TRUE, run preprocess_matrix function or log and/or quantile normalize or normalize raw counts.
+#' @param data Numeric matrix or data frame. The features can be rownames or the first column followed by the sample names as the column names with numeric count data as the values.
+#' @param raw.counts Logical. TRUE indicates the input data is raw counts. FALSE indicated the input data is not raw counts.
+#' @param raw.norm.method Character string of what method to use for raw count normalization. Supported methods are "TMM" or "upperquartile". If raw.counts is FALSE this will be ignored.
+#' @param log2 Logical. If TRUE, the input data with be logged with the method "log2+1".
+#' @param quantnorm Logical. If TRUE, the input data will be quantile normalized.
+#' @param remove.duplicates Logical. If TRUE, if duplicate row features are found, they will be summarized to the row with the maximum average feature value.
 #'
 #' @return List object of length of correction_method
 #' @export
@@ -35,10 +42,18 @@ batch_correct = function(mat = NULL,
                          round = FALSE,
                          tolerance = 1e-8,
                          par.prior = TRUE,
-                         sva_nsv_method = "be") {
+                         sva_nsv_method = "be",
+                         prep_matrix = FALSE,
+                         data = NULL,
+                         raw.counts = FALSE,
+                         raw.norm.method = NULL,
+                         log2 = TRUE,
+                         quantnorm = TRUE,
+                         remove.duplicates = TRUE) {
   #checks to make sure the data is in the right format
   if (is.null(mat)) stop("Must provide matrix")
-  if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
+  if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix"))
+    if (!prep_matrix) stop("Must be numeric matrix")
   if (is.null(meta)) stop("Must provide meta data")
   if (is.null(batch.1) & !"SVA" %in% correction_method) {
     stop("Please select column name in the meta file for the batch information")
@@ -66,9 +81,17 @@ batch_correct = function(mat = NULL,
       stop("batch.2 needs to be a column name in the metadata")
   if(length(batch.2) > 1) stop('batch.2 can only be of length 1 or NULL')
 
-  meta <- meta[match(colnames(mat), meta[[1]]),]
   batch_corrected_list <- list()
-  batch_corrected_list$Unadjusted = mat
+  batch_corrected_list$Unadjusted = as.matrix(mat)
+
+  if (prep_matrix) {
+    cat("\tPre-processing input matix\n")
+    mat <- preprocess_matrix(data = mat,raw.counts = raw.counts,raw.norm.method = raw.norm.method,log2 = log2, quantnorm = quantnorm,remove.duplicates = remove.duplicates)
+    batch_corrected_list[[paste0("Unadjusted_",ifelse(log2,"Log2_",NULL),ifelse(quantnorm,"Norm",NULL))]] = as.matrix(mat)
+  }
+
+  meta <- meta[match(colnames(mat), meta[[1]]),]
+
   if ("Limma" %in% correction_method){
     cat("\tAdjusting Limma\n")
     batch_corrected_list$Limma <- adjust_limma(mat, meta, variable_of_interest, batch.1, batch.2)
