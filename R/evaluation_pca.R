@@ -59,11 +59,10 @@ evaluation_pca = function(mat,
         ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
     }
     if ("BnW" %in% color_by){
-      pca_plot_list$pca_meta$bnw_colored<- ggplot2::autoplot(
+      pca_plot_list$pca_meta$bnw<- ggplot2::autoplot(
         PCA,
         PCA_data
-      )+
-        ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
+      )
     }
   }
   return(pca_plot_list)
