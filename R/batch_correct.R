@@ -29,6 +29,7 @@
 #' @examples
 #' set.seed(333)
 batch_correct = function(mat = NULL,
+
                          meta = NULL,
                          correction_method = "all",
                          batch.1 = NULL,
@@ -50,17 +51,20 @@ batch_correct = function(mat = NULL,
                          log2 = TRUE,
                          quantnorm = TRUE,
                          remove.duplicates = TRUE) {
+
   #checks to make sure the data is in the right format
   if (is.null(mat)) stop("Must provide matrix")
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix"))
     if (!prep_matrix) stop("Must be numeric matrix")
   if (is.null(meta)) stop("Must provide meta data")
+
   if (is.null(batch.1) & !"SVA" %in% correction_method) {
     stop("Please select column name in the meta file for the batch information")
   }
   if (is.null(variable_of_interest)){
     #message("Missing variable of interest. Some correction methods and evaluation techniques are not available.")
     message("Missing variable of interest. SVA and Harman correction methods are not available.")
+
   }
   if (is.null(housekeeping) & "RUVg" %in% correction_method | is.null(housekeeping) & "all" %in% correction_method){
     stop("Please provide a list of housekeeping genes for the RUVg correction method")

@@ -1,6 +1,6 @@
 #' Evaluation Pincipal Component Analysis
 #'
-#' @param mat Numeric matrix after pre-processing with features as rownames and sample names as the column names
+#' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param annotation Used to select whether a cluster or meta annotated PCA plot is generated. cluster = "cluster", meta = "meta", all = c("cluster", "meta")
 #' @param cluster_number Used to select the number of kmeans generated clusters to display in the uncorrected plot. If NULL is selected, a Silhouette generated cluster number is used.

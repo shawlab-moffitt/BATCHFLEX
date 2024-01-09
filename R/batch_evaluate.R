@@ -2,7 +2,7 @@
 #'
 #' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
-#' @param evaluation_method A character vector of batch correction methods in c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva")
+#' @param evaluation_method A character vector of batch correction methods in c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva", "umap")
 #' @param batch.1 Column name from the meta file of the column that will be used for batch information
 #' @param annotation Used by evaluation pca to select whether a cluster or meta annotated PCA plot is generated. cluster = "cluster", meta = "meta", all = c("cluster", "meta")
 #' @param cluster_number Used by evaluation pca to select the number of kmeans generated clusters to display in the plot. If NULL is selected, a Silhouette generated cluster number is used.
@@ -47,10 +47,10 @@ batch_evaluate = function(mat = NULL,
     message("Missing variable of interest. Some correction methods and evaluation techniques are not available.")
   }
   if ("all" %in% evaluation_method) {
-    evaluation_method = c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva")}
+    evaluation_method = c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva", "umap")}
   if (is.null(variable_of_interest)) {
     evaluation_method = evaluation_method[evaluation_method != "sva"]}
-  if (!all(evaluation_method %in% c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva"))) {
+  if (!all(evaluation_method %in% c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva", "umap"))) {
     stop("Evaluation correction method not found")}
   if ("all" %in% color_by){
     color_by = c("batch", "variable_of_interest", "BnW")
@@ -115,6 +115,14 @@ batch_evaluate = function(mat = NULL,
                                           sva_nsv_method)
     batch_evaluation_list$Plots$sva <- evaluation_sva_list$Plots
     batch_evaluation_list$Matrices$sva <- evaluation_sva_list$Matrices
+  }
+  if ("umap" %in% evaluation_method){
+    cat("\tConducting uniform manifold approimation and projection analysis\n")
+    batch_evaluation_list$Plots$umap <- evaluation_umap(mat,
+                                                        meta,
+                                                        batch.1,
+                                                        variable_of_interest,
+                                                        color_by)
   }
   return(batch_evaluation_list)
 }
