@@ -20,18 +20,18 @@
 #' @examples
 #' set.seed(333)
 batch_evaluate = function(mat = NULL,
-                            meta = NULL,
-                            evaluation_method = "all",
-                            batch.1 = NULL,
-                            annotation = "all",
-                            cluster_number = NULL,
-                            variable_of_interest = NULL,
-                            cluster_analysis_method = "all",
-                            color_by = "all",
-                            ncomponents = 5,
-                            pca_factors = NULL,
-                            variable_choices = NULL,
-                            sva_nsv_method = "be"){
+                          meta = NULL,
+                          evaluation_method = "all",
+                          batch.1 = NULL,
+                          annotation = "all",
+                          cluster_number = NULL,
+                          variable_of_interest = NULL,
+                          cluster_analysis_method = "all",
+                          color_by = "all",
+                          ncomponents = 5,
+                          pca_factors = NULL,
+                          variable_choices = NULL,
+                          sva_nsv_method = "be"){
   batch_evaluation_list <- list()
   if (is.null(mat)){
     stop("Please provide a matrix file or use retrieve_data or generate_data to generate a matrix file")
@@ -40,7 +40,7 @@ batch_evaluate = function(mat = NULL,
   if (is.null(meta)){
     stop("please provide a meta file or use retrieve_data or generate_data to generate a meta file")
   }
-  if (is.null(batch.1)){
+  if (is.null(batch.1) & !"sva" %in% evaluation_method){
     stop("Please select column name in the meta file for the batch information")
   }
   if (is.null(variable_of_interest)){
@@ -61,17 +61,17 @@ batch_evaluate = function(mat = NULL,
   if ("pca" %in% evaluation_method){
     cat("\tConducting principal component analysis\n")
     batch_evaluation_list$Plots$pca <-  evaluation_pca(mat,
-                                                 meta,
-                                                 annotation,
-                                                 cluster_number,
-                                                 batch.1,
-                                                 variable_of_interest,
-                                                 color_by)
+                                                       meta,
+                                                       annotation,
+                                                       cluster_number,
+                                                       batch.1,
+                                                       variable_of_interest,
+                                                       color_by)
   }
   if ("cluster_analysis" %in% evaluation_method){
     cat("\tConducting cluster analysis\n")
     batch_evaluation_list$Plots$cluster_analysis <- evaluation_cluster_analysis(mat,
-                                                                          cluster_analysis_method)
+                                                                                cluster_analysis_method)
   }
   if ("mc_pca" %in% evaluation_method){
     cat("\tConducting multiple components PCA analysis\n")

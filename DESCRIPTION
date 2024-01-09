@@ -28,6 +28,8 @@ Imports:
     umap,
     ggpubr,
     magrittr,
+    edgeR,
+    preprocessCore,
     factoextra,
     clValid,
     metafolio,
