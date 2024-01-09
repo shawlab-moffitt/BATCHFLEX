@@ -6,6 +6,9 @@
 \usage{
 Batch_FLEX(
   BatchFLEX_function = c("batch_correct", "batch_evaluate"),
+  merge_matrix_files = NULL,
+  merge_meta_files = NULL,
+  keep_all_genes = FALSE,
   mat = NULL,
   meta = NULL,
   correction_method = "all",
@@ -64,7 +67,7 @@ Batch_FLEX(
 
 \item{sva_nsv_method}{Input correction_method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek"}
 
-\item{evaluation_method}{A character vector of batch correction methods in c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva")}
+\item{evaluation_method}{A character vector of batch correction methods in c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva", "umap")}
 
 \item{annotation}{Used by evaluation pca to select whether a cluster or meta annotated PCA plot is generated. cluster = "cluster", meta = "meta", all = c("cluster", "meta")}
 

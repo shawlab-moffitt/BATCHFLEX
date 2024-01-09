@@ -31,6 +31,9 @@
 #' @examples
 #' set.seed(333)
 Batch_FLEX = function(BatchFLEX_function = c("batch_correct", "batch_evaluate"),
+                      merge_matrix_files = NULL,
+                      merge_meta_files = NULL,
+                      keep_all_genes = FALSE,
                       mat = NULL,
                       meta = NULL,
                       correction_method = "all",
@@ -71,8 +74,11 @@ Batch_FLEX = function(BatchFLEX_function = c("batch_correct", "batch_evaluate"),
   if (is.null(housekeeping) & "batch_correct" %in% BatchFLEX_function & "RUVg" %in% correction_method | is.null(housekeeping) & "batch_correct" %in% BatchFLEX_function & "all" %in% correction_method){
     stop("Please provide a list of housekeeping genes for the RUVg correction method")
   }
-  if (!all(BatchFLEX_function %in% c("retrieve_data", "generate_data", "preprocess_data", "batch_correct", "batch_evaluate"))){
+  if (!all(BatchFLEX_function %in% c("retrieve_data", "generate_data", "merge_data", "preprocess_data", "batch_correct", "batch_evaluate"))){
     stop("BatchFLEX function not found")
+  }
+  if ("merge_data" %in% BatchFLEX_function){
+    Batch_FLEX_list$merge_data <- merge_data(merge_matrix_files, merge_meta_files, keep_all_genes)
   }
   if ("batch_correct" %in% BatchFLEX_function){
     Batch_FLEX_list$data_matrices <- batch_correct(mat, meta, correction_method, batch.1, batch.2, log2_transformed, variable_of_interest, housekeeping,

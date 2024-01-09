@@ -25,7 +25,7 @@ batch_evaluate(
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
-\item{evaluation_method}{A character vector of batch correction methods in c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva")}
+\item{evaluation_method}{A character vector of batch correction methods in c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva", "umap")}
 
 \item{batch.1}{Column name from the meta file of the column that will be used for batch information}
 

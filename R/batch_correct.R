@@ -27,7 +27,7 @@ batch_correct = function(mat = NULL,
                             batch.1 = NULL,
                             batch.2 = NULL,
                             log2_transformed = TRUE,
-                            variable_of_interest = TRUE,
+                            variable_of_interest = NULL,
                             housekeeping = BatchFLEX::hsiao_mouse,
                             k = 2,
                             drop = 0,
@@ -36,15 +36,15 @@ batch_correct = function(mat = NULL,
                             tolerance = 1e-8,
                             par.prior = TRUE,
                             sva_nsv_method = "be") {
-  #checks to make sure teh data is in the right format
+  #checks to make sure the data is in the right format
   if (is.null(mat)) stop("Must provide matrix")
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
   if (is.null(meta)) stop("Must provide meta data")
-  if (is.null(batch.1)) {
+  if (is.null(batch.1)& !"SVA" %in% correction_method) {
     stop("Please select column name in the meta file for the batch information")
   }
   if (is.null(variable_of_interest)){
-    message("Missing variable of interest. Some correction methods and evaluation techniques are not available.")
+    message("Missing variable of interest. SVA and Harman correction methods are not available")
   }
   if (is.null(housekeeping) & "RUVg" %in% correction_method | is.null(housekeeping) & "all" %in% correction_method){
     stop("Please provide a list of housekeeping genes for the RUVg correction method")

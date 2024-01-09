@@ -27,7 +27,7 @@ adjust_ruvg = function(mat,
   if (sum(h_i_m) < length(h_i_m)*0.5){
     message("Check housekeeping gene list. Ensure species is correct")
   }
-  message(sum(h_i_m), " genes of ", length(h_i_m), " found in data")
+  message(sum(h_i_m), " housekeeping genes of ", length(h_i_m), " found in data")
   if(!log2_transformed){
     ruvg_mat <- log2(mat)
   } else {

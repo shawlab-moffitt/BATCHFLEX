@@ -11,7 +11,7 @@ batch_correct(
   batch.1 = NULL,
   batch.2 = NULL,
   log2_transformed = TRUE,
-  variable_of_interest = TRUE,
+  variable_of_interest = NULL,
   housekeeping = BatchFLEX::hsiao_mouse,
   k = 2,
   drop = 0,
