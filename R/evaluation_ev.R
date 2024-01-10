@@ -29,7 +29,7 @@ evaluation_ev <- function(mat,
   )
   SummarizedExperiment::assay(EV_SCE, "logcounts") <- SingleCellExperiment::counts(EV_SCE)
   EV_SCE_PCA <- scater::runPCA(EV_SCE)
-  EV_SCE_PCA_Vars <- getVarianceExplained(EV_SCE_PCA,exprs_values = "logcounts",variables = variable_choices)
+  EV_SCE_PCA_Vars <- scater::getVarianceExplained(EV_SCE_PCA,exprs_values = "logcounts",variables = variable_choices)
   EV_SCE_PCA_Vars_melt <- reshape2::melt(EV_SCE_PCA_Vars)
   evaluation_ev_list$ev <- ggplot(EV_SCE_PCA_Vars_melt, aes(x = value,color = Var2)) +
     geom_density(linewidth = 1) +

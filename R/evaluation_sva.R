@@ -27,7 +27,7 @@ evaluation_sva <- function(mat,
                                                latent_variable = SVA_object$pprob.gam,
                                                variable_of_intrest = SVA_object$pprob.b
   )
-  SVA_probability_df_longer <- pivot_longer(SVA_probability_df, !Genes, names_to = "variable_type")
+  SVA_probability_df_longer <- tidyr::pivot_longer(SVA_probability_df, !Genes, names_to = "variable_type")
   SVA_probability_df_longer <- dplyr::rename(SVA_probability_df_longer, "probability_association_of_each_gene" = "value")
   evaluation_sva_list$Plots$svaprob <- ggplot(SVA_probability_df_longer,
                                                   mapping = aes(x = probability_association_of_each_gene, fill = variable_type, alpha = 0.5)

@@ -35,6 +35,11 @@ Batch_FLEX = function(BatchFLEX_function = c("batch_correct", "batch_evaluate"),
                       merge_meta_files = NULL,
                       keep_all_genes = FALSE,
                       mat = NULL,
+                      raw.counts = FALSE,
+                      raw.norm.method = NULL,
+                      log2 = TRUE,
+                      quantnorm = TRUE,
+                      remove.duplicates = TRUE,
                       meta = NULL,
                       correction_method = "all",
                       batch.1 = NULL,
@@ -58,7 +63,7 @@ Batch_FLEX = function(BatchFLEX_function = c("batch_correct", "batch_evaluate"),
                       pca_factors = NULL,
                       variable_choices = NULL){
   Batch_FLEX_list <- list()
-  if (is.null(mat)){
+  if (is.null(mat) & !"preprocess_matrix" %in% BatchFLEX_function){
     stop("Please provide a matrix file or use retrieve_data or generate_data to generate a matrix file")
   }
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
@@ -74,18 +79,26 @@ Batch_FLEX = function(BatchFLEX_function = c("batch_correct", "batch_evaluate"),
   if (is.null(housekeeping) & "batch_correct" %in% BatchFLEX_function & "RUVg" %in% correction_method | is.null(housekeeping) & "batch_correct" %in% BatchFLEX_function & "all" %in% correction_method){
     stop("Please provide a list of housekeeping genes for the RUVg correction method")
   }
-  if (!all(BatchFLEX_function %in% c("retrieve_data", "generate_data", "merge_data", "preprocess_data", "batch_correct", "batch_evaluate"))){
+  if (!all(BatchFLEX_function %in% c("retrieve_data", "generate_data", "merge_data", "preprocess_matrix", "batch_correct", "batch_evaluate"))){
     stop("BatchFLEX function not found")
   }
   if ("merge_data" %in% BatchFLEX_function){
     Batch_FLEX_list$merge_data <- merge_data(merge_matrix_files, merge_meta_files, keep_all_genes)
   }
+  if ("preprocess_matrix" %in% BatchFLEX_function){
+    cat("\tPre-processing input matix\n")
+    mat <- preprocess_matrix(mat = mat, raw.counts = raw.counts, raw.norm.method = raw.norm.method,log2 = log2, quantnorm = quantnorm, remove.duplicates = remove.duplicates)
+    Batch_FLEX_list$data_matrices[[paste0("Unadjusted_", ifelse(log2, "Log2_", ""), ifelse(quantnorm, "Norm", ""))]] <-  as.matrix(mat)
+  }
   if ("batch_correct" %in% BatchFLEX_function){
-    Batch_FLEX_list$data_matrices <- batch_correct(mat, meta, correction_method, batch.1, batch.2, log2_transformed, variable_of_interest, housekeeping,
-                                          k, drop, center, round, tolerance, par.prior, sva_nsv_method)
+    if (!"preprocess_matrix" %in% BatchFLEX_function){
+      Batch_FLEX_list$data_matrices$Unadjusted <- mat
+    }
+    Batch_FLEX_list$data_matrices <- append(Batch_FLEX_list$data_matrices, batch_correct(mat, meta, correction_method, batch.1, batch.2, log2_transformed, variable_of_interest, housekeeping,
+                                          k, drop, center, round, tolerance, par.prior, sva_nsv_method))
   }
   if (!"batch_correct" %in% BatchFLEX_function){
-    if (is.matrix(mat)){
+    if (is.matrix(mat) & !"preprocess_matrix" %in% BatchFLEX_function){
       Batch_FLEX_list$data_matrices$Unadjusted <- mat
     }
     if (is.list(mat)){

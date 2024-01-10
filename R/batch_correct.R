@@ -16,7 +16,6 @@
 #' @param correction_method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA).
 #' @param sva_nsv_method Input correction_method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek".
 #' @param prep_matrix Logical. If TRUE, run preprocess_matrix function or log and/or quantile normalize or normalize raw counts.
-#' @param data Numeric matrix or data frame. The features can be rownames or the first column followed by the sample names as the column names with numeric count data as the values.
 #' @param raw.counts Logical. TRUE indicates the input data is raw counts. FALSE indicated the input data is not raw counts.
 #' @param raw.norm.method Character string of what method to use for raw count normalization. Supported methods are "TMM" or "upperquartile". If raw.counts is FALSE this will be ignored.
 #' @param log2 Logical. If TRUE, the input data with be logged with the method "log2+1".
@@ -29,7 +28,6 @@
 #' @examples
 #' set.seed(333)
 batch_correct = function(mat = NULL,
-
                          meta = NULL,
                          correction_method = "all",
                          batch.1 = NULL,
@@ -43,14 +41,7 @@ batch_correct = function(mat = NULL,
                          round = FALSE,
                          tolerance = 1e-8,
                          par.prior = TRUE,
-                         sva_nsv_method = "be",
-                         prep_matrix = FALSE,
-                         data = NULL,
-                         raw.counts = FALSE,
-                         raw.norm.method = NULL,
-                         log2 = TRUE,
-                         quantnorm = TRUE,
-                         remove.duplicates = TRUE) {
+                         sva_nsv_method = "be") {
 
   #checks to make sure the data is in the right format
   if (is.null(mat)) stop("Must provide matrix")
@@ -86,13 +77,6 @@ batch_correct = function(mat = NULL,
   if(length(batch.2) > 1) stop('batch.2 can only be of length 1 or NULL')
 
   batch_corrected_list <- list()
-  batch_corrected_list$Unadjusted = as.matrix(mat)
-
-  if (prep_matrix) {
-    cat("\tPre-processing input matix\n")
-    mat <- preprocess_matrix(data = mat,raw.counts = raw.counts,raw.norm.method = raw.norm.method,log2 = log2, quantnorm = quantnorm,remove.duplicates = remove.duplicates)
-    batch_corrected_list[[paste0("Unadjusted_",ifelse(log2,"Log2_",NULL),ifelse(quantnorm,"Norm",NULL))]] = as.matrix(mat)
-  }
 
   meta <- meta[match(colnames(mat), meta[[1]]),]
 
