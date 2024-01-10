@@ -94,7 +94,7 @@ Batch_FLEX = function(BatchFLEX_function = c("batch_correct", "batch_evaluate"),
     if (!"preprocess_matrix" %in% BatchFLEX_function){
       Batch_FLEX_list$data_matrices$Unadjusted <- mat
     }
-    Batch_FLEX_list$data_matrices <- append(Batch_FLEX_list$data_matrices, batch_correct(mat, meta, correction_method, batch.1, batch.2, log2_transformed, variable_of_interest, housekeeping,
+    Batch_FLEX_list$data_matrices <- base::append(Batch_FLEX_list$data_matrices, batch_correct(mat, meta, correction_method, batch.1, batch.2, log2_transformed, variable_of_interest, housekeeping,
                                           k, drop, center, round, tolerance, par.prior, sva_nsv_method))
   }
   if (!"batch_correct" %in% BatchFLEX_function){

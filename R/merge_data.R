@@ -13,26 +13,36 @@ merge_data <- function(merge_matrix_files = NULL,
                         merge_meta_files = NULL,
                         keep_all_genes = FALSE
 ){
-  if (is.null(merge_matrix_files) | is.null(merge_meta_files)){
+  if (is.null(merge_matrix_files)){
     message("Must provide a list of matrices and meta files simulatenously to match matrix and meta information")
   }
   merge_data <- list()
   merged_matrix <- base::merge(merge_matrix_files[[1]], merge_matrix_files[[2]], all = keep_all_genes)
   if (length(merge_matrix_files) > 2){
     for (file in merge_matrix_files[3:length(merge_matrix_files)]){
-      merged_matrix <- base::merge(merged_matrix, file)
+      merged_matrix <- base::merge(merged_matrix, file, all = keep_all_genes)
     }
   }
   merge_data$merged_matrix <- merged_matrix
-
-  merged_meta <- base::merge(merge_meta_files[[1]], merge_meta_files[[2]], all = TRUE)
-  if (length(merge_matrix_files) > 2){
-    for (file in merge_meta_files[3:length(merge_meta_files)]){
-      merged_meta <- base::merge(merged_meta, file, all = TRUE)
+  study_vector <- vector()
+  if (is.null(merge_meta_files)){
+    merged_meta <- data.frame()
+    merged_meta <- rbind(merged_meta, as.data.frame(colnames(merged_matrix)[-1]))
+    names(merged_meta) <- "SampleID"
+    for (study in names(merge_matrix_files)){
+      study_vector <- base::append(study_vector, rep(study, length(colnames(merge_matrix_files[[study]])[-1])))
     }
+    merged_meta$study <- study_vector
+    merge_data$merged_meta <- merged_meta
+  }else {
+    merged_meta <- base::merge(merge_meta_files[[1]], merge_meta_files[[2]], all = TRUE)
+    if (length(merge_matrix_files) > 2){
+      for (file in merge_meta_files[3:length(merge_meta_files)]){
+        merged_meta <- base::merge(merged_meta, file, all = TRUE)
+      }
+    }
+    merged_meta <- merged_meta[match(colnames(merged_matrix)[-1], merged_meta[,1]),]
+    merge_data$merged_meta <- merged_meta
   }
-  merged_meta <- merged_meta[match(colnames(merged_matrix)[-1], merged_meta[,1]),]
-  merge_data$merged_meta <- merged_meta
-
   return(merge_data)
 }
