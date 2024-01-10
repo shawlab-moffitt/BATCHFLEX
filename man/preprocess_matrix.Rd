@@ -5,7 +5,7 @@
 \title{Pre Process Matrix}
 \usage{
 preprocess_matrix(
-  data = NULL,
+  mat = NULL,
   raw.counts = FALSE,
   raw.norm.method = NULL,
   log2 = TRUE,
@@ -14,7 +14,7 @@ preprocess_matrix(
 )
 }
 \arguments{
-\item{data}{Numeric matrix or data frame. The features can be rownames or the first column followed by the sample names as the column names with numeric count data as the values.}
+\item{mat}{Numeric matrix or data frame. The features can be rownames or the first column followed by the sample names as the column names with numeric count data as the values.}
 
 \item{raw.counts}{Logical. TRUE indicates the input data is raw counts. FALSE indicated the input data is not raw counts.}
 
