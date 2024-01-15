@@ -58,7 +58,6 @@ knitr::opts_chunk$set(
 ## Background 
 
 Integrating multiple datasets for large-scale genomic or transcriptomic analysis is a difficult and tedious process that typically introduces significant batch effects. Batch effects can arise from many different types of technical variation from differing institutions, personnel, or instruments and often arise even in single studies when sample prep and analysis occurs over multiple days or weeks. Batch effects can significantly confound the data, making detection of true differences difficult. Although many tools are available to correct for these effects, not every method is appropriate in all instances. The BatchFLEX package is a comprehensive tool for simulating, merging, preprocessing, correcting, and evaluating data. BatchFLEX helps researchers determine if batch correction is necessary and helps researches choose the most optimal method of batch correction for their data. Finally, after batch correction, BatchFLEX allows for easy export of a corrected matrix and meta file for downstream analysis. 
-![image](https://github.com/shawlab-moffitt/BATCHFLEX/assets/153856188/6cb79d43-9ad7-4082-8cb6-6d1423912186)
 
 ## Methods
 
