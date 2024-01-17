@@ -22,7 +22,7 @@ evaluation_rle <- function(mat,
   if ("batch" %in% color_by){
     RLE_SCE <- SingleCellExperiment::SingleCellExperiment(
       assays = list(counts = as.matrix(rle_mat)),
-      colData = meta[order(meta[,batch.1]),],
+      colData = meta,
       rowData = rownames(mat)
     )
     evaluation_rle_list$batch_colored <- scater::plotRLE(
@@ -34,7 +34,7 @@ evaluation_rle <- function(mat,
   if ("variable_of_interest" %in% color_by){
     RLE_SCE <- SingleCellExperiment::SingleCellExperiment(
       assays = list(counts = as.matrix(rle_mat)),
-      colData = meta[order(meta[,variable_of_interest]),],
+      colData = meta,
       rowData = rownames(mat)
     )
     evaluation_rle_list$voi_colored <- scater::plotRLE(

@@ -10,6 +10,9 @@
 #' set.seed(333)
 evaluation_cluster_analysis = function(mat,
                                        cluster_analysis_method){
+
+  mat <- t(apply(mat, 1, scale))
+
   if("all" %in% cluster_analysis_method){
     cluster_analysis_method = c("wss", "silhouette", "dunn")
   }

@@ -34,7 +34,7 @@ batch_evaluate = function(mat = NULL,
                           sva_nsv_method = "be"){
   batch_evaluation_list <- list()
   if (is.null(mat)){
-    stop("Please provide a matrix file or use retrieve_data or generate_data to generate a matrix file")
+    stop("Please provide a matrix file or use retrieve_data or generate_data to generate a matrix file for batch_evaluate")
   }
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
   if (is.null(meta)){

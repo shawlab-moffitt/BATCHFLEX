@@ -19,7 +19,7 @@ adjust_sva(mat, meta, variable_of_interest, sva_nsv_method)
 an adjusted expression matrix
 }
 \description{
-Adjust_sva
+Wrapper for \code{sva::sva}
 }
 \examples{
 set.seed(333)

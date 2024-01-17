@@ -37,7 +37,8 @@ Imports:
     scater,
     SingleCellExperiment,
     FactoMineR,
-    cluster
+    cluster,
+    RUVcorr
 Depends: 
     R (>= 2.10),
     ggfortify

@@ -22,12 +22,17 @@ evaluation_pca = function(mat,
                           color_by){
   pca_plot_list <- list()
   row.names(mat) <- NULL
+  mat <- as.data.frame(mat)
+  mat <- mat[, sapply(mat, var) != 0]
+  mat <- as.matrix(mat)
+  meta <- meta[match(colnames(mat), meta[,1]),]
   if("all" %in% annotation) annotation = c("cluster", "meta")
   if (!all(annotation %in% c("cluster", "meta"))){
     stop("Annotation method not found")
   }
   if ("cluster" %in% annotation & is.null(cluster_number) ){
-    silhouette <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "silhouette", verbose = T)
+    zdataset <- t(apply(mat, 1, scale))
+    silhouette <- factoextra::fviz_nbclust(x = t(zdataset), FUNcluster = kmeans, method = "silhouette", verbose = T)
     cluster_number = silhouette$data$clusters[which(max(silhouette$data$y) == silhouette$data$y)]
   }
   if ("cluster" %in% annotation){

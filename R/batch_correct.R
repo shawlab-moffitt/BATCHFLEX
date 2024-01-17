@@ -15,12 +15,6 @@
 #' @param par.prior Used in the ComBat correction_method, TRUE indicates parametric adjustments will be used, FALSE indicates non-parametric adjustments will be used.
 #' @param correction_method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA).
 #' @param sva_nsv_method Input correction_method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek".
-#' @param prep_matrix Logical. If TRUE, run preprocess_matrix function or log and/or quantile normalize or normalize raw counts.
-#' @param raw.counts Logical. TRUE indicates the input data is raw counts. FALSE indicated the input data is not raw counts.
-#' @param raw.norm.method Character string of what method to use for raw count normalization. Supported methods are "TMM" or "upperquartile". If raw.counts is FALSE this will be ignored.
-#' @param log2 Logical. If TRUE, the input data with be logged with the method "log2+1".
-#' @param quantnorm Logical. If TRUE, the input data will be quantile normalized.
-#' @param remove.duplicates Logical. If TRUE, if duplicate row features are found, they will be summarized to the row with the maximum average feature value.
 #'
 #' @return List object of length of correction_method
 #' @export

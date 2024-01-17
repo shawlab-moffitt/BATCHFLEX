@@ -6,6 +6,22 @@
 \usage{
 Batch_FLEX(
   BatchFLEX_function = c("batch_correct", "batch_evaluate"),
+  num_samples = 1000,
+  num_genes = 20000,
+  num_control = 18000,
+  num_treatments = 2,
+  treatment_effect_multiplier = c(0, 1),
+  treatment_effect = 5,
+  treatment_sd = 1,
+  additional_batch = 1,
+  batch_proportion = 0.5,
+  batch_effect_multiplier = c(1),
+  batch_effect = 5,
+  batch_effect_sd = 1,
+  batch_sample_sd_mean = 0,
+  batch_sample_sd_sd = 2,
+  epsilon_mean = 0,
+  epsilon_sd = 1,
   merge_matrix_files = NULL,
   merge_meta_files = NULL,
   keep_all_genes = FALSE,
@@ -40,56 +56,104 @@ Batch_FLEX(
 )
 }
 \arguments{
-\item{BatchFLEX_function}{A Character vector of BatchFLEX functions in c("retrieve_data", "generate_data", "preprocess_data", "batch_correct", "batch_evaluate")}
+\item{BatchFLEX_function}{A Character vector of BatchFLEX functions in c("retrieve_data", "simulate_data", "preprocess_data", "batch_correct", "batch_evaluate").}
 
-\item{mat}{A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names}
+\item{num_samples}{An integer setting the number of samples to simulate.}
 
-\item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
+\item{num_genes}{An integer setting the number of genes to simulate.}
 
-\item{correction_method}{A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA). Default is set to "all", which excludes ComBatseq as it requires a count matrix}
+\item{num_control}{An integer setting the number of genes that do not respond to treatment.}
 
-\item{batch.1}{Column name from the meta file of the column that will be used for batch information}
+\item{num_treatments}{An integer setting the number of total treatments.}
 
-\item{batch.2}{Column name from the meta file of the column that will be used for batch two information}
+\item{treatment_effect_multiplier}{A number or numbers setting how each treatment impacts the treatment effect. Must equal the number of treatments.}
 
-\item{log2_transformed}{logical whether the data is already transformed. Default is set to TRUE}
+\item{treatment_effect}{A number setting average impact of the treatments.}
 
-\item{variable_of_interest}{Column name from the meta file of the column that will be used for the variable of interest information}
+\item{treatment_sd}{A number setting the standard deviation of the treatments.}
 
-\item{housekeeping}{Name of housekeeping gene set or character vector of housekeeping genes. Default is set to the preloaded HSIAO human gene list}
+\item{additional_batch}{An integer setting the number of additional batches. e.g. setting to 1 indicates 2 total batches in the simulation.}
 
-\item{k}{Used in the RUVg correction_method, the number of factors of unwanted variation to be estimated from the data}
+\item{batch_proportion}{A number setting the proportion of the total sample that is a different batch. Each additional batch is given an equal proportion of the total batch proportion.}
 
-\item{drop}{Used in the RUVg correction_method, the number of singular values to drop in the estimation of the factors of unwanted variation. This number is usually zero, but might be set to one if the first singular value captures the effect of interest. It must be less than k}
+\item{batch_effect_multiplier}{A number or numbers setting how each batch impacts the treatment effect.}
 
-\item{center}{Used in the RUVg correction_method, if TRUE, the counts are centered, for each gene, to have mean zero across samples. This is important to ensure that the first singular value does not capture the average gene expression}
+\item{batch_effect}{A number setting the initial expression of each gene for a single sample for the batch effect. e.g. a single column of num_genes length that will be used to set the average expression for that gene across a set of batch samples}
 
-\item{round}{Used in the RUVg correction_method, if TRUE, the normalized measures are rounded to form pseudo-counts}
+\item{batch_effect_sd}{A number setting the deviation for the initial expression of each gene for a single sample for the batch effect.}
 
-\item{tolerance}{Used in the RUVg correction_method, tolerance in the selection of the number of positive singular values, i.e., a singular value must be larger than tolerance to be considered positive}
+\item{batch_sample_sd_mean}{A number setting average for the standard deviation for each sample derived from the initial gene expression.}
 
-\item{par.prior}{Used in the ComBat correction_method, TRUE indicates parametric adjustments will be used, FALSE indicates non-parametric adjustments will be used}
+\item{batch_sample_sd_sd}{A number setting the deviation for the average standard deviation used in the batch effect calculations.}
 
-\item{sva_nsv_method}{Input correction_method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek"}
+\item{epsilon_mean}{A number setting the average noise level}
 
-\item{evaluation_method}{A character vector of batch correction methods in c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva", "umap")}
+\item{epsilon_sd}{A number setting the deviation for the average noise level}
 
-\item{annotation}{Used by evaluation pca to select whether a cluster or meta annotated PCA plot is generated. cluster = "cluster", meta = "meta", all = c("cluster", "meta")}
+\item{merge_matrix_files}{A list of matrix files to be merged.}
 
-\item{cluster_number}{Used by evaluation pca to select the number of kmeans generated clusters to display in the uncorrected plot. If NULL is selected, a Dunn generated cluster number is used.}
+\item{merge_meta_files}{A list of meta files to be merged.}
 
-\item{cluster_analysis_method}{Used to select cluster analysis method. Elbow = "wss", Silhouette = "silhouette", Dunn = "dunn', all generates plots from each method}
+\item{keep_all_genes}{A TRUE/FALSE statement to indicate how unmatched genes will be handled. If TRUE, then NAs will be inserted for unmatched genes. If FALSE, unmatched genes will be deleted. Default is set to FALSE.}
 
-\item{color_by}{Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals. Choices are "batch", "variable_of_interest", "BnW", and "all". Default is set to "all"}
+\item{mat}{A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names.}
 
-\item{ncomponents}{Used by evaluation multiple components to select the number of principal components that will be plotted. Default is set to 5}
+\item{raw.counts}{Logical. TRUE indicates the input data is raw counts. FALSE indicated the input data is not raw counts.}
 
-\item{pca_factors}{Used by evaluation pca details to select the Column name from the meta file of the column that will be used to group the summary details of the PCA plot. If NULL, batch is selected}
+\item{raw.norm.method}{Character string of what method to use for raw count normalization. Supported methods are "TMM" or "upperquartile". If raw.counts is FALSE this will be ignored.}
 
-\item{variable_choices}{Used by the explanatory variables function to select which variables to plot. Default is a combination of the batch and variable of interest}
+\item{log2}{Logical. If TRUE, the input data with be logged with the method "log2+1".}
+
+\item{quantnorm}{Logical. If TRUE, the input data will be quantile normalized.}
+
+\item{remove.duplicates}{Logical. If TRUE, if duplicate row features are found, they will be summarized to the row with the maximum average feature value.}
+
+\item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix.}
+
+\item{correction_method}{A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA). Default is set to "all", which excludes ComBatseq as it requires a count matrix.}
+
+\item{batch.1}{Column name from the meta file of the column that will be used for batch information.}
+
+\item{batch.2}{Column name from the meta file of the column that will be used for batch two information.}
+
+\item{log2_transformed}{logical whether the data is already transformed. Default is set to TRUE.}
+
+\item{variable_of_interest}{Column name from the meta file of the column that will be used for the variable of interest information.}
+
+\item{housekeeping}{Name of housekeeping gene set or character vector of housekeeping genes. Default is set to the preloaded HSIAO human gene list.}
+
+\item{k}{Used in the RUVg correction_method, the number of factors of unwanted variation to be estimated from the data.}
+
+\item{drop}{Used in the RUVg correction_method, the number of singular values to drop in the estimation of the factors of unwanted variation. This number is usually zero, but might be set to one if the first singular value captures the effect of interest. It must be less than k.}
+
+\item{center}{Used in the RUVg correction_method, if TRUE, the counts are centered, for each gene, to have mean zero across samples. This is important to ensure that the first singular value does not capture the average gene expression.}
+
+\item{round}{Used in the RUVg correction_method, if TRUE, the normalized measures are rounded to form pseudo-counts.}
+
+\item{tolerance}{Used in the RUVg correction_method, tolerance in the selection of the number of positive singular values, i.e., a singular value must be larger than tolerance to be considered positive.}
+
+\item{par.prior}{Used in the ComBat correction_method, TRUE indicates parametric adjustments will be used, FALSE indicates non-parametric adjustments will be used.}
+
+\item{sva_nsv_method}{Input correction_method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek".}
+
+\item{evaluation_method}{A character vector of batch correction methods in c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva", "umap").}
+
+\item{annotation}{Used by evaluation pca to select whether a cluster or meta annotated PCA plot is generated. cluster = "cluster", meta = "meta", all = c("cluster", "meta").}
+
+\item{cluster_number}{Used by evaluation pca to select the number of kmeans generated clusters to display in the uncorrected plot. If NULL is selected, a Dunn generated cluster number is used..}
+
+\item{cluster_analysis_method}{Used to select cluster analysis method. Elbow = "wss", Silhouette = "silhouette", Dunn = "dunn', all generates plots from each method.}
+
+\item{color_by}{Used by evaluation multiple components, pca, and rle to select which feature will be used to color the individuals. Choices are "batch", "variable_of_interest", "BnW", and "all". Default is set to "all".}
+
+\item{ncomponents}{Used by evaluation multiple components to select the number of principal components that will be plotted. Default is set to 5.}
+
+\item{pca_factors}{Used by evaluation pca details to select the Column name from the meta file of the column that will be used to group the summary details of the PCA plot. If NULL, batch is selected.}
+
+\item{variable_choices}{Used by the explanatory variables function to select which variables to plot. Default is a combination of the batch and variable of interest.}
 }
 \value{
-A list object containing all plots and matrices generated by BatchFLEX
+A list object containing all plots and matrices generated by BatchFLEX.
 }
 \description{
 BatchFLEX

@@ -1,5 +1,7 @@
 #' Adjust_sva
 #'
+#' Wrapper for `sva::sva`
+#'
 #' @param mat Numeric matrix with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param variable_of_interest Column name from the meta file of the column that will be used as the variable of interest to generate the model matrix
