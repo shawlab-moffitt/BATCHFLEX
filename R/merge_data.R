@@ -29,8 +29,8 @@ merge_data <- function(merge_matrix_files = NULL,
     merged_meta <- data.frame()
     merged_meta <- rbind(merged_meta, as.data.frame(colnames(merged_matrix)[-1]))
     names(merged_meta) <- "SampleID"
-    for (study in names(merge_matrix_files)){
-      study_vector <- base::append(study_vector, rep(study, length(colnames(merge_matrix_files[[study]])[-1])))
+    for (file in 1:length(merge_matrix_files)){
+      study_vector <- base::append(study_vector, rep(paste0("Study_", file, sep = ""), length(colnames(merge_matrix_files[[file]])[-1])))
     }
     merged_meta$study <- study_vector
     merge_data$merged_meta <- merged_meta
@@ -41,6 +41,10 @@ merge_data <- function(merge_matrix_files = NULL,
         merged_meta <- base::merge(merged_meta, file, all = TRUE)
       }
     }
+    for (file in 1:length(merge_meta_files)){
+      study_vector <- base::append(study_vector, rep(paste0("Study_", file, sep = ""), base::nrow(merge_meta_files[[file]])))
+    }
+    merged_meta$study <- study_vector
     merged_meta <- merged_meta[match(colnames(merged_matrix)[-1], merged_meta[,1]),]
     merge_data$merged_meta <- merged_meta
   }
