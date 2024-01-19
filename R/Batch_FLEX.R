@@ -1,6 +1,6 @@
 #' BatchFLEX
 #'
-#' @param BatchFLEX_function A Character vector of BatchFLEX functions in c("retrieve_data", "simulate_data", "preprocess_data", "batch_correct", "batch_evaluate").
+#' @param BatchFLEX_function A Character vector of BatchFLEX functions in c("retrieve_data", "merge_data", "simulate_data", "preprocess_data", "batch_correct", "batch_evaluate").
 #' @param num_samples An integer setting the number of samples to simulate.
 #' @param num_genes An integer setting the number of genes to simulate.
 #' @param num_control An integer setting the number of genes that do not respond to treatment.
@@ -103,11 +103,15 @@ Batch_FLEX = function(BatchFLEX_function = c("batch_correct", "batch_evaluate"),
                       pca_factors = NULL,
                       variable_choices = NULL){
   Batch_FLEX_list <- list()
-  if (is.null(mat) & !"simulate_data" %in% BatchFLEX_function | is.null(mat) & !"simulate_data" %in% BatchFLEX_function & !"merge_data" %in% BatchFLEX_function){
-    stop("Please provide a matrix file or use retrieve_data or simulate_data to generate a matrix file")
+  if (!"simulate_data" %in% BatchFLEX_function | !"merge_data" %in% BatchFLEX_function){
+    if (is.null(mat)){
+      stop("Please provide a matrix file or use retrieve_data or simulate_data to generate a matrix file")
+    }
   }
-  if (is.null(meta) & !"simulate_data" %in% BatchFLEX_function | is.null(meta) & !"simulate_data" %in% BatchFLEX_function & !"merge_data" %in% BatchFLEX_function){
-    stop("please provide a meta file or use retrieve_data or simulate_data to generate a meta file")
+  if (!"simulate_data" %in% BatchFLEX_function | !"merge_data" %in% BatchFLEX_function){
+    if (is.null(meta)){
+      stop("Please provide a matrix file or use retrieve_data or simulate_data to generate a matrix file")
+    }
   }
   if (is.null(batch.1) & "batch_correct" %in% BatchFLEX_function & !"simulate_data" %in% BatchFLEX_function | is.null(batch.1) & "batch_evaluate" %in% BatchFLEX_function & !"simulate_data" %in% BatchFLEX_function){
     stop("Please select column name in the meta file for the batch information")
@@ -135,14 +139,14 @@ Batch_FLEX = function(BatchFLEX_function = c("batch_correct", "batch_evaluate"),
   if ("merge_data" %in% BatchFLEX_function){
     Batch_FLEX_list$merge_data <- merge_data(merge_matrix_files, merge_meta_files, keep_all_genes)
   }
-  if ("merge_data" %in% BatchFLEX_function & "batch_correct" %in% BatchFLEX_function | "merge_data" %in% BatchFLEX_function & "batch_evaluate" %in% BatchFLEX_function){
+  if ("merge_data" %in% BatchFLEX_function & "batch_correct" %in% BatchFLEX_function | "merge_data" %in% BatchFLEX_function & "batch_evaluate" %in% BatchFLEX_function | "merge_data" %in% BatchFLEX_function & "preprocess_data" %in% BatchFLEX_function){
     mat <- Batch_FLEX_list$merge_data$merged_mat
     meta <- Batch_FLEX_list$merge_data$merged_meta
   }
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
   if ("preprocess_matrix" %in% BatchFLEX_function){
     cat("\tPre-processing input matix\n")
-    mat <- preprocess_matrix(mat = mat, raw.counts = raw.counts, raw.norm.method = raw.norm.method,log2 = log2, quantnorm = quantnorm, remove.duplicates = remove.duplicates)
+    mat <- preprocess_matrix(mat, raw.counts, raw.norm.method, log2, quantnorm, remove.duplicates)
     Batch_FLEX_list$data_matrices[[paste0("Unadjusted_", ifelse(log2, "Log2_", ""), ifelse(quantnorm, "Norm", ""))]] <-  as.matrix(mat)
   }
   if ("batch_correct" %in% BatchFLEX_function){
