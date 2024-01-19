@@ -17,7 +17,7 @@
 #' @param batch_sample_sd_sd A number setting the deviation for the average standard deviation used in the batch effect calculations.
 #' @param epsilon_mean A number setting the average noise level
 #' @param epsilon_sd A number setting the deviation for the average noise level
-#' @param merge_matrix_files A list of matrix files to be merged.
+#' @param merge_matrix_files A list of matrix files to be merged. If supplied as a named list, batchflex will add a named column to the meta file with the specified names. If not, batch flex will add a generic name per meta file.
 #' @param merge_meta_files A list of meta files to be merged.
 #' @param keep_all_genes A TRUE/FALSE statement to indicate how unmatched genes will be handled. If TRUE, then NAs will be inserted for unmatched genes. If FALSE, unmatched genes will be deleted. Default is set to FALSE.
 #' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names.

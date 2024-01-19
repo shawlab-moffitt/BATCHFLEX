@@ -1,6 +1,6 @@
 #' merge_data
 #'
-#' @param merge_matrix_files A list of matrix files to be merged
+#' @param merge_matrix_files A list of matrix files to be merged. If supplied as a named list, batchflex will add a named column to the meta file with the specified names. If not, batch flex will add a generic name per meta file.
 #' @param merge_meta_files A list of meta files to be merged
 #' @param keep_all_genes A TRUE/FALSE statement to indicate how unmatched genes will be handled. If TRUE, then NAs will be inserted for unmatched genes. If FALSE, unmatched genes will be deleted. Default is set to FALSE
 #'
@@ -37,7 +37,7 @@ merge_data <- function(merge_matrix_files = NULL,
       if (!is.null(names(merge_matrix_files))){
         batchflex_study <- user_names[study_number]
       }
-      study_vector <- base::append(study_vector, rep(batch_flex_study, length(colnames(merge_matrix_files[[study_number]])[-1])))
+      study_vector <- base::append(study_vector, rep(batchflex_study, length(colnames(merge_matrix_files[[study_number]])[-1])))
     }
     merged_meta$batchflex_study <- study_vector
   }else {
