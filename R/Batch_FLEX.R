@@ -103,14 +103,18 @@ Batch_FLEX = function(BatchFLEX_function = c("batch_correct", "batch_evaluate"),
                       pca_factors = NULL,
                       variable_choices = NULL){
   Batch_FLEX_list <- list()
-  if (!"simulate_data" %in% BatchFLEX_function | !"merge_data" %in% BatchFLEX_function){
+  if ("simulate_data" %in% BatchFLEX_function | "merge_data" %in% BatchFLEX_function){
+    message("Generating mat from a BatchFLEX function")
+  }else {
     if (is.null(mat)){
       stop("Please provide a matrix file or use retrieve_data or simulate_data to generate a matrix file")
     }
   }
-  if (!"simulate_data" %in% BatchFLEX_function | !"merge_data" %in% BatchFLEX_function){
+  if ("simulate_data" %in% BatchFLEX_function | "merge_data" %in% BatchFLEX_function){
+    message("Generating meta from a BatchFLEX function")
+  }else {
     if (is.null(meta)){
-      stop("Please provide a matrix file or use retrieve_data or simulate_data to generate a matrix file")
+      stop("Please provide a meta file or use retrieve_data or simulate_data to generate a matrix file")
     }
   }
   if (is.null(batch.1) & "batch_correct" %in% BatchFLEX_function & !"simulate_data" %in% BatchFLEX_function | is.null(batch.1) & "batch_evaluate" %in% BatchFLEX_function & !"simulate_data" %in% BatchFLEX_function){
