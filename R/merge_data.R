@@ -26,18 +26,20 @@ merge_data <- function(merge_matrix_files = NULL,
       merged_matrix <- base::merge(merged_matrix, file, all = keep_all_genes)
     }
   }
+  row.names(merged_matrix) <- merged_matrix[,1]
+  merged_matrix <- as.matrix(merged_matrix[,-1])
   merge_data$merged_matrix <- merged_matrix
   if (is.null(merge_meta_files)){
     study_vector <- vector()
     merged_meta <- data.frame()
-    merged_meta <- rbind(merged_meta, as.data.frame(colnames(merged_matrix)[-1]))
+    merged_meta <- rbind(merged_meta, as.data.frame(colnames(merged_matrix)))
     names(merged_meta) <- "SampleID"
     for (study_number in 1:length(merge_matrix_files)){
       batchflex_study <- paste0("Study_", study_number, sep = "")
       if (!is.null(names(merge_matrix_files))){
         batchflex_study <- user_names[study_number]
       }
-      study_vector <- base::append(study_vector, rep(batchflex_study, length(colnames(merge_matrix_files[[study_number]])[-1])))
+      study_vector <- base::append(study_vector, rep(batchflex_study, length(colnames(merge_matrix_files[[study_number]]))))
     }
     merged_meta$batchflex_study <- study_vector
   }else {
@@ -57,7 +59,7 @@ merge_data <- function(merge_matrix_files = NULL,
       }
     }
   }
-  merged_meta <- merged_meta[match(colnames(merged_matrix)[-1], merged_meta[,1]),]
+  merged_meta <- merged_meta[match(colnames(merged_matrix), merged_meta[,1]),]
   merge_data$merged_meta <- merged_meta
   return(merge_data)
 }
