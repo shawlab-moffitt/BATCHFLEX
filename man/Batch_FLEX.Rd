@@ -56,7 +56,7 @@ Batch_FLEX(
 )
 }
 \arguments{
-\item{BatchFLEX_function}{A Character vector of BatchFLEX functions in c("retrieve_data", "simulate_data", "preprocess_data", "batch_correct", "batch_evaluate").}
+\item{BatchFLEX_function}{A Character vector of BatchFLEX functions in c("retrieve_data", "merge_data", "simulate_data", "preprocess_data", "batch_correct", "batch_evaluate").}
 
 \item{num_samples}{An integer setting the number of samples to simulate.}
 
@@ -90,7 +90,7 @@ Batch_FLEX(
 
 \item{epsilon_sd}{A number setting the deviation for the average noise level}
 
-\item{merge_matrix_files}{A list of matrix files to be merged.}
+\item{merge_matrix_files}{A list of matrix files to be merged. If supplied as a named list, batchflex will add a named column to the meta file with the specified names. If not, batch flex will add a generic name per meta file.}
 
 \item{merge_meta_files}{A list of meta files to be merged.}
 
