@@ -16,6 +16,9 @@ merge_data <- function(merge_matrix_files = NULL,
   if (is.null(merge_matrix_files)){
     message("Must provide a list of matrices and meta files simulatenously to match matrix and meta information")
   }
+  if (!is.null(names(merge_matrix_files))){
+    user_names <- names(merge_matrix_files)
+  }
   merge_data <- list()
   merged_matrix <- base::merge(merge_matrix_files[[1]], merge_matrix_files[[2]], all = keep_all_genes)
   if (length(merge_matrix_files) > 2){
@@ -24,29 +27,37 @@ merge_data <- function(merge_matrix_files = NULL,
     }
   }
   merge_data$merged_matrix <- merged_matrix
-  study_vector <- vector()
   if (is.null(merge_meta_files)){
+    study_vector <- vector()
     merged_meta <- data.frame()
     merged_meta <- rbind(merged_meta, as.data.frame(colnames(merged_matrix)[-1]))
     names(merged_meta) <- "SampleID"
-    for (file in 1:length(merge_matrix_files)){
-      study_vector <- base::append(study_vector, rep(paste0("Study_", file, sep = ""), length(colnames(merge_matrix_files[[file]])[-1])))
+    for (study_number in 1:length(merge_matrix_files)){
+      batchflex_study <- paste0("Study_", study_number, sep = "")
+      if (!is.null(names(merge_matrix_files))){
+        batchflex_study <- user_names[study_number]
+      }
+      study_vector <- base::append(study_vector, rep(batch_flex_study, length(colnames(merge_matrix_files[[study_number]])[-1])))
     }
-    merged_meta$study <- study_vector
-    merge_data$merged_meta <- merged_meta
+    merged_meta$batchflex_study <- study_vector
   }else {
+    for (study_number in 1:length(merge_meta_files)){
+      batchflex_study <- paste0("Study_", study_number, sep = "")
+      if(!is.null(names(merge_matrix_files))){
+        batchflex_study <- user_names[study_number]
+      }
+      study_vector <- vector()
+      study_vector <- base::append(study_vector, rep(batchflex_study, nrow(merge_meta_files[[study_number]])))
+      merge_meta_files[[study_number]]$batchflex_study <- study_vector
+    }
     merged_meta <- base::merge(merge_meta_files[[1]], merge_meta_files[[2]], all = TRUE)
     if (length(merge_matrix_files) > 2){
       for (file in merge_meta_files[3:length(merge_meta_files)]){
         merged_meta <- base::merge(merged_meta, file, all = TRUE)
       }
     }
-    for (file in 1:length(merge_meta_files)){
-      study_vector <- base::append(study_vector, rep(paste0("Study_", file, sep = ""), base::nrow(merge_meta_files[[file]])))
-    }
-    merged_meta$study <- study_vector
-    merged_meta <- merged_meta[match(colnames(merged_matrix)[-1], merged_meta[,1]),]
-    merge_data$merged_meta <- merged_meta
   }
+  merged_meta <- merged_meta[match(colnames(merged_matrix)[-1], merged_meta[,1]),]
+  merge_data$merged_meta <- merged_meta
   return(merge_data)
 }
