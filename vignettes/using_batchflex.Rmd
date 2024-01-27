@@ -30,7 +30,7 @@ Integrating multiple datasets for large-scale genomic or transcriptomic analysis
 
 ## Using BatchFlex
 
-```{r setup}
+```{r load-packages, include = FALSE}
 library(BatchFLEX)
 library(ggpubr)
 ```
@@ -45,7 +45,7 @@ https://academic.oup.com/biostatistics/article/17/1/16/1744198
 
 
 ```{r}
-simulated_data = BatchFLEX::simulate_data()
+simulated_data = simulate_data()
 head(as.data.frame(simulated_data$sim_matrix))
 head(simulated_data$sim_meta)
 test_simulate_BatchFLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_correct", "batch_evaluate"), correction_method = "ComBat", evaluation_method = "rle", mat = simulated_data$sim_matrix, meta = simulated_data$sim_meta, batch.1 = "batch", color_by = "batch")
@@ -133,7 +133,7 @@ meta_files_to_be_merged <- list(BatchFLEX::GSE112876_meta,
                                 BatchFLEX::GSE75195_meta,
                                 BatchFLEX::GSE75202_meta,
                                 BatchFLEX::GSE75203_meta)
-test_merge <- merge_data(merge_matrix_files = matrices_to_be_merged, merge_meta_files = meta_files_to_be_merged)
+test_merge_1 <- merge_data(merge_matrix_files = matrices_to_be_merged, merge_meta_files = meta_files_to_be_merged)
 head(as.data.frame(test_merge$merged_matrix))
 head(test_merge$merged_meta)
 ```
@@ -148,7 +148,7 @@ matrices_to_be_merged <- list("GSE112876" = BatchFLEX::GSE112876_matrix,
                               "GSE75195" = BatchFLEX::GSE75195_matrix,
                               "GSE75202" = BatchFLEX::GSE75202_matrix,
                               "GSE75203" = BatchFLEX::GSE75203_matrix)
-test_merge <- merge_data(merge_matrix_files = matrices_to_be_merged)
+test_merge_2 <- merge_data(merge_matrix_files = matrices_to_be_merged)
 head(as.data.frame(test_merge$merged_matrix))
 head(test_merge$merged_meta)
 ```
@@ -430,5 +430,6 @@ Finally, `BatchFLEX` has the ability to generate `ggarrange` plots for all evalu
 example_mat_abbreviated <- example_mat[,1:100]
 example_meta_abbreviated <- example_meta[1:100,]
 test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_evaluate", "batch_correct", "BatchFLEX_export"), correction_method = c("Limma", "ComBat"), evaluation_method = c("pca","mc_pca"), mat = example_mat_abbreviated, meta = example_meta_abbreviated, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
+devtools::session_info()
 ```
 

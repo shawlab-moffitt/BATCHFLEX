@@ -39,7 +39,7 @@ merge_data <- function(merge_matrix_files = NULL,
       if (!is.null(names(merge_matrix_files))){
         batchflex_study <- user_names[study_number]
       }
-      study_vector <- base::append(study_vector, rep(batchflex_study, length(colnames(merge_matrix_files[[study_number]]))))
+      study_vector <- base::append(study_vector, rep(batchflex_study, length(colnames(merge_matrix_files[[study_number]])[-1])))
     }
     merged_meta$batchflex_study <- study_vector
   }else {
