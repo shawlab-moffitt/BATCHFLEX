@@ -19,7 +19,8 @@ evaluation_pca = function(mat,
                           cluster_number,
                           batch.1,
                           variable_of_interest,
-                          color_by){
+                          color_by,
+                          plot_title){
   pca_plot_list <- list()
   row.names(mat) <- NULL
   mat <- as.data.frame(mat)
@@ -40,34 +41,38 @@ evaluation_pca = function(mat,
     pca_plot_list$pca_clust <- ggplot2::autoplot(
       PCA,
       frame = TRUE,
-      frame.type = "norm")
+      frame.type = "norm") +
+      ggtitle(plot_title)
   }
   if ("meta" %in% annotation){
     PCA <- stats::prcomp(t(mat), scale. = TRUE)
     PCA_data <- cbind(t(mat), meta)
     if ("batch" %in% color_by){
-      pca_plot_list$pca_meta$batch_colored <- ggplot2::autoplot(
+      pca_plot_list$pca_meta_batch_colored_pca <- ggplot2::autoplot(
         PCA,
         PCA_data,
         color = batch.1,
         shape = variable_of_interest
       )+
-        ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
+        ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))+
+        ggtitle(plot_title)
     }
     if ("variable_of_interest" %in% color_by){
-      pca_plot_list$pca_meta$voi_colored <- ggplot2::autoplot(
+      pca_plot_list$pca_meta_voi_colored_pca <- ggplot2::autoplot(
         PCA,
         PCA_data,
         color = variable_of_interest,
         shape = batch.1
       )+
-        ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))
+        ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))+
+        ggtitle(plot_title)
     }
     if ("BnW" %in% color_by){
-      pca_plot_list$pca_meta$bnw<- ggplot2::autoplot(
+      pca_plot_list$pca_meta_bnw_pca<- ggplot2::autoplot(
         PCA,
         PCA_data
-      )
+      )+
+        ggtitle(plot_title)
     }
   }
   return(pca_plot_list)

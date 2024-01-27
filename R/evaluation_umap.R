@@ -13,42 +13,46 @@
 #' @examples
 #' set.seed(333)
 evaluation_umap = function(mat,
-                            meta,
-                            batch.1,
-                            variable_of_interest,
-                            color_by){
+                           meta,
+                           batch.1,
+                           variable_of_interest,
+                           color_by,
+                           plot_title){
   evaluation_umap_list <- list()
   #run umaps
   umap_res = umap::umap(t(mat))
 
   if ("batch" %in% color_by){
-    evaluation_umap_list$Plots$umap$batch_colored <- dplyr::bind_cols(meta,
+    evaluation_umap_list$batch_colored_umap <- dplyr::bind_cols(meta,
                                              as.data.frame(umap_res$layout) %>%
                                                dplyr::rename("x" = 1, "y" = 2)) %>%
       ggplot2::ggplot(aes(x = x, y = y)) +
       geom_point(aes(color = get(batch.1))) +
       theme_bw() +
-      theme(plot.title = element_text(hjust = 0.5))
+      theme(plot.title = element_text(hjust = 0.5))+
+      ggtitle(plot_title)
       #labs(title = paste0(x, " Expression"), color = batch.1)
   }
   if ("variable_of_interest" %in% color_by){
-    evaluation_umap_list$Plots$umap$voi_colored <- dplyr::bind_cols(meta,
+    evaluation_umap_list$voi_colored_umap <- dplyr::bind_cols(meta,
                                                                       as.data.frame(umap_res$layout) %>%
                                                                         dplyr::rename("x" = 1, "y" = 2)) %>%
       ggplot2::ggplot(aes(x = x, y = y)) +
       geom_point(aes(color = get(variable_of_interest))) +
       theme_bw() +
-      theme(plot.title = element_text(hjust = 0.5))
+      theme(plot.title = element_text(hjust = 0.5))+
+      ggtitle(plot_title)
       #labs(title = paste0(x, " Expression"), color = variable_of_interest)
   }
   if ("BnW" %in% color_by){
-    evaluation_umap_list$Plots$umap$BnW_colored <- dplyr::bind_cols(meta,
+    evaluation_umap_list$BnW_colored_umap <- dplyr::bind_cols(meta,
                                                                     as.data.frame(umap_res$layout) %>%
                                                                       dplyr::rename("x" = 1, "y" = 2)) %>%
       ggplot2::ggplot(aes(x = x, y = y)) +
       geom_point() +
       theme_bw() +
-      theme(plot.title = element_text(hjust = 0.5))
+      theme(plot.title = element_text(hjust = 0.5))+
+      ggtitle(plot_title)
     #labs(title = paste0(x, " Expression"), color = variable_of_interest)
   }
   return(evaluation_umap_list)

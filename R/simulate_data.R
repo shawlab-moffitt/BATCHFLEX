@@ -36,7 +36,7 @@ simulate_data <- function(num_samples = 100,
                           batch_effect = 5,
                           batch_effect_sd = 1,
                           batch_sample_sd_mean = 0,
-                          batch_sample_sd_max = 2,
+                          batch_sample_sd_sd = 2,
                           epsilon_mean = 0,
                           epsilon_sd = 1
 ){

@@ -4,7 +4,7 @@
 \alias{evaluation_cluster_analysis}
 \title{Evaluation Cluster Analysis}
 \usage{
-evaluation_cluster_analysis(mat, cluster_analysis_method)
+evaluation_cluster_analysis(mat, cluster_analysis_method, plot_title)
 }
 \arguments{
 \item{mat}{A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names}

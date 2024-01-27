@@ -18,7 +18,7 @@ simulate_data(
   batch_effect = 5,
   batch_effect_sd = 1,
   batch_sample_sd_mean = 0,
-  batch_sample_sd_max = 2,
+  batch_sample_sd_sd = 2,
   epsilon_mean = 0,
   epsilon_sd = 1
 )
@@ -50,13 +50,13 @@ simulate_data(
 
 \item{batch_sample_sd_mean}{A number setting average for the standard deviation for each sample derived from the initial gene expression.}
 
+\item{batch_sample_sd_sd}{A number setting the deviation for the average standard deviation used in the batch effect calculations.}
+
 \item{epsilon_mean}{A number setting the average noise level}
 
 \item{epsilon_sd}{A number setting the deviation for the average noise level}
 
 \item{BatchFLEX_function}{A Character vector of BatchFLEX functions in c("retrieve_data", "simulate_data", "preprocess_data", "batch_correct", "batch_evaluate").}
-
-\item{batch_sample_sd_sd}{A number setting the deviation for the average standard deviation used in the batch effect calculations.}
 }
 \value{
 A list of a simulated matrix and a simulated meta file

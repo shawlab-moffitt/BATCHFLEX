@@ -19,7 +19,7 @@ adjust_sva = function(mat,
   if (is.null(variable_of_interest)) {
     stop("SVA requires a variable_of_interest input")}
   if (sva_nsv_method == "be") {
-    print("Method 'be' is selected. Input 'leek' to sva_nsv_method if alternative is desired")
+    message("Method 'be' is selected. Input 'leek' to sva_nsv_method if alternative is desired")
   }
   sva_mod <- stats::model.matrix(reformulate(variable_of_interest), data = meta)
   sva_mod0 <- stats::model.matrix(~1, data = meta)

@@ -5,7 +5,7 @@
 \title{BatchFLEX}
 \usage{
 Batch_FLEX(
-  BatchFLEX_function = c("batch_correct", "batch_evaluate"),
+  Batch_FLEX_function = c("batch_correct", "batch_evaluate"),
   num_samples = 1000,
   num_genes = 20000,
   num_control = 18000,
@@ -52,11 +52,13 @@ Batch_FLEX(
   color_by = "all",
   ncomponents = 5,
   pca_factors = NULL,
-  variable_choices = NULL
+  variable_choices = NULL,
+  plot_title = NULL,
+  large_list = NULL
 )
 }
 \arguments{
-\item{BatchFLEX_function}{A Character vector of BatchFLEX functions in c("retrieve_data", "merge_data", "simulate_data", "preprocess_data", "batch_correct", "batch_evaluate").}
+\item{Batch_FLEX_function}{A Character vector of BatchFLEX functions in c("retrieve_data", "merge_data", "simulate_data", "preprocess_data", "batch_correct", "batch_evaluate").}
 
 \item{num_samples}{An integer setting the number of samples to simulate.}
 

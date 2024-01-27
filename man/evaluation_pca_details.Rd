@@ -4,7 +4,7 @@
 \alias{evaluation_pca_details}
 \title{Evaluation PCA Details}
 \usage{
-evaluation_pca_details(mat, meta, batch.1, pca_factors)
+evaluation_pca_details(mat, meta, batch.1, pca_factors, plot_title)
 }
 \arguments{
 \item{mat}{A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names}

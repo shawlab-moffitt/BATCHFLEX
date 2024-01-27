@@ -9,7 +9,8 @@
 #' @examples
 #' set.seed(333)
 evaluation_cluster_analysis = function(mat,
-                                       cluster_analysis_method){
+                                       cluster_analysis_method,
+                                       plot_title){
 
   mat <- t(apply(mat, 1, scale))
 
@@ -21,10 +22,12 @@ evaluation_cluster_analysis = function(mat,
   }
   cluster_plot_list <- list()
   if ("wss" %in% cluster_analysis_method){
-    cluster_plot_list$wss <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "wss", verbose = T)
+    cluster_plot_list$wss <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "wss", verbose = T)+
+      labs(title = paste0("Elbow Cluster Analysis\n", plot_title, sep = " "))
   }
   if ("silhouette" %in% cluster_analysis_method){
-    cluster_plot_list$silhouette <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "silhouette", verbose = T)
+    cluster_plot_list$silhouette <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "silhouette", verbose = T)+
+      labs(title = paste0("Silhouette Cluster Analysis\n", plot_title, sep = " "))
   }
   if ("dunn" %in% cluster_analysis_method){
     set.seed(333)
@@ -46,7 +49,8 @@ evaluation_cluster_analysis = function(mat,
         color = "dodgerblue1",
         linetype = 2
       ) +
-      theme_classic()
+      theme_classic()+
+      ggtitle(paste0("Dunn Cluster Analysis\n", plot_title, sep = " "))
   }
   return(cluster_plot_list)
 }

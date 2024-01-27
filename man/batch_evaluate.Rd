@@ -17,7 +17,8 @@ batch_evaluate(
   ncomponents = 5,
   pca_factors = NULL,
   variable_choices = NULL,
-  sva_nsv_method = "be"
+  sva_nsv_method = "be",
+  plot_title = NULL
 )
 }
 \arguments{

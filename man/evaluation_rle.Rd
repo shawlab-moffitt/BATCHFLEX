@@ -4,7 +4,7 @@
 \alias{evaluation_rle}
 \title{Evaluation Relative Log Expression}
 \usage{
-evaluation_rle(mat, meta, batch.1, variable_of_interest, color_by)
+evaluation_rle(mat, meta, batch.1, variable_of_interest, color_by, plot_title)
 }
 \arguments{
 \item{mat}{A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names}

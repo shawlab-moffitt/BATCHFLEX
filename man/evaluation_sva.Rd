@@ -4,7 +4,7 @@
 \alias{evaluation_sva}
 \title{Evaluation Surrogate Variable Analysis}
 \usage{
-evaluation_sva(mat, meta, variable_of_interest, sva_nsv_method)
+evaluation_sva(mat, meta, variable_of_interest, sva_nsv_method, plot_title)
 }
 \arguments{
 \item{mat}{A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names}

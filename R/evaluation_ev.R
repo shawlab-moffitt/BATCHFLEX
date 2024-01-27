@@ -15,7 +15,8 @@ evaluation_ev <- function(mat,
                           meta,
                           variable_choices,
                           batch.1,
-                          variable_of_interest){
+                          variable_of_interest,
+                          plot_title){
   evaluation_ev_list <- list()
   if (is.null(variable_choices)){
     variable_choices = c(batch.1, variable_of_interest)
@@ -36,7 +37,8 @@ evaluation_ev <- function(mat,
     scale_x_log10(limit = c(0.0001,100),labels = ~ format(.x, scientific = FALSE), breaks = c(0.001,0.01,0.1,1,10,100)) +
       geom_vline(xintercept = 1, linetype="dashed") +
     theme_classic() +
-    labs(x = "% Variance Explained", y = "Density", color = "Variable")
+    labs(x = "% Variance Explained", y = "Density", color = "Variable")+
+    ggtitle(paste0("Explanatory Variables Plot\n", plot_title))
 
   return(evaluation_ev_list)
 }

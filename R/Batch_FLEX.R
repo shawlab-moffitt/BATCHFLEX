@@ -1,6 +1,6 @@
 #' BatchFLEX
 #'
-#' @param BatchFLEX_function A Character vector of BatchFLEX functions in c("retrieve_data", "merge_data", "simulate_data", "preprocess_data", "batch_correct", "batch_evaluate").
+#' @param Batch_FLEX_function A Character vector of BatchFLEX functions in c("retrieve_data", "merge_data", "simulate_data", "preprocess_data", "batch_correct", "batch_evaluate").
 #' @param num_samples An integer setting the number of samples to simulate.
 #' @param num_genes An integer setting the number of genes to simulate.
 #' @param num_control An integer setting the number of genes that do not respond to treatment.
@@ -54,7 +54,7 @@
 #'
 #' @examples
 #' set.seed(333)
-Batch_FLEX = function(BatchFLEX_function = c("batch_correct", "batch_evaluate"),
+Batch_FLEX = function(Batch_FLEX_function = c("batch_correct", "batch_evaluate"),
                       num_samples = 1000,
                       num_genes = 20000,
                       num_control = 18000,
@@ -101,86 +101,100 @@ Batch_FLEX = function(BatchFLEX_function = c("batch_correct", "batch_evaluate"),
                       color_by = "all",
                       ncomponents = 5,
                       pca_factors = NULL,
-                      variable_choices = NULL){
+                      variable_choices = NULL,
+                      plot_title = NULL,
+                      large_list = NULL){
   Batch_FLEX_list <- list()
-  if ("simulate_data" %in% BatchFLEX_function | "merge_data" %in% BatchFLEX_function){
+  if ("simulate_data" %in% Batch_FLEX_function | "merge_data" %in% Batch_FLEX_function){
     message("Generating mat from a BatchFLEX function")
   }else {
     if (is.null(mat)){
       stop("Please provide a matrix file or use retrieve_data or simulate_data to generate a matrix file")
     }
   }
-  if ("simulate_data" %in% BatchFLEX_function | "merge_data" %in% BatchFLEX_function){
+  if ("simulate_data" %in% Batch_FLEX_function | "merge_data" %in% Batch_FLEX_function){
     message("Generating meta from a BatchFLEX function")
   }else {
     if (is.null(meta)){
       stop("Please provide a meta file or use retrieve_data or simulate_data to generate a matrix file")
     }
   }
-  if (is.null(batch.1) & "batch_correct" %in% BatchFLEX_function & !"simulate_data" %in% BatchFLEX_function | is.null(batch.1) & "batch_evaluate" %in% BatchFLEX_function & !"simulate_data" %in% BatchFLEX_function){
+  if (is.null(batch.1) & "batch_correct" %in% Batch_FLEX_function & !"simulate_data" %in% Batch_FLEX_function | is.null(batch.1) & "batch_evaluate" %in% Batch_FLEX_function & !"simulate_data" %in% Batch_FLEX_function){
     stop("Please select column name in the meta file for the batch information")
   }
-  if (is.null(variable_of_interest) & "batch_evaluate" %in% BatchFLEX_function & !"simulate_data" %in% BatchFLEX_function | is.null(variable_of_interest) & "batch_correct" %in% BatchFLEX_function & !"simulate_data" %in% BatchFLEX_function){
+  if (is.null(variable_of_interest) & "batch_evaluate" %in% Batch_FLEX_function & !"simulate_data" %in% Batch_FLEX_function | is.null(variable_of_interest) & "batch_correct" %in% Batch_FLEX_function & !"simulate_data" %in% Batch_FLEX_function){
     message("Missing variable of interest. Some correction methods and evaluation techniques are not available.")
   }
-  if (is.null(housekeeping) & "batch_correct" %in% BatchFLEX_function & "RUVg" %in% correction_method | is.null(housekeeping) & "batch_correct" %in% BatchFLEX_function & "all" %in% correction_method){
+  if (is.null(housekeeping) & "batch_correct" %in% Batch_FLEX_function & "RUVg" %in% correction_method | is.null(housekeeping) & "batch_correct" %in% Batch_FLEX_function & "all" %in% correction_method){
     stop("Please provide a list of housekeeping genes for the RUVg correction method")
   }
-  if (!all(BatchFLEX_function %in% c("retrieve_data", "simulate_data", "merge_data", "preprocess_matrix", "batch_correct", "batch_evaluate"))){
+  if (!all(Batch_FLEX_function %in% c("retrieve_data", "simulate_data", "merge_data", "preprocess_matrix", "batch_correct", "batch_evaluate", "BatchFLEX_export"))){
     stop("BatchFLEX function not found")
   }
-  if ("simulate_data" %in% BatchFLEX_function){
+  if ("simulate_data" %in% Batch_FLEX_function){
     Batch_FLEX_list$simulate_data <- simulate_data(num_samples, num_genes, num_control, num_treatments, treatment_effect_multiplier, treatment_effect,
                                                    treatment_sd, additional_batch, batch_proportion, batch_effect_multiplier, batch_effect, batch_effect_sd,
-                                                   batch_sample_sd, batch_sample_sd_max, epsilon_mean, epsilon_sd)
+                                                   batch_sample_sd_mean, batch_sample_sd_sd, epsilon_mean, epsilon_sd)
   }
-  if ("simulate_data" %in% BatchFLEX_function & "batch_correct" %in% BatchFLEX_function | "simulate_data" %in% BatchFLEX_function & "batch_evaluate" %in% BatchFLEX_function){
+  if ("simulate_data" %in% Batch_FLEX_function & "batch_correct" %in% Batch_FLEX_function | "simulate_data" %in% Batch_FLEX_function & "batch_evaluate" %in% Batch_FLEX_function){
     mat <- Batch_FLEX_list$simulate_data$sim_matrix
     meta <- Batch_FLEX_list$simulate_data$sim_meta
     batch.1 = "batch"
     variable_of_interest = "treatment"
   }
-  if ("merge_data" %in% BatchFLEX_function){
+  if ("merge_data" %in% Batch_FLEX_function){
     Batch_FLEX_list$merge_data <- merge_data(merge_matrix_files, merge_meta_files, keep_all_genes)
   }
-  if ("merge_data" %in% BatchFLEX_function & "batch_correct" %in% BatchFLEX_function | "merge_data" %in% BatchFLEX_function & "batch_evaluate" %in% BatchFLEX_function | "merge_data" %in% BatchFLEX_function & "preprocess_data" %in% BatchFLEX_function){
+  if ("merge_data" %in% Batch_FLEX_function & "batch_correct" %in% Batch_FLEX_function | "merge_data" %in% Batch_FLEX_function & "batch_evaluate" %in% Batch_FLEX_function | "merge_data" %in% Batch_FLEX_function & "preprocess_data" %in% Batch_FLEX_function){
     mat <- Batch_FLEX_list$merge_data$merged_mat
     meta <- Batch_FLEX_list$merge_data$merged_meta
   }
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")) stop("Must be numeric matrix")
-  if ("preprocess_matrix" %in% BatchFLEX_function){
+  if ("preprocess_matrix" %in% Batch_FLEX_function){
     cat("\tPre-processing input matix\n")
     mat <- preprocess_matrix(mat, raw.counts, raw.norm.method, log2, quantnorm, remove.duplicates)
-    Batch_FLEX_list$data_matrices[[paste0("Unadjusted_", ifelse(log2, "Log2_", ""), ifelse(quantnorm, "Norm", ""))]] <-  as.matrix(mat)
+    Batch_FLEX_list$data_matrices[[paste0("Unadjusted_", ifelse(log2, "Log2", ""), ifelse(quantnorm, "_Norm", ""))]] <-  as.matrix(mat)
   }
-  if ("batch_correct" %in% BatchFLEX_function){
-    if (!"preprocess_matrix" %in% BatchFLEX_function){
+  if ("batch_correct" %in% Batch_FLEX_function){
+    if (!"preprocess_matrix" %in% Batch_FLEX_function){
       Batch_FLEX_list$data_matrices$Unadjusted <- mat
     }
     Batch_FLEX_list$data_matrices <- base::append(Batch_FLEX_list$data_matrices, batch_correct(mat, meta, correction_method, batch.1, batch.2, log2_transformed, variable_of_interest, housekeeping,
                                           k, drop, center, round, tolerance, par.prior, sva_nsv_method))
   }
-  if (!"batch_correct" %in% BatchFLEX_function){
-    if (is.matrix(mat) & !"preprocess_matrix" %in% BatchFLEX_function){
+  if (!"batch_correct" %in% Batch_FLEX_function){
+    if (is.matrix(mat) & !"preprocess_matrix" %in% Batch_FLEX_function){
       Batch_FLEX_list$data_matrices$Unadjusted <- mat
     }
     if (is.list(mat)){
       Batch_FLEX_list$data_matrices <- mat
     }
   }
-  if ("batch_evaluate" %in% BatchFLEX_function){
+  if (is.null(plot_title)){
+    plot_titles <- names(Batch_FLEX_list$data_matrices)
+  }else {
+    plot_titles <- plot_title
+  }
+  if ("batch_evaluate" %in% Batch_FLEX_function){
     for (matrix in 1:length(Batch_FLEX_list$data_matrices)){
+      plot_title <- plot_titles[[matrix]]
       matrix_name <- names(Batch_FLEX_list$data_matrices)[[matrix]]
       all_matrices = Batch_FLEX_list$data_matrices[[matrix]]
       Batch_FLEX_list$batch_evaluation[[matrix_name]]$batch1 <- batch_evaluate(mat = all_matrices, meta, evaluation_method, batch.1, annotation, cluster_number,
                                                                                variable_of_interest, cluster_analysis_method, color_by, ncomponents,
-                                                                               pca_factors, variable_choices, sva_nsv_method)
+                                                                               pca_factors, variable_choices, sva_nsv_method, plot_title)
       if (!is.null(batch.2)){
         Batch_FLEX_list$batch_evaluation[[matrix_name]]$batch2 <- batch_evaluate(mat = all_matrices, meta, evaluation_method, batch.1 = batch.2, annotation, cluster_number,
                                                                                      variable_of_interest, cluster_analysis_method, color_by, ncomponents,
-                                                                                     pca_factors, variable_choices, sva_nsv_method)
+                                                                                     pca_factors, variable_choices, sva_nsv_method, plot_title)
       }
     }
+  }
+  if (is.null(large_list)){
+    large_list <- Batch_FLEX_list
+  }
+  if ("BatchFLEX_export" %in% Batch_FLEX_function){
+    BatchFLEX_export(large_list)
   }
   return(Batch_FLEX_list)
 }

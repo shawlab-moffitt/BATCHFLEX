@@ -31,7 +31,8 @@ batch_evaluate = function(mat = NULL,
                           ncomponents = 5,
                           pca_factors = NULL,
                           variable_choices = NULL,
-                          sva_nsv_method = "be"){
+                          sva_nsv_method = "be",
+                          plot_title = NULL){
   batch_evaluation_list <- list()
   if (is.null(mat)){
     stop("Please provide a matrix file or use retrieve_data or generate_data to generate a matrix file for batch_evaluate")
@@ -66,53 +67,60 @@ batch_evaluate = function(mat = NULL,
                                                        cluster_number,
                                                        batch.1,
                                                        variable_of_interest,
-                                                       color_by)
+                                                       color_by,
+                                                       plot_title)
   }
   if ("cluster_analysis" %in% evaluation_method){
     cat("\tConducting cluster analysis\n")
     batch_evaluation_list$Plots$cluster_analysis <- evaluation_cluster_analysis(mat,
-                                                                                cluster_analysis_method)
+                                                                                cluster_analysis_method,
+                                                                                plot_title)
   }
   if ("mc_pca" %in% evaluation_method){
     cat("\tConducting multiple components PCA analysis\n")
     batch_evaluation_list$Plots$mc_pca <- evaluation_mc_pca(mat,
-                                                             meta,
-                                                             batch.1,
-                                                             variable_of_interest,
-                                                             ncomponents,
-                                                             color_by)
+                                                            meta,
+                                                            batch.1,
+                                                            variable_of_interest,
+                                                            ncomponents,
+                                                            color_by,
+                                                            plot_title)
   }
   if ("pca_details" %in% evaluation_method){
     cat("\tConducting PCA details analysis\n")
     evaluation_pca_details_list <- evaluation_pca_details(mat,
                                                           meta,
                                                           batch.1,
-                                                          pca_factors)
+                                                          pca_factors,
+                                                          plot_title)
     batch_evaluation_list$Plots$pca_details <- evaluation_pca_details_list$Plots
     batch_evaluation_list$Matrices$pca_details <- evaluation_pca_details_list$Matrices
   }
   if ("rle" %in% evaluation_method){
     cat("\tConducting relative log expression analysis\n")
     batch_evaluation_list$Plots$rle <- evaluation_rle(mat,
-                                                       meta,
-                                                       batch.1,
-                                                       variable_of_interest,
-                                                       color_by)
+                                                      meta,
+                                                      batch.1,
+                                                      variable_of_interest,
+                                                      color_by,
+                                                      plot_title)
   }
   if ("ev" %in% evaluation_method){
     cat("\tConducting explanatory variables analysis\n")
     batch_evaluation_list$Plots$ev <- evaluation_ev(mat,
-                                                     meta,
-                                                     variable_choices,
-                                                     batch.1,
-                                                     variable_of_interest)
+                                                    meta,
+                                                    variable_choices,
+                                                    batch.1,
+                                                    variable_of_interest,
+                                                    plot_title)
   }
   if ("sva" %in% evaluation_method){
     cat("\tConducting surrogate variable analysis\n")
     evaluation_sva_list <- evaluation_sva(mat,
                                           meta,
                                           variable_of_interest,
-                                          sva_nsv_method)
+                                          sva_nsv_method,
+                                          plot_title)
     batch_evaluation_list$Plots$sva <- evaluation_sva_list$Plots
     batch_evaluation_list$Matrices$sva <- evaluation_sva_list$Matrices
   }
@@ -122,7 +130,8 @@ batch_evaluate = function(mat = NULL,
                                                         meta,
                                                         batch.1,
                                                         variable_of_interest,
-                                                        color_by)
+                                                        color_by,
+                                                        plot_title)
   }
   return(batch_evaluation_list)
 }

@@ -11,7 +11,8 @@ evaluation_pca(
   cluster_number,
   batch.1,
   variable_of_interest,
-  color_by
+  color_by,
+  plot_title
 )
 }
 \arguments{

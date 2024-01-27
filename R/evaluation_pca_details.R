@@ -13,7 +13,8 @@
 evaluation_pca_details <- function(mat,
                                    meta,
                                    batch.1,
-                                   pca_factors
+                                   pca_factors,
+                                   plot_title
 ){
   if (is.null(pca_factors)){
     pca_factors <- batch.1
@@ -37,7 +38,8 @@ evaluation_pca_details <- function(mat,
     geom_text(aes(label=`Variance Percent`), vjust=-0.3,size=4.5) +
     labs(x = "Dimensions",y = "Variance Percent") +
     theme(axis.text = element_text(size = 14),
-          axis.title = element_text(size = 16))
+          axis.title = element_text(size = 16))+
+    ggtitle(paste0("Scree Plot\n", plot_title))
 
   # contributions matrix
   PCA_individuals <- PCA_details

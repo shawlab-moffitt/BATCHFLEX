@@ -13,7 +13,8 @@
 evaluation_sva <- function(mat,
                            meta,
                            variable_of_interest,
-                           sva_nsv_method){
+                           sva_nsv_method,
+                           plot_title){
   evaluation_sva_list <- list()
   mod <- stats::model.matrix(reformulate(variable_of_interest), data = meta)
   mod_null <- stats::model.matrix(~1, data = meta)
@@ -31,7 +32,9 @@ evaluation_sva <- function(mat,
   SVA_probability_df_longer <- dplyr::rename(SVA_probability_df_longer, "probability_association_of_each_gene" = "value")
   evaluation_sva_list$Plots$svaprob <- ggplot(SVA_probability_df_longer,
                                                   mapping = aes(x = probability_association_of_each_gene, fill = variable_type, alpha = 0.5)
-                                                  )+ geom_density()
+                                                  )+
+    geom_density()+
+    ggtitle(plot_title)
   evaluation_sva_list$Matrices$sv <- SVA_object$sv
 
   return(evaluation_sva_list)

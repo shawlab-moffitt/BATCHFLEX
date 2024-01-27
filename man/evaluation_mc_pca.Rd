@@ -10,7 +10,8 @@ evaluation_mc_pca(
   batch.1,
   variable_of_interest,
   ncomponents,
-  color_by
+  color_by,
+  plot_title
 )
 }
 \arguments{

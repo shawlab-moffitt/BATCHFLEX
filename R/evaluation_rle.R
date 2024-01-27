@@ -15,7 +15,8 @@ evaluation_rle <- function(mat,
                            meta,
                            batch.1,
                            variable_of_interest,
-                           color_by){
+                           color_by,
+                           plot_title){
   evaluation_rle_list <- list()
   rle_mat <- mat
   names(rle_mat) <- NULL
@@ -25,11 +26,12 @@ evaluation_rle <- function(mat,
       colData = meta,
       rowData = rownames(mat)
     )
-    evaluation_rle_list$batch_colored <- scater::plotRLE(
+    evaluation_rle_list$batch_colored_rle <- scater::plotRLE(
       RLE_SCE,
       exprs_values = "counts",
       color_by = batch.1
-    )
+    )+
+      ggtitle(plot_title)
   }
   if ("variable_of_interest" %in% color_by){
     RLE_SCE <- SingleCellExperiment::SingleCellExperiment(
@@ -37,11 +39,12 @@ evaluation_rle <- function(mat,
       colData = meta,
       rowData = rownames(mat)
     )
-    evaluation_rle_list$voi_colored <- scater::plotRLE(
+    evaluation_rle_list$voi_colored_rle <- scater::plotRLE(
       RLE_SCE,
       exprs_values = "counts",
       color_by = variable_of_interest
-    )
+    )+
+      ggtitle(plot_title)
   }
   if ("BnW" %in% color_by){
     RLE_SCE <- SingleCellExperiment::SingleCellExperiment(
@@ -49,10 +52,11 @@ evaluation_rle <- function(mat,
       colData = meta,
       rowData = rownames(mat)
     )
-    evaluation_rle_list$BnW_colored <- scater::plotRLE(
+    evaluation_rle_list$bnW_colored_rle <- scater::plotRLE(
       RLE_SCE,
       exprs_values = "counts"
-    )
+    )+
+      ggtitle(plot_title)
   }
 
   return(evaluation_rle_list)
