@@ -89,10 +89,10 @@ https://academic.oup.com/biostatistics/article/17/1/16/1744198
 simulated_data = simulate_data()
 head(as.data.frame(simulated_data$sim_matrix))
 head(simulated_data$sim_meta)
-test_simulate_BatchFLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_correct", "batch_evaluate"), correction_method = "ComBat", evaluation_method = "rle", mat = simulated_data$sim_matrix, meta = simulated_data$sim_meta, batch.1 = "batch", color_by = "batch")
+test_simulate_BatchFLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_correct", "batch_evaluate"), correction_method = "ComBat", evaluation_method = "pca", mat = simulated_data$sim_matrix, meta = simulated_data$sim_meta, batch.1 = "batch", color_by = "batch")
 
-test_simulate_BatchFLEX[["batch_evaluation"]][["Unadjusted"]][["batch1"]][["Plots"]][["rle"]]
-test_simulate_BatchFLEX[["batch_evaluation"]][["ComBat"]][["batch1"]][["Plots"]][["rle"]]
+test_simulate_BatchFLEX[["batch_evaluation"]][["Unadjusted"]][["batch1"]][["Plots"]][["pca"]]
+test_simulate_BatchFLEX[["batch_evaluation"]][["ComBat"]][["batch1"]][["Plots"]][["pca"]]
 ```
 
 If desired, users can adjust the default simulation to include additional batches or additional treatments as well as many other parameters to test `BatchFLEX`. 
@@ -116,20 +116,20 @@ simulated_data <- simulate_data(num_samples = 1000,
                           epsilon_mean = 0,
                           epsilon_sd = 1)
 
-test_simulate_BatchFLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_correct", "batch_evaluate"), correction_method = "ComBat", evaluation_method = "rle", mat = simulated_data$sim_matrix, meta = simulated_data$sim_meta, batch.1 = "batch", variable_of_interest = "treatment")
+test_simulate_BatchFLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_correct", "batch_evaluate"), correction_method = "ComBat", evaluation_method = "umap", mat = simulated_data$sim_matrix, meta = simulated_data$sim_meta, batch.1 = "batch", variable_of_interest = "treatment")
 
-test_simulate_BatchFLEX[["batch_evaluation"]][["Unadjusted"]][["batch1"]][["Plots"]][["rle"]]
-test_simulate_BatchFLEX[["batch_evaluation"]][["ComBat"]][["batch1"]][["Plots"]][["rle"]]
+test_simulate_BatchFLEX[["batch_evaluation"]][["Unadjusted"]][["batch1"]][["Plots"]][["umap"]]
+test_simulate_BatchFLEX[["batch_evaluation"]][["ComBat"]][["batch1"]][["Plots"]][["umap"]]
 
 ```
 
 
 #### Simulate data within BatchFLEX
 ```{r}
-test_simulate_BatchFLEX <- Batch_FLEX(Batch_FLEX_function = c("simulate_data", "batch_correct", "batch_evaluate"), correction_method = "ComBat", evaluation_method = "rle", batch.1 = "batch", variable_of_interest = "treatment", color_by = "batch")
+test_simulate_BatchFLEX <- Batch_FLEX(Batch_FLEX_function = c("simulate_data", "batch_correct", "batch_evaluate"), correction_method = "ComBat", evaluation_method = "ev", batch.1 = "batch", variable_of_interest = "treatment", color_by = "batch")
 
-test_simulate_BatchFLEX[["batch_evaluation"]][["Unadjusted"]][["batch1"]][["Plots"]][["rle"]]
-test_simulate_BatchFLEX[["batch_evaluation"]][["ComBat"]][["batch1"]][["Plots"]][["rle"]]
+test_simulate_BatchFLEX[["batch_evaluation"]][["Unadjusted"]][["batch1"]][["Plots"]][["ev"]]
+test_simulate_BatchFLEX[["batch_evaluation"]][["ComBat"]][["batch1"]][["Plots"]][["ev"]]
 ```
 
 
@@ -174,7 +174,7 @@ meta_files_to_be_merged <- list(BatchFLEX::GSE112876_meta,
                                 BatchFLEX::GSE75195_meta,
                                 BatchFLEX::GSE75202_meta,
                                 BatchFLEX::GSE75203_meta)
-test_merge <- merge_data(merge_matrix_files = matrices_to_be_merged, merge_meta_files = meta_files_to_be_merged)
+test_merge_1 <- merge_data(merge_matrix_files = matrices_to_be_merged, merge_meta_files = meta_files_to_be_merged)
 head(as.data.frame(test_merge$merged_matrix))
 head(test_merge$merged_meta)
 ```
@@ -189,7 +189,7 @@ matrices_to_be_merged <- list("GSE112876" = BatchFLEX::GSE112876_matrix,
                               "GSE75195" = BatchFLEX::GSE75195_matrix,
                               "GSE75202" = BatchFLEX::GSE75202_matrix,
                               "GSE75203" = BatchFLEX::GSE75203_matrix)
-test_merge <- merge_data(merge_matrix_files = matrices_to_be_merged)
+test_merge_2 <- merge_data(merge_matrix_files = matrices_to_be_merged)
 head(as.data.frame(test_merge$merged_matrix))
 head(test_merge$merged_meta)
 ```
@@ -219,15 +219,15 @@ test_merge_BatchFLEX <- Batch_FLEX(
   batch.1 = "batchflex_study", 
   variable_of_interest = "MajorCellType",
   correction_method = "ComBat",
-  evaluation_method = "rle",
+  evaluation_method = "ev",
   quantnorm = FALSE
   )
 head(as.data.frame(test_merge_BatchFLEX[["merge_data"]][["merged_matrix"]]))
 head(test_merge_BatchFLEX[["merge_data"]][["merged_meta"]])
 head(as.data.frame(test_merge_BatchFLEX[["data_matrices"]][["Unadjusted_Log2_Norm"]]))
 head(as.data.frame(test_merge_BatchFLEX[["data_matrices"]][["ComBat"]]))
-test_merge_BatchFLEX[["batch_evaluation"]][["Unadjusted_Log2"]][["batch1"]][["Plots"]][["rle"]][["batch_colored"]]
-test_merge_BatchFLEX[["batch_evaluation"]][["ComBat"]][["batch1"]][["Plots"]][["rle"]][["batch_colored"]]
+test_merge_BatchFLEX[["batch_evaluation"]][["Unadjusted_Log2"]][["batch1"]][["Plots"]][["ev"]]
+test_merge_BatchFLEX[["batch_evaluation"]][["ComBat"]][["batch1"]][["Plots"]][["ev"]]
 ```
 
 
@@ -379,7 +379,7 @@ The PCA details analysis includes many helpful plots and matrices that can be us
 
 ```{r}
 test_evaluate <- batch_evaluate(evaluation_method = "pca_details", mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", pca_factors = "MajorCellType")
-test_evaluate
+test_evaluate$Plots$pca_details
 ```
 
 
@@ -428,13 +428,13 @@ test_evaluate$Plots
 `batch_evaluate` can also be used in conjunction with other functions within the top level `Batch_FLEX` function.
 
 ```{r}
-test_evaluate <- Batch_FLEX(Batch_FLEX_function = c("batch_correct", "batch_evaluate"), mat = example_mat, meta = example_meta, batch.1 =  "batchflex_study", variable_of_interest = "MajorCellType")
+test_evaluate <- Batch_FLEX(Batch_FLEX_function = c("batch_correct", "batch_evaluate"), correction_method = "Limma", evaluation_method = "ev", mat = example_mat, meta = example_meta, batch.1 =  "batchflex_study", variable_of_interest = "MajorCellType")
 test_evaluate$Matrices
 test_evaluate$Plots
 ```
 
 ### BatchFlex easy usage
-By default, `Batch_FLEX` will run `batch_correct` and `batch_evaluate`. It will correct using all avaialable methods except for ComBatseq, which requires a counts based matrix file. It will also use a self contained housekeeping gene list for the RUVg evaluation. By default, this is set to human, but can be changed to mouse or a user provided housekeeping gene list can be used. All available evaluation methods will be used unless a variable of interest is not provided, which eliminates the use of sva. The output is an organized list tree separated into the unadjusted and adjusted expression matrices and the the evaluation plots and matrices. The evaluation list is organized according to the  correction method. Each evaluation list contains a list of evaluation matrices and a list of evaluation plots. An example access to the plots is shown below. 
+By default, `Batch_FLEX` will run `batch_correct` and `batch_evaluate`. It will correct using all avaialable methods except for ComBatseq, which requires a counts based matrix file. It will also use a self contained housekeeping gene list for the RUVg evaluation. By default, this is set to human, but can be changed to mouse or a user provided housekeeping gene list can be used. All available evaluation methods will be used unless a variable of interest is not provided, which eliminates the use of sva. The output is an organized list tree separated into the unadjusted and adjusted expression matrices and the the evaluation plots and matrices. The evaluation list is organized according to the  correction method. Each evaluation list contains a list of evaluation matrices and a list of evaluation plots. An example of how to access to the plots is shown below. 
 ```{r}
 example_mat_abbreviated <- example_mat[,1:100]
 example_meta_abbreviated <- example_meta[1:100,]
@@ -455,13 +455,13 @@ example_mat_abbreviated <- example_mat[,1:100]
 example_meta_abbreviated <- example_meta[1:100,]
 test_Batch_FLEX <- Batch_FLEX(mat = example_mat_abbreviated, meta = example_meta_abbreviated, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", evaluation_method = "pca")
 
-ggarrange(
-  test_Batch_FLEX[["batch_evaluation"]][["Unadjusted"]][["batch1"]][["Plots"]][["pca"]][["pca_meta"]][["batch_colored"]],
-  test_Batch_FLEX[["batch_evaluation"]][["Limma"]][["batch1"]][["Plots"]][["pca"]][["pca_meta"]][["batch_colored"]],
-  test_Batch_FLEX[["batch_evaluation"]][["ComBat"]][["batch1"]][["Plots"]][["pca"]][["pca_meta"]][["batch_colored"]], 
-  test_Batch_FLEX[["batch_evaluation"]][["Harman"]][["batch1"]][["Plots"]][["pca"]][["pca_meta"]][["batch_colored"]],
-  test_Batch_FLEX[["batch_evaluation"]][["RUVg"]][["batch1"]][["Plots"]][["pca"]][["pca_meta"]][["batch_colored"]],
-  test_Batch_FLEX[["batch_evaluation"]][["SVA"]][["batch1"]][["Plots"]][["pca"]][["pca_meta"]][["batch_colored"]],
+ggpubr::ggarrange(
+  test_Batch_FLEX[["batch_evaluation"]][["Unadjusted"]][["batch1"]][["Plots"]][["pca"]][["pca_meta_batch_colored_pca"]],
+  test_Batch_FLEX[["batch_evaluation"]][["Limma"]][["batch1"]][["Plots"]][["pca"]][["pca_meta_batch_colored_pca"]],
+  test_Batch_FLEX[["batch_evaluation"]][["ComBat"]][["batch1"]][["Plots"]][["pca"]][["pca_meta_batch_colored_pca"]], 
+  test_Batch_FLEX[["batch_evaluation"]][["Harman"]][["batch1"]][["Plots"]][["pca"]][["pca_meta_batch_colored_pca"]],
+  test_Batch_FLEX[["batch_evaluation"]][["RUVg"]][["batch1"]][["Plots"]][["pca"]][["pca_meta_batch_colored_pca"]],
+  test_Batch_FLEX[["batch_evaluation"]][["SVA"]][["batch1"]][["Plots"]][["pca"]][["pca_meta_batch_colored_pca"]],
   common.legend = TRUE)
 ```
 
@@ -473,6 +473,8 @@ example_meta_abbreviated <- example_meta[1:100,]
 test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_evaluate", "batch_correct", "BatchFLEX_export"), correction_method = c("Limma", "ComBat"), evaluation_method = c("pca","mc_pca"), mat = example_mat_abbreviated, meta = example_meta_abbreviated, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
 devtools::session_info()
 ```
+
+
 
 
 
