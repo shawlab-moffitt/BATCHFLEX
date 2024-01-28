@@ -68,7 +68,7 @@ BatchFLEX_export <- function(large_list){
     for (plot in 1:length(plot_list)){
       for (name19 in 1:length(names_1_batch_evaluation_batch[[1]])){
         plot_name <- names(plot_list)[[plot]]
-        ggarrange_list[[plot_name]] <- ggarrange(plotlist = plot_list[[plot]][[1]][[name19]], common.legend = if(plot_name == "pca_clust") FALSE else TRUE )
+        ggarrange_list[[plot_name]] <- ggpubr::ggarrange(plotlist = plot_list[[plot]][[1]][[name19]], common.legend = if(plot_name == "pca_clust") FALSE else TRUE )
       }
     }
   }
