@@ -171,7 +171,15 @@ Batch_FLEX = function(Batch_FLEX_function = c("batch_correct", "batch_evaluate")
     }
   }
   if (is.null(plot_title)){
-    plot_titles <- names(Batch_FLEX_list$data_matrices)
+    plot_titles <- list()
+    for (name in names(Batch_FLEX_list$data_matrices)){
+      if(is.null(batch.2)){
+        plot_titles[[name]] <- paste0(name, "_", "batch_1_is_", batch.1, "_", "voi_is_", if (is.null(variable_of_interest)) {"NULL"} else {variable_of_interest}, sep = "")
+      } else {
+        plot_titles[[name]] <- paste0(name, "_", "batch_1_is_", batch.1, "_", "batch_2_is_", batch.2, if (is.null(variable_of_interest)) {"NULL"} else {variable_of_interest}, sep = "")
+      }
+    }
+
   }else {
     plot_titles <- plot_title
   }

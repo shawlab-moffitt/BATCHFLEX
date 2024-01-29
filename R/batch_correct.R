@@ -76,31 +76,31 @@ batch_correct = function(mat = NULL,
 
   if ("Limma" %in% correction_method){
     cat("\tAdjusting Limma\n")
-    batch_corrected_list$Limma <- adjust_limma(mat, meta, variable_of_interest, batch.1, batch.2)
+    batch_corrected_list$Limma_adjusted <- adjust_limma(mat, meta, variable_of_interest, batch.1, batch.2)
   }
   if("ComBat" %in% correction_method){
     cat("\tAdjusting ComBat\n")
-    batch_corrected_list$ComBat = adjust_combat(mat, meta, batch.1, log2_transformed, par.prior)
+    batch_corrected_list$ComBat_adjusted = adjust_combat(mat, meta, batch.1, log2_transformed, par.prior)
   }
   if("Mean Centering" %in% correction_method){
     cat("\tAdjusting Mean Centering\n")
-    batch_corrected_list$`Mean Centering` = adjust_mean_centering(mat, meta, batch.1, log2_transformed)
+    batch_corrected_list$`Mean Centering_adjusted` = adjust_mean_centering(mat, meta, batch.1, log2_transformed)
   }
   if("ComBatseq" %in% correction_method){
     cat("\tAdjusting ComBatseq\n")
-    batch_corrected_list$ComBatseq <- adjust_combatseq(mat, meta, batch.1, variable_of_interest, log2_transformed)
+    batch_corrected_list$ComBatseq_adjusted <- adjust_combatseq(mat, meta, batch.1, variable_of_interest, log2_transformed)
   }
   if("Harman" %in% correction_method){
     cat("\tAdjusting Harman\n")
-    batch_corrected_list$Harman <- adjust_harman(mat, meta, batch.1, variable_of_interest, log2_transformed)
+    batch_corrected_list$Harman_adjusted <- adjust_harman(mat, meta, batch.1, variable_of_interest, log2_transformed)
   }
   if("RUVg" %in% correction_method){
     cat("\tAdjusting RUVg\n")
-    batch_corrected_list$RUVg <- adjust_ruvg(mat, housekeeping, k, drop, center, round, tolerance, log2_transformed)
+    batch_corrected_list$RUVg_adjusted <- adjust_ruvg(mat, housekeeping, k, drop, center, round, tolerance, log2_transformed)
   }
   if("SVA" %in% correction_method){
     cat("\tAdjusting SVA\n")
-    batch_corrected_list$SVA <- adjust_sva(mat, meta, variable_of_interest, sva_nsv_method)
+    batch_corrected_list$SVA_adjusted <- adjust_sva(mat, meta, variable_of_interest, sva_nsv_method)
   }
   return(batch_corrected_list)
 }

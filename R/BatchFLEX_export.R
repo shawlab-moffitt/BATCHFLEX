@@ -93,7 +93,7 @@ BatchFLEX_export <- function(large_list){
       }
     }
   }
-  pdf(paste0(directory,"/", "BatchFLEX_plots_", gsub("-", "_", Sys.Date()),".pdf", sep = ""), width = 14, height = 14)
+  pdf(paste0(directory,"/", "BatchFLEX_plots_", gsub("-", "_", Sys.Date()),".pdf", sep = ""), width = 10, height = 10)
   print(plot_list)
   print(ggarrange_list)
   dev.off()
