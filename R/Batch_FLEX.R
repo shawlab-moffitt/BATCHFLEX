@@ -114,11 +114,6 @@ Batch_FLEX = function(Batch_FLEX_function = c("batch_correct", "batch_evaluate")
                       var_type = "MAD",
                       cluster_method = "ward.D2",
                       fill_percentage = TRUE){
-  my_cluster <- parallel::makeCluster(
-    4,
-    type = "PSOCK"
-  )
-  doParallel::registerDoParallel(cl = my_cluster)
   Batch_FLEX_list <- list()
   if ("simulate_data" %in% Batch_FLEX_function | "merge_data" %in% Batch_FLEX_function){
     message("Generating mat from a BatchFLEX function")
@@ -206,7 +201,7 @@ Batch_FLEX = function(Batch_FLEX_function = c("batch_correct", "batch_evaluate")
     plot_titles <- plot_title
   }
   if ("batch_evaluate" %in% Batch_FLEX_function){
-    foreach (matrix = 1:length(Batch_FLEX_list$data_matrices), .packages = c("BatchFLEX")) %dopar% {
+    for (matrix in 1:length(Batch_FLEX_list$data_matrices)) {
       plot_title <- plot_titles[[matrix]]
       matrix_name <- names(Batch_FLEX_list$data_matrices)[[matrix]]
       all_matrices = Batch_FLEX_list$data_matrices[[matrix]]
