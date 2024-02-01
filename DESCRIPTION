@@ -40,7 +40,9 @@ Imports:
     cluster,
     RUVcorr,
     purrr,
-    readr
+    readr,
+    tabula,
+    folio
 Depends: 
     R (>= 2.10),
     ggfortify

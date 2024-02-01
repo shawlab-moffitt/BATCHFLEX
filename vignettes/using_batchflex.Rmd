@@ -334,6 +334,14 @@ By default, the cluster analysis will include an elbow plot, a silhouette plot a
 test_evaluate <- batch_evaluate(evaluation_method = "cluster_analysis", mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", cluster_analysis_method = "silhouette")
 test_evaluate$Plots$cluster_analysis
 ```
+##### Cluster HE
+BatchFLEX also includes multiple methods to assess the heterogeneity and evenness of the clustering to ensure appropriate batch correction occurs. Ideally, clustering representing the variable of interest should have relatively equal representation of each batch, which would suggest that the batch effect is not driving the clustering. By default, cluster_he will use the ward.d2 method and will use the MAD variance method.
+```{r}
+test_evaluate <- batch_evaluate(evaluation_method = "cluster_HE", mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", plot_title = "Unadjusted")
+test_evaluate$Plots$cluster_HE
+test_evaluate$Matrices$cluster_HE
+```
+
 
 ##### PCA details
 The PCA details analysis includes many helpful plots and matrices that can be used to assess the PCA. By default, `batch_evaluate` will use the batch.1 parameter when generating these files, however, this can be adjusted by altering the pca_factors parameter
@@ -431,7 +439,7 @@ Finally, `BatchFLEX` has the ability to generate `ggarrange` plots for all evalu
 ```{r, fig.width = 10, fig.height = 10}
 example_mat_abbreviated <- example_mat[,1:100]
 example_meta_abbreviated <- example_meta[1:100,]
-test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_evaluate", "batch_correct", "BatchFLEX_export"), mat = example_mat_abbreviated, meta = example_meta_abbreviated, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
+test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_evaluate", "batch_correct", "BatchFLEX_export"), correction_method = c("ComBat", "Limma"), mat = example_mat_abbreviated, meta = example_meta_abbreviated, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
 devtools::session_info()
 ```
 

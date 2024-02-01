@@ -79,7 +79,7 @@ BatchFLEX_export <- function(large_list){
       for (name21 in 1:length(names_1_batch_evaluation_batch[[name20]])){
         for (name22 in 1:length(names_1_batch_evaluation_batch_data_evaluations[[name20]][["Matrices"]])){
           for (name23 in 1:length(names_1_batch_evaluation_batch_data_evaluations_plots[[name20]][[name21]][["Matrices"]][[name22]])){
-            matrices_list[[names_1_batch_evaluation_batch_data_evaluations_plots[[name20]][[name21]][["Matrices"]][[name22]][[name23]]]][[names_1_batch_evaluation_batch_data_evaluations[[name20]][["Matrices"]][[name22]]]][[names_1_batch_evaluation_batch[[name20]][[name21]]]][[names_1_batch_evaluation[name14]]] <- large_list[[2]][[name20]][[name21]][["Matrices"]][[name22]][[name23]]
+            matrices_list[[names_1_batch_evaluation_batch_data_evaluations_plots[[name20]][[name21]][["Matrices"]][[name22]][[name23]]]][[names_1_batch_evaluation_batch_data_evaluations[[name20]][["Matrices"]][[name22]]]][[names_1_batch_evaluation_batch[[name20]][[name21]]]][[names_1_batch_evaluation[[name20]]]] <- large_list[[2]][[name20]][[name21]][["Matrices"]][[name22]][[name23]]
           }
         }
       }
