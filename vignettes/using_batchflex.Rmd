@@ -437,9 +437,7 @@ ggpubr::ggarrange(
 Finally, `BatchFLEX` has the ability to generate `ggarrange` plots for all evaluation methods and to export these plots along with all other plots and matrices to a BatchFLEX_analysis folder by evoking the `BatchFLEX_export` function.
 
 ```{r, fig.width = 10, fig.height = 10}
-example_mat_abbreviated <- example_mat[,1:100]
-example_meta_abbreviated <- example_meta[1:100,]
-test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_evaluate", "batch_correct", "BatchFLEX_export"), correction_method = c("ComBat", "Limma"), mat = example_mat_abbreviated, meta = example_meta_abbreviated, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
+test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_evaluate", "batch_correct", "BatchFLEX_export"), mat = example_mat_abbreviated, meta = example_meta_abbreviated, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
 devtools::session_info()
 ```
 
