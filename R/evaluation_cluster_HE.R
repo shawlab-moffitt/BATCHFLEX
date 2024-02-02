@@ -88,7 +88,7 @@ evaluation_cluster_HE <- function(mat,
   plot_df[,batch.1] <- as.factor(plot_df[,batch.1])
   barp <- ggplot2::ggplot(plot_df,
                           aes(fill = !!sym(batch.1), x = !!sym(cluster_col))
-                          )+ ggtitle(plot_title)
+                          )
   if (fill_percentage) {
     barp <- barp + geom_bar(position = "fill") +
       theme_minimal()
@@ -96,10 +96,10 @@ evaluation_cluster_HE <- function(mat,
     barp <- barp + geom_bar() +
       theme_minimal()
   }
-  barp <- barp + theme(axis.text.x = element_text(size = 30),
-                       axis.title.x = element_text(size = 30),
-                       axis.text.y = element_text(size = 30),
-                       axis.title.y = element_text(size = 30))
+  barp <- barp + theme(axis.text.x = element_text(size = 24),
+                       axis.title.x = element_text(size = 24),
+                       axis.text.y = element_text(size = 24),
+                       axis.title.y = element_text(size = 24))
   evaluation_cluster_HE_list$Plots$bar_plot <- barp
 
 
