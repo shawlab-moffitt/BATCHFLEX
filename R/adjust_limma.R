@@ -4,7 +4,7 @@
 #'
 #' @param mat Numeric matrix with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
-#' @param treatment Column name from the meta file of the column that will be used for treatment information
+#' @param variable_of_interest Column name from the meta file of the column that will be used for variable_of_interest information
 #' @param batch.1 Column name from the meta file of the column that will be used for batch one information
 #' @param batch.2 Column name from the meta file of the column that will be used for batch two information
 #' @param log2_transformed whether data is log2 transformed already or not
@@ -17,15 +17,15 @@
 #' set.seed(333)
 adjust_limma = function(mat,
                         meta,
-                        treatment,
+                        variable_of_interest,
                         batch.1,
                         batch.2,
                         log2_transformed = TRUE,
                         ...){
-  if (is.null(treatment)){
+  if (is.null(variable_of_interest)){
     model_matrix <- NULL
   } else {
-    total_covariates <- paste0(treatment,collapse = "+")
+    total_covariates <- paste0(variable_of_interest,collapse = "+")
     model_matrix <- stats::model.matrix(reformulate(total_covariates), data = as.data.frame(meta))
   }
   #get the values associated with batch 1 and batch 2

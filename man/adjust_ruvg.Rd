@@ -4,7 +4,16 @@
 \alias{adjust_ruvg}
 \title{Adjust RUVg}
 \usage{
-adjust_ruvg(mat, housekeeping, k, drop, center, round, tolerannce)
+adjust_ruvg(
+  mat,
+  housekeeping,
+  k,
+  drop,
+  center,
+  round,
+  tolerance,
+  log2_transformed
+)
 }
 \arguments{
 \item{mat}{Numeric matrix with features as rownames and sample names as the column names}
