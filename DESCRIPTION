@@ -21,7 +21,6 @@ Imports:
     ggplot2,
     limma,
     RUVSeq,
-    immunedeconv,
     sva,
     Harman,
     affyPLM,
