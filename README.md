@@ -9,7 +9,7 @@ To install package:
 ```
 if (!require("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
-BiocManager::install("shawlab-moffitt/BATCHFLEX")
+BiocManager::install("shawlab-moffitt/BATCHFLEX", dependencies = TRUE)
 ```
 
 
