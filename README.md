@@ -7,8 +7,9 @@ An R package for correct batch effects in numeric data (typically RNA sequencing
 To install package:
 
 ```
-install.packages("devtools")
-devtools::install_github('shawlab-moffitt/BATCHFLEX')
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install("shawlab-moffitt/BATCHFLEX", dependencies = TRUE)
 ```
 
 
