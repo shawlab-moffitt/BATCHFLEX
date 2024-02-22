@@ -22,18 +22,16 @@ evaluation_pca = function(mat,
                           color_by,
                           plot_title){
   pca_plot_list <- list()
-  row.names(mat) <- NULL
-  mat <- as.data.frame(mat)
-  mat <- mat[, sapply(mat, var) != 0]
-  mat <- as.matrix(mat)
+  rownames(mat) <- NULL
+  mat <- mat[apply(mat, 1, var) != 0, ]
   meta <- meta[match(colnames(mat), meta[,1]),]
   if("all" %in% annotation) annotation = c("cluster", "meta")
   if (!all(annotation %in% c("cluster", "meta"))){
     stop("Annotation method not found")
   }
-  if ("cluster" %in% annotation & is.null(cluster_number) ){
+  if ("cluster" %in% annotation & is.null(cluster_number)){
     zdataset <- t(apply(mat, 1, scale))
-    silhouette <- factoextra::fviz_nbclust(x = t(zdataset), FUNcluster = kmeans, method = "silhouette", verbose = T)
+    silhouette <- factoextra::fviz_nbclust(x = t(zdataset), FUNcluster = kmeans, method = "silhouette")
     cluster_number = silhouette$data$clusters[which(max(silhouette$data$y) == silhouette$data$y)]
   }
   if ("cluster" %in% annotation){
@@ -48,24 +46,42 @@ evaluation_pca = function(mat,
     PCA <- stats::prcomp(t(mat), scale. = TRUE)
     PCA_data <- cbind(t(mat), meta)
     if ("batch" %in% color_by){
-      pca_plot_list$pca_meta_batch_colored_pca <- ggplot2::autoplot(
-        PCA,
-        PCA_data,
-        color = batch.1,
-        shape = variable_of_interest
-      )+
-        ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))+
-        ggtitle(plot_title)
+      if (length(unique(meta[,variable_of_interest])) - 1 <= 25){
+        pca_plot_list$pca_meta_batch_colored_pca <- ggplot2::autoplot(
+          PCA,
+          PCA_data,
+          color = batch.1,
+          shape = variable_of_interest
+        )+
+          ggplot2::scale_shape_manual(values = seq(0, length(unique(meta[,variable_of_interest])) - 1))+
+          ggtitle(plot_title)
+      }else{
+        pca_plot_list$pca_meta_batch_colored_pca <- ggplot2::autoplot(
+          PCA,
+          PCA_data,
+          color = batch.1,
+        )+
+          ggtitle(plot_title)
+      }
     }
     if ("variable_of_interest" %in% color_by){
-      pca_plot_list$pca_meta_voi_colored_pca <- ggplot2::autoplot(
-        PCA,
-        PCA_data,
-        color = variable_of_interest,
-        shape = batch.1
-      )+
-        ggplot2::scale_shape_manual(values = seq(0, length(meta[,variable_of_interest])))+
-        ggtitle(plot_title)
+      if (length(unique(meta[,batch.1])) - 1 <= 25){
+        pca_plot_list$pca_meta_voi_colored_pca <- ggplot2::autoplot(
+          PCA,
+          PCA_data,
+          color = variable_of_interest,
+          shape = batch.1
+        )+
+          ggplot2::scale_shape_manual(values = seq(0, unique(length(meta[,batch.1])) - 1))+
+          ggtitle(plot_title)
+      }else{
+        pca_plot_list$pca_meta_voi_colored_pca <- ggplot2::autoplot(
+          PCA,
+          PCA_data,
+          color = variable_of_interest,
+        )+
+          ggtitle(plot_title)
+      }
     }
     if ("BnW" %in% color_by){
       pca_plot_list$pca_meta_bnw_pca<- ggplot2::autoplot(

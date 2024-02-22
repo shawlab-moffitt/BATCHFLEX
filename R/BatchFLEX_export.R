@@ -8,7 +8,7 @@
 #' @examples
 #' set.seed(333)
 BatchFLEX_export <- function(large_list){
-  directory <- paste0(getwd(), "/BatchFlex_analysis_", gsub("-", "_", Sys.Date()))
+  directory <- paste0(getwd(), "/BatchFlex_analysis_", gsub("-", "_", Sys.Date()), "_", gsub(":", "", format(Sys.time(), "%H:%M:%S")))
   if(file.exists(directory)){
     print(paste0("Saving to", directory))
   }else{
@@ -20,7 +20,10 @@ BatchFLEX_export <- function(large_list){
   }
   for (name2 in 1:length(names_1_data_matrices)){
     file_name <- paste0(directory, "/", names_1_data_matrices[[name2]], "_matrix_", gsub("-", "_", Sys.Date()),".tsv", sep = "")
-    readr::write_tsv(as.data.frame(large_list[[names_1[[1]]]][[names_1_data_matrices[[name2]]]]), file = file_name)
+    matrix_tobesaved <- as.data.frame(large_list[[names_1[[1]]]][[names_1_data_matrices[[name2]]]])
+    matrix_tobesaved$Genes <- row.names(matrix_tobesaved)
+    matrix_tobesaved <- matrix_tobesaved |> dplyr::relocate("Genes")
+    readr::write_tsv(matrix_tobesaved, file = file_name)
   }
   names_1_batch_evaluation_batch <- list()
   for (name3 in 1:length(names_1_batch_evaluation)){
@@ -65,10 +68,27 @@ BatchFLEX_export <- function(large_list){
       }
     }
     ggarrange_list <- list()
+    heatmap_list <- list()
     for (plot in 1:length(plot_list)){
       for (name19 in 1:length(names_1_batch_evaluation_batch[[1]])){
         plot_name <- names(plot_list)[[plot]]
-        ggarrange_list[[plot_name]] <- ggpubr::ggarrange(plotlist = plot_list[[plot]][[1]][[name19]], common.legend = if(plot_name == "pca_clust") FALSE else TRUE )
+        if (plot_name == "heatmap"){
+          for (batch_heatmap in 1:length(plot_list[[plot]][[1]][[name19]])){
+            correction_name <- names(plot_list[[plot]][[1]][[name19]])[[batch_heatmap]]
+            if ("Unadjusted" %in% correction_name){
+              comparison_heatmap <- plot_list[[plot]][[1]][[name19]][[batch_heatmap]]
+            }else{
+              heatmap_list[[correction_name]] <- plot_list[[plot]][[1]][[name19]][[batch_heatmap]]
+            }
+          }
+          for (corrected_heatmap_plot in 1:length(heatmap_list)){
+            comparison_name <- names(heatmap_list)[[corrected_heatmap_plot]]
+            comparison_list <- list(comparison_heatmap, heatmap_list[[corrected_heatmap_plot]])
+            ggarrange_list[[plot_name]][[comparison_name]] <- ggpubr::ggarrange(plotlist = comparison_list)
+          }
+        }else{
+          ggarrange_list[[plot_name]] <- ggpubr::ggarrange(plotlist = plot_list[[plot]][[1]][[name19]], common.legend = if(plot_name == "pca_clust") FALSE else TRUE )
+        }
       }
     }
   }
@@ -93,7 +113,7 @@ BatchFLEX_export <- function(large_list){
       }
     }
   }
-  pdf(paste0(directory,"/", "BatchFLEX_plots_", gsub("-", "_", Sys.Date()),".pdf", sep = ""), width = 10, height = 10)
+  grDevices::pdf(paste0(directory,"/", "BatchFLEX_plots_", gsub("-", "_", Sys.Date()),".pdf", sep = ""), width = 24, height = 16)
   print(ggarrange_list)
   print(plot_list)
   dev.off()
