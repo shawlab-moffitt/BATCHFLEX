@@ -35,8 +35,8 @@ evaluation_umap = function(mat,
   }
   if ("variable_of_interest" %in% color_by){
     evaluation_umap_list$voi_colored_umap <- dplyr::bind_cols(meta,
-                                                                      as.data.frame(umap_res$layout) %>%
-                                                                        dplyr::rename("x" = 1, "y" = 2)) %>%
+                                                              as.data.frame(umap_res$layout) %>%
+                                                                dplyr::rename("x" = 1, "y" = 2)) %>%
       ggplot2::ggplot(aes(x = x, y = y)) +
       geom_point(aes(color = get(variable_of_interest))) +
       theme_bw() +
@@ -46,8 +46,8 @@ evaluation_umap = function(mat,
   }
   if ("BnW" %in% color_by){
     evaluation_umap_list$BnW_colored_umap <- dplyr::bind_cols(meta,
-                                                                    as.data.frame(umap_res$layout) %>%
-                                                                      dplyr::rename("x" = 1, "y" = 2)) %>%
+                                                              as.data.frame(umap_res$layout) %>%
+                                                                dplyr::rename("x" = 1, "y" = 2)) %>%
       ggplot2::ggplot(aes(x = x, y = y)) +
       geom_point() +
       theme_bw() +

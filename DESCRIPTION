@@ -1,5 +1,5 @@
 Package: BatchFLEX
-Title: What the Package Does (One Line, Title Case)
+Title: Comprehensive Batch Correction and Analysis
 Version: 0.0.0.9000
 Authors@R: 
     c(
@@ -14,7 +14,7 @@ Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Imports:
     dplyr,
     tidyr,
@@ -42,7 +42,11 @@ Imports:
     readr,
     tabula,
     folio,
-    bapred
+    bapred,
+    grDevices,
+    stats,
+    statVisual,
+    gridExtra
 Depends: 
     R (>= 2.10),
     ggfortify

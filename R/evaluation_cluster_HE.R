@@ -86,9 +86,8 @@ evaluation_cluster_HE <- function(mat,
   plot_df <- topN_meta
   cluster_col <- paste0(cluster_method, plot_title, sep = "")
   plot_df[,batch.1] <- as.factor(plot_df[,batch.1])
-  barp <- ggplot2::ggplot(plot_df,
-                          aes(fill = !!sym(batch.1), x = !!sym(cluster_col))
-                          )
+  barp <- ggplot2::ggplot(plot_df, aes(fill = !!sym(batch.1), x = !!sym(cluster_col)))
+
   if (fill_percentage) {
     barp <- barp + geom_bar(position = "fill") +
       theme_minimal()
@@ -100,7 +99,6 @@ evaluation_cluster_HE <- function(mat,
                        axis.title.x = element_text(size = 24),
                        axis.text.y = element_text(size = 24),
                        axis.title.y = element_text(size = 24))
-  evaluation_cluster_HE_list$Plots$bar_plot <- barp
 
 
   cluster_batch_freq <- as.data.frame.matrix(table(topN_meta[,cluster_col], topN_meta[,batch.1]))
@@ -117,7 +115,8 @@ evaluation_cluster_HE <- function(mat,
   heterogeneity_matrix$Cluster <- paste0(cluster_method,"_Cluster_",1:nrow(heterogeneity_matrix))
   heterogeneity_matrix <- heterogeneity_matrix %>%
     dplyr::relocate(Cluster)
-  evaluation_cluster_HE_list$Matrices$heterogeneity_matrix <- heterogeneity_matrix
+  evaluation_cluster_HE_list$Matrices$heterogeneity <- heterogeneity_matrix
+  heterogeneity_matrix_table <- gridExtra::tableGrob(heterogeneity_matrix)
 
   avg_heterogeneity_vec <- apply(heterogeneity_matrix[,-1],2,function(x) base::mean(x,na.rm = T))
   avg_heterogeneity_df <- data.frame(Heterogeneity_Method = names(avg_heterogeneity_vec),
@@ -134,11 +133,18 @@ evaluation_cluster_HE <- function(mat,
   evenness_matrix$Cluster <- paste0(cluster_method,"_Cluster_",1:nrow(evenness_matrix))
   evenness_matrix <- evenness_matrix %>%
     dplyr::relocate(Cluster)
-  evaluation_cluster_HE_list$Matrices$evenness_matrix <- evenness_matrix
+  evaluation_cluster_HE_list$Matrices$evenness <- evenness_matrix
+  evenness_matrix_table <- gridExtra::tableGrob(evenness_matrix)
 
   avg_evenness_vec <- apply(evenness_matrix[,-1],2,function(x) mean(x,na.rm = T))
   avg_evenness_df <- data.frame(Evenness_Method = names(avg_evenness_vec),
                                 Average_Evenness = unname(avg_evenness_vec))
   evaluation_cluster_HE_list$Matrices$average_evenness <- avg_evenness_df
+
+  barpntable_list <- list(barp, heterogeneity_matrix_table, evenness_matrix_table)
+  heterogeneity_height <- 0.1 * nrow(heterogeneity_matrix) + 0.1
+  evenness_height <- 0.1* nrow(evenness_matrix) + 0.1
+  barpntable <- ggpubr::ggarrange(plotlist = barpntable_list, nrow = 3, heights = c(4, heterogeneity_height, evenness_height))
+  evaluation_cluster_HE_list$Plots$bar_plot <- barpntable
   return(evaluation_cluster_HE_list)
 }
