@@ -457,6 +457,6 @@ test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_evaluate", "batch_c
 Finally, `BatchFLEX` has the ability to generate `ggarrange` plots for all evaluation methods and to export these plots along with all other plots and matrices to a BatchFLEX_analysis folder by evoking the `BatchFLEX_export` function. Because of the size, multiple heatmaps comparing the uncorrected matrix to each corrected matrix are generated instead of a single plot comparing all methods simultaneously.
 
 ```{r, fig.width = 10, fig.height = 10}
-test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_evaluate", "batch_correct", "BatchFLEX_export"), correction_method = c("ComBat", "Limma", "Harman", "SVA", "RUVg"), mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
+test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_evaluate", "batch_correct", "BatchFLEX_export"), correction_method = c("ComBat", "Limma", "Harman", "SVA", "RUVg"), mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", parallelize = TRUE)
 devtools::session_info()
 ```
