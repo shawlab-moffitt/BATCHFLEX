@@ -48,7 +48,8 @@ batch_evaluate = function(mat = NULL,
                           heatmap_rownames = FALSE,
                           heatmap_colnames = FALSE,
                           topN_pvca = 20000,
-                          pvca_pct = 0.8){
+                          pvca_pct = 0.8,
+                          cores){
   batch_evaluation_list <- list()
   if (is.null(mat)){
     stop("Please provide a matrix file or use retrieve_data or generate_data to generate a matrix file for batch_evaluate")
@@ -120,7 +121,8 @@ batch_evaluate = function(mat = NULL,
                                                       batch.1,
                                                       variable_of_interest,
                                                       color_by,
-                                                      plot_title)
+                                                      plot_title,
+                                                      cores)
   }
   if ("ev" %in% evaluation_method){
     cat("\tConducting explanatory variables analysis\n")

@@ -408,9 +408,10 @@ test_evaluate$Plots
 
 #### Batch evaluate used within BatchFLEX
 `batch_evaluate` can also be used in conjunction with other functions within the top level `Batch_FLEX` function.
+Additionally, `batch_evaluate` can be ran in parallel using the parallelize parameter if desired, which can reduce computational time at the expense of overhead. Default is set to FALSE.
 
 ```{r, fig.width = 10, fig.height = 10}
-test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_correct", "batch_evaluate"), correction_method = "Limma", evaluation_method = "umap", mat = example_mat, meta = example_meta, batch.1 =  "batchflex_study", variable_of_interest = "MajorCellType")
+test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_correct", "batch_evaluate"), correction_method = "Limma", evaluation_method = "umap", mat = example_mat, meta = example_meta, batch.1 =  "batchflex_study", variable_of_interest = "MajorCellType", parallelize = TRUE)
 test_Batch_FLEX[["batch_evaluation"]][["Unadjusted"]][["batch1"]][["Plots"]]
 test_Batch_FLEX[["batch_evaluation"]][["Limma_adjusted"]][["batch1"]][["Plots"]]
 ```

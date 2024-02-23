@@ -35,9 +35,12 @@ batch_correct = function(mat = NULL,
                          round = FALSE,
                          tolerance = 1e-8,
                          par.prior = TRUE,
-                         sva_nsv_method = "be") {
+                         sva_nsv_method = "be",
+                         cores = 1,
+                         parallelize = FALSE) {
 
   #checks to make sure the data is in the right format
+  start_time <- Sys.time()
   if (is.null(mat)) stop("Must provide matrix")
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix"))
     if (!prep_matrix) stop("Must be numeric matrix")
@@ -74,33 +77,88 @@ batch_correct = function(mat = NULL,
 
   meta <- meta[match(colnames(mat), meta[[1]]),]
 
-  if ("Limma" %in% correction_method){
-    cat("\tAdjusting Limma\n")
-    batch_corrected_list$Limma_adjusted <- adjust_limma(mat, meta, variable_of_interest, batch.1, batch.2)
+  if (parallelize == TRUE){
+    if (cores == 1){
+      cores <- parallel::detectCores()
+      parallel_matrices <- length(correction_method)
+      if (parallel_matrices <= cores){
+        cores <- parallel_matrices
+      }
+    }
+    cl <- parallel::makePSOCKcluster(cores, outfile = "debug.txt")
+    parallel::clusterEvalQ(cl, {
+      library(devtools)
+      load_all()
+    })
+    doParallel::registerDoParallel(cl)
+    parallel_matrices <- foreach::foreach(method = correction_method) %dopar% {
+      if (method == "Limma"){
+        cat("\tAdjusting Limma\n")
+        corrected_mat <- adjust_limma(mat, meta, variable_of_interest, batch.1, batch.2)
+      }
+      if(method == "ComBat"){
+        cat("\tAdjusting ComBat\n")
+        corrected_mat <- adjust_combat(mat, meta, batch.1, log2_transformed, par.prior)
+      }
+      if(method == "Mean Centering"){
+        cat("\tAdjusting Mean Centering\n")
+        corrected_mat <- adjust_mean_centering(mat, meta, batch.1, log2_transformed)
+      }
+      if(method == "ComBatseq"){
+        cat("\tAdjusting ComBatseq\n")
+        corrected_mat <- adjust_combatseq(mat, meta, batch.1, variable_of_interest, log2_transformed)
+      }
+      if(method == "Harman"){
+        cat("\tAdjusting Harman\n")
+        corrected_mat <- adjust_harman(mat, meta, batch.1, variable_of_interest, log2_transformed)
+      }
+      if(method == "RUVg"){
+        cat("\tAdjusting RUVg\n")
+        corrected_mat <- adjust_ruvg(mat, housekeeping, k, drop, center, round, tolerance, log2_transformed)
+      }
+      if(method == "SVA"){
+        cat("\tAdjusting SVA\n")
+        corrected_mat <- adjust_sva(mat, meta, variable_of_interest, sva_nsv_method)
+      }
+      corrected_mat
+    }
+    parallel::stopCluster(cl)
+    for (parallel_matrix_names in 1:length(parallel_matrices)){
+      matrix_name <- correction_method[[parallel_matrix_names]]
+      batch_corrected_list[[matrix_name]]$batch1 <- parallel_matrices[[parallel_matrix_names]]
+    }
   }
-  if("ComBat" %in% correction_method){
-    cat("\tAdjusting ComBat\n")
-    batch_corrected_list$ComBat_adjusted = adjust_combat(mat, meta, batch.1, log2_transformed, par.prior)
+  if (parallelize == FALSE){
+    if ("Limma" %in% correction_method){
+      cat("\tAdjusting Limma\n")
+      batch_corrected_list$Limma_adjusted <- adjust_limma(mat, meta, variable_of_interest, batch.1, batch.2)
+    }
+    if("ComBat" %in% correction_method){
+      cat("\tAdjusting ComBat\n")
+      batch_corrected_list$ComBat_adjusted = adjust_combat(mat, meta, batch.1, log2_transformed, par.prior)
+    }
+    if("Mean Centering" %in% correction_method){
+      cat("\tAdjusting Mean Centering\n")
+      batch_corrected_list$`Mean Centering_adjusted` = adjust_mean_centering(mat, meta, batch.1, log2_transformed)
+    }
+    if("ComBatseq" %in% correction_method){
+      cat("\tAdjusting ComBatseq\n")
+      batch_corrected_list$ComBatseq_adjusted <- adjust_combatseq(mat, meta, batch.1, variable_of_interest, log2_transformed)
+    }
+    if("Harman" %in% correction_method){
+      cat("\tAdjusting Harman\n")
+      batch_corrected_list$Harman_adjusted <- adjust_harman(mat, meta, batch.1, variable_of_interest, log2_transformed)
+    }
+    if("RUVg" %in% correction_method){
+      cat("\tAdjusting RUVg\n")
+      batch_corrected_list$RUVg_adjusted <- adjust_ruvg(mat, housekeeping, k, drop, center, round, tolerance, log2_transformed)
+    }
+    if("SVA" %in% correction_method){
+      cat("\tAdjusting SVA\n")
+      batch_corrected_list$SVA_adjusted <- adjust_sva(mat, meta, variable_of_interest, sva_nsv_method)
+    }
   }
-  if("Mean Centering" %in% correction_method){
-    cat("\tAdjusting Mean Centering\n")
-    batch_corrected_list$`Mean Centering_adjusted` = adjust_mean_centering(mat, meta, batch.1, log2_transformed)
-  }
-  if("ComBatseq" %in% correction_method){
-    cat("\tAdjusting ComBatseq\n")
-    batch_corrected_list$ComBatseq_adjusted <- adjust_combatseq(mat, meta, batch.1, variable_of_interest, log2_transformed)
-  }
-  if("Harman" %in% correction_method){
-    cat("\tAdjusting Harman\n")
-    batch_corrected_list$Harman_adjusted <- adjust_harman(mat, meta, batch.1, variable_of_interest, log2_transformed)
-  }
-  if("RUVg" %in% correction_method){
-    cat("\tAdjusting RUVg\n")
-    batch_corrected_list$RUVg_adjusted <- adjust_ruvg(mat, housekeeping, k, drop, center, round, tolerance, log2_transformed)
-  }
-  if("SVA" %in% correction_method){
-    cat("\tAdjusting SVA\n")
-    batch_corrected_list$SVA_adjusted <- adjust_sva(mat, meta, variable_of_interest, sva_nsv_method)
-  }
+  end_time <- Sys.time()
+  print(end_time - start_time)
   return(batch_corrected_list)
 }
