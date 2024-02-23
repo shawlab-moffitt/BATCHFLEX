@@ -46,7 +46,8 @@ Imports:
     grDevices,
     stats,
     statVisual,
-    gridExtra
+    gridExtra,
+    doParallel
 Depends: 
     R (>= 2.10),
     ggfortify

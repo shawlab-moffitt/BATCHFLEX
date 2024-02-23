@@ -16,7 +16,8 @@ evaluation_rle <- function(mat,
                            batch.1,
                            variable_of_interest,
                            color_by,
-                           plot_title){
+                           plot_title,
+                           cores){
   evaluation_rle_list <- list()
   rle_mat <- mat
   names(rle_mat) <- NULL
@@ -29,7 +30,8 @@ evaluation_rle <- function(mat,
     evaluation_rle_list$batch_colored_rle <- scater::plotRLE(
       RLE_SCE,
       exprs_values = "counts",
-      color_by = batch.1
+      color_by = batch.1,
+      BPPARAM = BiocParallel::MulticoreParam(cores)
     )+
       ggtitle(plot_title)
   }
@@ -37,12 +39,13 @@ evaluation_rle <- function(mat,
     RLE_SCE <- SingleCellExperiment::SingleCellExperiment(
       assays = list(counts = as.matrix(rle_mat)),
       colData = meta,
-      rowData = rownames(mat)
+      rowData = rownames(mat),
     )
     evaluation_rle_list$voi_colored_rle <- scater::plotRLE(
       RLE_SCE,
       exprs_values = "counts",
-      color_by = variable_of_interest
+      color_by = variable_of_interest,
+      BPPARAM = BiocParallel::MulticoreParam(cores)
     )+
       ggtitle(plot_title)
   }
@@ -54,7 +57,8 @@ evaluation_rle <- function(mat,
     )
     evaluation_rle_list$bnW_colored_rle <- scater::plotRLE(
       RLE_SCE,
-      exprs_values = "counts"
+      exprs_values = "counts",
+      BPPARAM = BiocParallel::MulticoreParam(cores)
     )+
       ggtitle(plot_title)
   }
