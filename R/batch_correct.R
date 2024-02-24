@@ -15,6 +15,8 @@
 #' @param par.prior Used in the ComBat correction_method, TRUE indicates parametric adjustments will be used, FALSE indicates non-parametric adjustments will be used.
 #' @param correction_method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA).
 #' @param sva_nsv_method Input correction_method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek".
+#' @param cores A numeric input for the number of cores to use if parallel is set to TRUE. Default is set to 1. If none is chosen and parallelize is TRUE default is set to the number of correction methods chosen, if possible.
+#' @param parallelize A logical operator to determine if correction will be run sequentially or in parallel.
 #'
 #' @return List object of length of correction_method
 #' @export
@@ -41,6 +43,7 @@ batch_correct = function(mat = NULL,
 
   #checks to make sure the data is in the right format
   start_time <- Sys.time()
+  print(correction_method)
   if (is.null(mat)) stop("Must provide matrix")
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix"))
     if (!prep_matrix) stop("Must be numeric matrix")
@@ -76,6 +79,7 @@ batch_correct = function(mat = NULL,
   batch_corrected_list <- list()
 
   meta <- meta[match(colnames(mat), meta[[1]]),]
+  print(parallelize)
 
   if (parallelize == TRUE){
     if (cores == 1){
