@@ -76,7 +76,7 @@ BatchFLEX_export <- function(large_list){
         if (plot_name == "heatmap"){
           for (batch_heatmap in 1:length(plot_list[[plot]][[1]][[name19]])){
             correction_name <- names(plot_list[[plot]][[1]][[name19]])[[batch_heatmap]]
-            if ("Unadjusted" %in% correction_name){
+            if (grepl("Unadjusted", correction_name)){
               comparison_heatmap <- plot_list[[plot]][[1]][[name19]][[batch_heatmap]]
             }else{
               heatmap_list[[correction_name]] <- plot_list[[plot]][[1]][[name19]][[batch_heatmap]]

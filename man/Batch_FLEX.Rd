@@ -29,7 +29,7 @@ Batch_FLEX(
   raw.counts = FALSE,
   raw.norm.method = NULL,
   log2 = TRUE,
-  quantnorm = TRUE,
+  quantnorm = FALSE,
   remove.duplicates = TRUE,
   meta = NULL,
   correction_method = "all",
