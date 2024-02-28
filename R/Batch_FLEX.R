@@ -91,7 +91,7 @@ Batch_FLEX = function(Batch_FLEX_function = c("batch_correct", "batch_evaluate")
                       raw.counts = FALSE,
                       raw.norm.method = NULL,
                       log2 = TRUE,
-                      quantnorm = TRUE,
+                      quantnorm = FALSE,
                       remove.duplicates = TRUE,
                       meta = NULL,
                       correction_method = "all",
