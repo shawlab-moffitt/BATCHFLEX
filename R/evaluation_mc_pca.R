@@ -37,23 +37,38 @@ evaluation_mc_pca <- function(mat,
       pca_mc_sce,
       ncomponents = ncomponents,
       colour_by = batch.1
-    )+
-      ggtitle(plot_title)
+    ) +
+      ggtitle(plot_title) +
+      theme(axis.text.x = element_text(size = 14),
+            axis.text.y = element_text(size = 14),
+            legend.title = element_text(size = 18),
+            legend.text = element_text(size = 18),
+            plot.title = element_text(size = 18))
   }
   if ("variable_of_interest" %in% color_by){
     mc_pca_plot_list$voi_colored_mc_pca <- scater::plotPCA(
       pca_mc_sce,
       ncomponents = ncomponents,
       colour_by = variable_of_interest
-    )+
-      ggtitle(plot_title)
+    ) +
+      ggtitle(plot_title) +
+      theme(axis.text.x = element_text(size = 14),
+            axis.text.y = element_text(size = 14),
+            legend.title = element_text(size = 18),
+            legend.text = element_text(size = 18),
+            plot.title = element_text(size = 18))
   }
   if ("BnW" %in% color_by){
     mc_pca_plot_list$bnw_colored_mc_pca <- scater::plotPCA(
       pca_mc_sce,
       ncomponents = ncomponents
-    )+
-      ggtitle(plot_title)
+    ) +
+      ggtitle(plot_title) +
+      theme(axis.text.x = element_text(size = 14),
+            axis.text.y = element_text(size = 14),
+            legend.title = element_text(size = 18),
+            legend.text = element_text(size = 18),
+            plot.title = element_text(size = 18))
   }
 
 

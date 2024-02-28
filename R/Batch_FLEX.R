@@ -182,9 +182,8 @@ Batch_FLEX = function(Batch_FLEX_function = c("batch_correct", "batch_evaluate")
     if (!"preprocess_matrix" %in% Batch_FLEX_function){
       Batch_FLEX_list$data_matrices$Unadjusted <- mat
     }
-    print(parallelize)
     Batch_FLEX_list$data_matrices <- base::append(Batch_FLEX_list$data_matrices, batch_correct(mat, meta, correction_method, batch.1, batch.2, log2_transformed, variable_of_interest, housekeeping,
-                                          k, drop, center, round, tolerance, par.prior, sva_nsv_method, parallelize))
+                                          k, drop, center, round, tolerance, par.prior, sva_nsv_method, cores, parallelize))
   }
   if (!"batch_correct" %in% Batch_FLEX_function){
     if (is.matrix(mat) & !"preprocess_matrix" %in% Batch_FLEX_function){
@@ -217,6 +216,7 @@ Batch_FLEX = function(Batch_FLEX_function = c("batch_correct", "batch_evaluate")
   }
   if ("batch_evaluate" %in% Batch_FLEX_function){
     if (parallelize == TRUE){
+      message("Starting parallelized batch evaluation")
       if (cores == 1){
         cores <- parallel::detectCores()
         parallel_matrices <- length(Batch_FLEX_list$data_matrices)
@@ -224,10 +224,9 @@ Batch_FLEX = function(Batch_FLEX_function = c("batch_correct", "batch_evaluate")
           cores <- parallel_matrices
         }
       }
-      cl <- parallel::makePSOCKcluster(cores, outfile = "debug.txt")
+      cl <- parallel::makePSOCKcluster(cores)
       parallel::clusterEvalQ(cl, {
-        library(devtools)
-        load_all()
+        library(BatchFLEX)
       })
       doParallel::registerDoParallel(cl)
       parallel_batch1_list <- foreach::foreach (matrix = 1:length(Batch_FLEX_list$data_matrices)) %dopar% {
@@ -237,7 +236,7 @@ Batch_FLEX = function(Batch_FLEX_function = c("batch_correct", "batch_evaluate")
         BatchFLEX::batch_evaluate(mat, meta, evaluation_method, batch.1, annotation, cluster_number,
                                   variable_of_interest, cluster_analysis_method, color_by, ncomponents,
                                   pca_factors, variable_choices, sva_nsv_method, plot_title, topN, var_type, cluster_method,
-                                  fill_percentage, heatmap_annotation, heatmap_rownames, heatmap_colnames, topN_pvca, pvca_pct, cores)
+                                  fill_percentage, heatmap_annotation, heatmap_rownames, heatmap_colnames, topN_pvca, pvca_pct)
       }
       if (!is.null(batch.2)){
         parallel_batch2_list <- foreach::foreach (matrix = 1:length(Batch_FLEX_list$data_matrices)) %dopar% {
@@ -285,9 +284,11 @@ Batch_FLEX = function(Batch_FLEX_function = c("batch_correct", "batch_evaluate")
     large_list <- Batch_FLEX_list
   }
   if ("BatchFLEX_export" %in% Batch_FLEX_function){
+    message("Starting batch export")
     BatchFLEX_export(large_list)
   }
   if ("BatchFLEX_shiny" %in% Batch_FLEX_function){
+    message("Starting shiny application")
     BatchFLEX_shiny()
   }
   return(Batch_FLEX_list)

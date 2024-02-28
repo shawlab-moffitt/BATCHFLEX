@@ -40,7 +40,14 @@ evaluation_pca = function(mat,
       PCA,
       frame = TRUE,
       frame.type = "norm") +
-      ggtitle(plot_title)
+      ggtitle(plot_title) +
+      theme(axis.text.x = element_text(size = 18),
+            axis.title.x = element_text(size = 18),
+            axis.text.y = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
+            legend.title = element_text(size = 18),
+            legend.text = element_text(size = 18),
+            plot.title = element_text(size = 18))
   }
   if ("meta" %in% annotation){
     PCA <- stats::prcomp(t(mat), scale. = TRUE)
@@ -54,14 +61,28 @@ evaluation_pca = function(mat,
           shape = variable_of_interest
         )+
           ggplot2::scale_shape_manual(values = seq(0, length(unique(meta[,variable_of_interest])) - 1))+
-          ggtitle(plot_title)
+          ggtitle(plot_title) +
+          theme(axis.text.x = element_text(size = 18),
+                axis.title.x = element_text(size = 18),
+                axis.text.y = element_text(size = 18),
+                axis.title.y = element_text(size = 18),
+                legend.title = element_text(size = 18),
+                legend.text = element_text(size = 18),
+                plot.title = element_text(size = 18))
       }else{
         pca_plot_list$pca_meta_batch_colored_pca <- ggplot2::autoplot(
           PCA,
           PCA_data,
           color = batch.1,
         )+
-          ggtitle(plot_title)
+          ggtitle(plot_title) +
+          theme(axis.text.x = element_text(size = 18),
+                axis.title.x = element_text(size = 18),
+                axis.text.y = element_text(size = 18),
+                axis.title.y = element_text(size = 18),
+                legend.title = element_text(size = 18),
+                legend.text = element_text(size = 18),
+                plot.title = element_text(size = 18))
       }
     }
     if ("variable_of_interest" %in% color_by){
@@ -73,22 +94,41 @@ evaluation_pca = function(mat,
           shape = batch.1
         )+
           ggplot2::scale_shape_manual(values = seq(0, unique(length(meta[,batch.1])) - 1))+
-          ggtitle(plot_title)
+          ggtitle(plot_title) +
+          theme(axis.text.x = element_text(size = 18),
+                axis.title.x = element_text(size = 18),
+                axis.text.y = element_text(size = 18),
+                axis.title.y = element_text(size = 18),
+                legend.title = element_text(size = 18),
+                legend.text = element_text(size = 18),
+                plot.title = element_text(size = 18))
       }else{
         pca_plot_list$pca_meta_voi_colored_pca <- ggplot2::autoplot(
           PCA,
           PCA_data,
-          color = variable_of_interest,
-        )+
-          ggtitle(plot_title)
+          color = variable_of_interest)+
+          ggtitle(plot_title) +
+          theme(axis.text.x = element_text(size = 18),
+                axis.title.x = element_text(size = 18),
+                axis.text.y = element_text(size = 18),
+                axis.title.y = element_text(size = 18),
+                legend.title = element_text(size = 18),
+                legend.text = element_text(size = 18),
+                plot.title = element_text(size = 18))
       }
     }
     if ("BnW" %in% color_by){
       pca_plot_list$pca_meta_bnw_pca<- ggplot2::autoplot(
         PCA,
-        PCA_data
-      )+
-        ggtitle(plot_title)
+        PCA_data)+
+        ggtitle(plot_title) +
+        theme(axis.text.x = element_text(size = 18),
+              axis.title.x = element_text(size = 18),
+              axis.text.y = element_text(size = 18),
+              axis.title.y = element_text(size = 18),
+              legend.title = element_text(size = 18),
+              legend.text = element_text(size = 18),
+              plot.title = element_text(size = 18))
     }
   }
   return(pca_plot_list)

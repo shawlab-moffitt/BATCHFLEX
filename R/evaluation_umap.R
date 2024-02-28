@@ -29,8 +29,15 @@ evaluation_umap = function(mat,
       ggplot2::ggplot(aes(x = x, y = y)) +
       geom_point(aes(color = get(batch.1))) +
       theme_bw() +
-      theme(plot.title = element_text(hjust = 0.5))+
-      ggtitle(plot_title)
+      theme(plot.title = element_text(hjust = 0.5)) +
+      ggtitle(plot_title) +
+      theme(axis.text.x = element_text(size = 18),
+            axis.title.x = element_text(size = 18),
+            axis.text.y = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
+            legend.title = element_text(size = 18),
+            legend.text = element_text(size = 18),
+            plot.title = element_text(size = 18))
       #labs(title = paste0(x, " Expression"), color = batch.1)
   }
   if ("variable_of_interest" %in% color_by){
@@ -40,8 +47,15 @@ evaluation_umap = function(mat,
       ggplot2::ggplot(aes(x = x, y = y)) +
       geom_point(aes(color = get(variable_of_interest))) +
       theme_bw() +
-      theme(plot.title = element_text(hjust = 0.5))+
-      ggtitle(plot_title)
+      theme(plot.title = element_text(hjust = 0.5)) +
+      ggtitle(plot_title) +
+      theme(axis.text.x = element_text(size = 18),
+            axis.title.x = element_text(size = 18),
+            axis.text.y = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
+            legend.title = element_text(size = 18),
+            legend.text = element_text(size = 18),
+            plot.title = element_text(size = 18))
       #labs(title = paste0(x, " Expression"), color = variable_of_interest)
   }
   if ("BnW" %in% color_by){
@@ -51,8 +65,15 @@ evaluation_umap = function(mat,
       ggplot2::ggplot(aes(x = x, y = y)) +
       geom_point() +
       theme_bw() +
-      theme(plot.title = element_text(hjust = 0.5))+
-      ggtitle(plot_title)
+      theme(plot.title = element_text(hjust = 0.5)) +
+      ggtitle(plot_title) +
+      theme(axis.text.x = element_text(size = 18),
+            axis.title.x = element_text(size = 18),
+            axis.text.y = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
+            legend.title = element_text(size = 18),
+            legend.text = element_text(size = 18),
+            plot.title = element_text(size = 18))
     #labs(title = paste0(x, " Expression"), color = variable_of_interest)
   }
   return(evaluation_umap_list)

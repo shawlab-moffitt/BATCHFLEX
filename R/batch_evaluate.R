@@ -125,8 +125,7 @@ batch_evaluate = function(mat = NULL,
                                                       batch.1,
                                                       variable_of_interest,
                                                       color_by,
-                                                      plot_title,
-                                                      cores)
+                                                      plot_title)
   }
   if ("ev" %in% evaluation_method){
     cat("\tConducting explanatory variables analysis\n")

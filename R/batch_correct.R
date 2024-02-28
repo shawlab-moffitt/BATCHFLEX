@@ -42,8 +42,6 @@ batch_correct = function(mat = NULL,
                          parallelize = FALSE) {
 
   #checks to make sure the data is in the right format
-  start_time <- Sys.time()
-  print(correction_method)
   if (is.null(mat)) stop("Must provide matrix")
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix"))
     if (!prep_matrix) stop("Must be numeric matrix")
@@ -79,20 +77,19 @@ batch_correct = function(mat = NULL,
   batch_corrected_list <- list()
 
   meta <- meta[match(colnames(mat), meta[[1]]),]
-  print(parallelize)
 
   if (parallelize == TRUE){
+    message("Starting parallelized batch correction")
     if (cores == 1){
       cores <- parallel::detectCores()
-      parallel_matrices <- length(correction_method)
+      parallel_matrices <- length(correction_method) + 1
       if (parallel_matrices <= cores){
         cores <- parallel_matrices
       }
     }
     cl <- parallel::makePSOCKcluster(cores, outfile = "debug.txt")
     parallel::clusterEvalQ(cl, {
-      library(devtools)
-      load_all()
+      library(BatchFLEX)
     })
     doParallel::registerDoParallel(cl)
     parallel_matrices <- foreach::foreach(method = correction_method) %dopar% {
@@ -129,7 +126,7 @@ batch_correct = function(mat = NULL,
     parallel::stopCluster(cl)
     for (parallel_matrix_names in 1:length(parallel_matrices)){
       matrix_name <- correction_method[[parallel_matrix_names]]
-      batch_corrected_list[[matrix_name]]$batch1 <- parallel_matrices[[parallel_matrix_names]]
+      batch_corrected_list[[matrix_name]] <- parallel_matrices[[parallel_matrix_names]]
     }
   }
   if (parallelize == FALSE){
@@ -162,7 +159,5 @@ batch_correct = function(mat = NULL,
       batch_corrected_list$SVA_adjusted <- adjust_sva(mat, meta, variable_of_interest, sva_nsv_method)
     }
   }
-  end_time <- Sys.time()
-  print(end_time - start_time)
   return(batch_corrected_list)
 }
