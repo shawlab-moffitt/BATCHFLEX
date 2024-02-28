@@ -15,6 +15,8 @@
 #' @param par.prior Used in the ComBat correction_method, TRUE indicates parametric adjustments will be used, FALSE indicates non-parametric adjustments will be used.
 #' @param correction_method A character vector of batch correction methods in c("Limma", "ComBat", "Mean Centering", "ComBatseq", "Harman", "RUVg", "SVA).
 #' @param sva_nsv_method Input correction_method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek".
+#' @param cores A numeric input for the number of cores to use if parallel is set to TRUE. Default is set to 1. If none is chosen and parallelize is TRUE default is set to the number of correction methods chosen, if possible.
+#' @param parallelize A logical operator to determine if correction will be run sequentially or in parallel.
 #'
 #' @return List object of length of correction_method
 #' @export
@@ -40,7 +42,6 @@ batch_correct = function(mat = NULL,
                          parallelize = FALSE) {
 
   #checks to make sure the data is in the right format
-  start_time <- Sys.time()
   if (is.null(mat)) stop("Must provide matrix")
   if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix"))
     if (!prep_matrix) stop("Must be numeric matrix")
@@ -78,17 +79,17 @@ batch_correct = function(mat = NULL,
   meta <- meta[match(colnames(mat), meta[[1]]),]
 
   if (parallelize == TRUE){
+    message("Starting parallelized batch correction")
     if (cores == 1){
       cores <- parallel::detectCores()
-      parallel_matrices <- length(correction_method)
+      parallel_matrices <- length(correction_method) + 1
       if (parallel_matrices <= cores){
         cores <- parallel_matrices
       }
     }
     cl <- parallel::makePSOCKcluster(cores, outfile = "debug.txt")
     parallel::clusterEvalQ(cl, {
-      library(devtools)
-      load_all()
+      library(BatchFLEX)
     })
     doParallel::registerDoParallel(cl)
     parallel_matrices <- foreach::foreach(method = correction_method) %dopar% {
@@ -125,7 +126,7 @@ batch_correct = function(mat = NULL,
     parallel::stopCluster(cl)
     for (parallel_matrix_names in 1:length(parallel_matrices)){
       matrix_name <- correction_method[[parallel_matrix_names]]
-      batch_corrected_list[[matrix_name]]$batch1 <- parallel_matrices[[parallel_matrix_names]]
+      batch_corrected_list[[matrix_name]] <- parallel_matrices[[parallel_matrix_names]]
     }
   }
   if (parallelize == FALSE){
@@ -158,7 +159,5 @@ batch_correct = function(mat = NULL,
       batch_corrected_list$SVA_adjusted <- adjust_sva(mat, meta, variable_of_interest, sva_nsv_method)
     }
   }
-  end_time <- Sys.time()
-  print(end_time - start_time)
   return(batch_corrected_list)
 }

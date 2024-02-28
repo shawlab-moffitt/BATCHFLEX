@@ -95,56 +95,74 @@ evaluation_cluster_HE <- function(mat,
     barp <- barp + geom_bar() +
       theme_minimal()
   }
-  barp <- barp + theme(axis.text.x = element_text(size = 24),
-                       axis.title.x = element_text(size = 24),
-                       axis.text.y = element_text(size = 24),
-                       axis.title.y = element_text(size = 24))
+  barp <- barp + theme(axis.text.x = element_text(size = 18),
+                       axis.title.x = element_text(size = 18),
+                       axis.text.y = element_text(size = 18),
+                       axis.title.y = element_text(size = 18),
+                       legend.title = element_text(size = 18),
+                       legend.text = element_text(size = 18))
 
 
   cluster_batch_freq <- as.data.frame.matrix(table(topN_meta[,cluster_col], topN_meta[,batch.1]))
 
-  heterogeneity_shannon = tabula::heterogeneity(cluster_batch_freq, method = "shannon") # other options include c("berger", "boone", "brillouin", "mcintosh", "shannon", "simpson")
-  heterogeneity_berger = tabula::heterogeneity(cluster_batch_freq, method = "berger") # other options include c("berger", "boone", "brillouin", "mcintosh", "shannon", "simpson")
-  heterogeneity_boone = tabula::heterogeneity(cluster_batch_freq, method = "boone") # other options include c("berger", "boone", "brillouin", "mcintosh", "shannon", "simpson")
-  heterogeneity_brillouin = tabula::heterogeneity(cluster_batch_freq, method = "brillouin") # other options include c("berger", "boone", "brillouin", "mcintosh", "shannon", "simpson")
-  heterogeneity_mcintosh = tabula::heterogeneity(cluster_batch_freq, method = "mcintosh") # other options include c("berger", "boone", "brillouin", "mcintosh", "shannon", "simpson")
+  Hshannon = tabula::heterogeneity(cluster_batch_freq, method = "shannon") # other options include c("berger", "boone", "brillouin", "mcintosh", "shannon", "simpson")
+  Hberger = tabula::heterogeneity(cluster_batch_freq, method = "berger") # other options include c("berger", "boone", "brillouin", "mcintosh", "shannon", "simpson")
+  Hboone = tabula::heterogeneity(cluster_batch_freq, method = "boone") # other options include c("berger", "boone", "brillouin", "mcintosh", "shannon", "simpson")
+  Hbrillouin = tabula::heterogeneity(cluster_batch_freq, method = "brillouin") # other options include c("berger", "boone", "brillouin", "mcintosh", "shannon", "simpson")
+  Hmcintosh = tabula::heterogeneity(cluster_batch_freq, method = "mcintosh") # other options include c("berger", "boone", "brillouin", "mcintosh", "shannon", "simpson")
 
-  heterogeneity_matrix = as.data.frame(cbind(heterogeneity_shannon, heterogeneity_berger,
-                                                    heterogeneity_boone, heterogeneity_brillouin,
-                                                    heterogeneity_mcintosh))
+  heterogeneity_matrix = as.data.frame(cbind(Hshannon, Hberger,
+                                                    Hboone, Hbrillouin,
+                                                    Hmcintosh))
   heterogeneity_matrix$Cluster <- paste0(cluster_method,"_Cluster_",1:nrow(heterogeneity_matrix))
   heterogeneity_matrix <- heterogeneity_matrix %>%
     dplyr::relocate(Cluster)
   evaluation_cluster_HE_list$Matrices$heterogeneity <- heterogeneity_matrix
-  heterogeneity_matrix_table <- gridExtra::tableGrob(heterogeneity_matrix)
+
+  #vp_het <- viewport(width = 0.3, height = heterogeneity_height)
+  #heterogeneity_matrix_table <- gridExtra::tableGrob(heterogeneity_matrix, vp = vp_het)
 
   avg_heterogeneity_vec <- apply(heterogeneity_matrix[,-1],2,function(x) base::mean(x,na.rm = T))
   avg_heterogeneity_df <- data.frame(Heterogeneity_Method = names(avg_heterogeneity_vec),
                                      Average_Heterogeneity = unname(avg_heterogeneity_vec))
   evaluation_cluster_HE_list$Matrices$average_heterogeneity <- avg_heterogeneity_df
 
-  evenness_shannon = tabula::evenness(cluster_batch_freq, method="shannon")
-  evenness_brillouin = tabula::evenness(cluster_batch_freq, method="brillouin")
-  evenness_mcintosh = tabula::evenness(cluster_batch_freq, method="mcintosh")
-  evenness_simpson = tabula::evenness(cluster_batch_freq, method="simpson")
+  Eshannon = tabula::evenness(cluster_batch_freq, method="shannon")
+  Ebrillouin = tabula::evenness(cluster_batch_freq, method="brillouin")
+  Emcintosh = tabula::evenness(cluster_batch_freq, method="mcintosh")
+  Esimpson = tabula::evenness(cluster_batch_freq, method="simpson")
 
-  evenness_matrix = as.data.frame(cbind(evenness_shannon, evenness_brillouin,
-                                               evenness_mcintosh, evenness_simpson))
+  evenness_matrix = as.data.frame(cbind(Eshannon, Ebrillouin,
+                                               Emcintosh, Esimpson))
   evenness_matrix$Cluster <- paste0(cluster_method,"_Cluster_",1:nrow(evenness_matrix))
   evenness_matrix <- evenness_matrix %>%
     dplyr::relocate(Cluster)
   evaluation_cluster_HE_list$Matrices$evenness <- evenness_matrix
-  evenness_matrix_table <- gridExtra::tableGrob(evenness_matrix)
+
+  #vp_even <- viewport(width = 0.3, height = evenness_height)
+  complete_table <- cbind(heterogeneity_matrix, evenness_matrix[,-1])
+  complete_table <- round(as.matrix(complete_table[,-1]), 6)
+  complete_table <- as.data.frame(complete_table)
+  complete_table$Cluster <- as.vector(1:nrow(complete_table))
+  complete_table <- dplyr::relocate(complete_table, "Cluster")
+  complete_matrix_table <- gridExtra::tableGrob(complete_table, theme = gridExtra::ttheme_default(base_size = 11, base_colour = "black", base_family = "",
+                                                                                                  parse = FALSE, padding = unit(c(2, 2), "mm")))
 
   avg_evenness_vec <- apply(evenness_matrix[,-1],2,function(x) mean(x,na.rm = T))
   avg_evenness_df <- data.frame(Evenness_Method = names(avg_evenness_vec),
                                 Average_Evenness = unname(avg_evenness_vec))
   evaluation_cluster_HE_list$Matrices$average_evenness <- avg_evenness_df
 
-  barpntable_list <- list(barp, heterogeneity_matrix_table, evenness_matrix_table)
+  barpntable_list <- list(barp, complete_matrix_table)
   heterogeneity_height <- 0.1 * nrow(heterogeneity_matrix) + 0.1
-  evenness_height <- 0.1* nrow(evenness_matrix) + 0.1
-  barpntable <- ggpubr::ggarrange(plotlist = barpntable_list, nrow = 3, heights = c(4, heterogeneity_height, evenness_height))
+  evenness_height <- 0.1 * nrow(evenness_matrix) + 0.1
+  complete_height <- heterogeneity_height + evenness_height
+
+  barp_height <-  heterogeneity_height + evenness_height
+  barpntable <- ggpubr::ggarrange(plotlist = barpntable_list,
+                                  nrow = 2, ncol = 1,
+                                  heights = c(barp_height, complete_height))
+
   evaluation_cluster_HE_list$Plots$bar_plot <- barpntable
   return(evaluation_cluster_HE_list)
 }

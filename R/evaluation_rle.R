@@ -16,11 +16,11 @@ evaluation_rle <- function(mat,
                            batch.1,
                            variable_of_interest,
                            color_by,
-                           plot_title,
-                           cores){
+                           plot_title){
   evaluation_rle_list <- list()
   rle_mat <- mat
   names(rle_mat) <- NULL
+  bpparam_rle <- BiocParallel::SnowParam(workers = 1, type = "SOCK")
   if ("batch" %in% color_by){
     RLE_SCE <- SingleCellExperiment::SingleCellExperiment(
       assays = list(counts = as.matrix(rle_mat)),
@@ -31,9 +31,16 @@ evaluation_rle <- function(mat,
       RLE_SCE,
       exprs_values = "counts",
       color_by = batch.1,
-      BPPARAM = BiocParallel::MulticoreParam(cores)
+      BPPARAM = bpparam_rle
     )+
-      ggtitle(plot_title)
+      ggtitle(plot_title)+
+      theme(axis.text.x = element_text(size = 18),
+            axis.title.x = element_text(size = 18),
+            axis.text.y = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
+            legend.title = element_text(size = 18),
+            legend.text = element_text(size = 18),
+            plot.title = element_text(size = 18))
   }
   if ("variable_of_interest" %in% color_by){
     RLE_SCE <- SingleCellExperiment::SingleCellExperiment(
@@ -45,9 +52,16 @@ evaluation_rle <- function(mat,
       RLE_SCE,
       exprs_values = "counts",
       color_by = variable_of_interest,
-      BPPARAM = BiocParallel::MulticoreParam(cores)
+      BPPARAM = bpparam_rle
     )+
-      ggtitle(plot_title)
+      ggtitle(plot_title)+
+      theme(axis.text.x = element_text(size = 18),
+            axis.title.x = element_text(size = 18),
+            axis.text.y = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
+            legend.title = element_text(size = 18),
+            legend.text = element_text(size = 18),
+            plot.title = element_text(size = 18))
   }
   if ("BnW" %in% color_by){
     RLE_SCE <- SingleCellExperiment::SingleCellExperiment(
@@ -58,10 +72,18 @@ evaluation_rle <- function(mat,
     evaluation_rle_list$bnW_colored_rle <- scater::plotRLE(
       RLE_SCE,
       exprs_values = "counts",
-      BPPARAM = BiocParallel::MulticoreParam(cores)
+      BPPARAM = bpparam_rle
     )+
-      ggtitle(plot_title)
+      ggtitle(plot_title)+
+      theme(axis.text.x = element_text(size = 18),
+            axis.title.x = element_text(size = 18),
+            axis.text.y = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
+            legend.title = element_text(size = 18),
+            legend.text = element_text(size = 18),
+            plot.title = element_text(size = 18))
   }
+  BiocParallel::bpstop(bpparam_rle)
 
   return(evaluation_rle_list)
 }

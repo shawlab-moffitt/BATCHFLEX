@@ -87,7 +87,7 @@ BatchFLEX_export <- function(large_list){
             ggarrange_list[[plot_name]][[comparison_name]] <- ggpubr::ggarrange(plotlist = comparison_list)
           }
         }else{
-          ggarrange_list[[plot_name]] <- ggpubr::ggarrange(plotlist = plot_list[[plot]][[1]][[name19]], common.legend = if(plot_name == "pca_clust") FALSE else TRUE )
+          ggarrange_list[[plot_name]] <- ggpubr::ggarrange(plotlist = plot_list[[plot]][[1]][[name19]], common.legend = if(plot_name == "pca_clust" | plot_name == "cluster_HE") FALSE else TRUE)
         }
       }
     }
@@ -113,8 +113,11 @@ BatchFLEX_export <- function(large_list){
       }
     }
   }
-  grDevices::pdf(paste0(directory,"/", "BatchFLEX_plots_", gsub("-", "_", Sys.Date()),".pdf", sep = ""), width = 24, height = 16)
+  grDevices::pdf(paste0(directory,"/", "Combined_BatchFLEX_plots_", gsub("-", "_", Sys.Date()),".pdf", sep = ""), width = 24, height = 16)
   print(ggarrange_list)
+  dev.off()
+
+  grDevices::pdf(paste0(directory,"/", "Individual_BatchFLEX_plots_", gsub("-", "_", Sys.Date()),".pdf", sep = ""), width = 12, height = 8)
   print(plot_list)
   dev.off()
 

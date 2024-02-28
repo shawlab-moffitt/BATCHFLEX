@@ -23,11 +23,25 @@ evaluation_cluster_analysis = function(mat,
   cluster_plot_list <- list()
   if ("wss" %in% cluster_analysis_method){
     cluster_plot_list$wss <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "wss", verbose = T)+
-      labs(title = paste0("Elbow Cluster Analysis\n", plot_title, sep = " "))
+      labs(title = paste0("Elbow Cluster Analysis\n", plot_title, sep = " ")) +
+      theme(axis.text.x = element_text(size = 18),
+            axis.title.x = element_text(size = 18),
+            axis.text.y = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
+            legend.title = element_text(size = 18),
+            legend.text = element_text(size = 18),
+            plot.title = element_text(size = 18))
   }
   if ("silhouette" %in% cluster_analysis_method){
     cluster_plot_list$silhouette <- factoextra::fviz_nbclust(x = t(mat), FUNcluster = kmeans, method = "silhouette", verbose = T)+
-      labs(title = paste0("Silhouette Cluster Analysis\n", plot_title, sep = " "))
+      labs(title = paste0("Silhouette Cluster Analysis\n", plot_title, sep = " ")) +
+      theme(axis.text.x = element_text(size = 18),
+            axis.title.x = element_text(size = 18),
+            axis.text.y = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
+            legend.title = element_text(size = 18),
+            legend.text = element_text(size = 18),
+            plot.title = element_text(size = 18))
   }
   if ("dunn" %in% cluster_analysis_method){
     set.seed(333)
@@ -50,7 +64,14 @@ evaluation_cluster_analysis = function(mat,
         linetype = 2
       ) +
       theme_classic()+
-      ggtitle(paste0("Dunn Cluster Analysis\n", plot_title, sep = " "))
+      ggtitle(paste0("Dunn Cluster Analysis\n", plot_title, sep = " ")) +
+      theme(axis.text.x = element_text(size = 18),
+            axis.title.x = element_text(size = 18),
+            axis.text.y = element_text(size = 18),
+            axis.title.y = element_text(size = 18),
+            legend.title = element_text(size = 18),
+            legend.text = element_text(size = 18),
+            plot.title = element_text(size = 18))
   }
   return(cluster_plot_list)
 }

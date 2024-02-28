@@ -16,7 +16,7 @@ preprocess_matrix = function(mat = NULL,
                              raw.counts = FALSE,
                              raw.norm.method = NULL,
                              log2 = TRUE,
-                             quantnorm = TRUE,
+                             quantnorm = FALSE,
                              remove.duplicates = TRUE) {
   #checks to make sure the data is in the right format
   if (!raw.counts) raw.norm.method = NULL

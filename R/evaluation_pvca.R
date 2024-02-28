@@ -73,13 +73,23 @@ evaluation_pvca <- function(mat,
   dataset_pvca <- dataset_pvca %>% dplyr::relocate(any_of(featColName_pvca))
   matrix_pvca <- as.matrix(dataset_pvca[,-1])
 
-  evaluation_pvca_list$pvca <- statVisual::PVCA(
+  final_pvca <- statVisual::PVCA(
     clin_data = meta,
     clin_subjid = colnames(meta)[1],
     gene_data = matrix_pvca,
     batch.factors = variable_choices,
-    pct_threshold = pvca_pct
-    )+ ggtitle(plot_title)
+    pct_threshold = pvca_pct) +
+    ggtitle(plot_title) +
+    theme(axis.text.x = element_text(size = 12),
+          axis.title.x = element_text(size = 18),
+          axis.text.y = element_text(size = 18),
+          axis.title.y = element_text(size = 18),
+          legend.title = element_text(size = 18),
+          legend.text = element_text(size = 18),
+          plot.title = element_text(size = 18))
+  final_pvca$layers[[2]]$aes_params$size <- 5
+
+  evaluation_pvca_list$pvca <- final_pvca
 
   return(evaluation_pvca_list)
 }

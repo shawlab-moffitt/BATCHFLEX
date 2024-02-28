@@ -48,7 +48,9 @@ evaluation_heatmap <- function(mat,
   meta_sub <- meta[,heatmap_annotation, drop = F]
   heat_colAnn <- ComplexHeatmap::HeatmapAnnotation(df = meta_sub,
                                                    name = heatmap_annotation,
-                                                   which = 'col')
+                                                   which = 'col',
+                                                   annotation_name_gp = grid::gpar(fontsize = 18),
+                                                   annotation_legend_param = list(title_gp = grid::gpar(fontsize = 18), labels_gp = grid::gpar(fontsize = 18)))
   if(is.null(heatmap_annotation)){
     heat_colAnn <- NULL
   }
@@ -90,9 +92,10 @@ evaluation_heatmap <- function(mat,
                                                                                top_annotation = heat_colAnn,
                                                                                show_row_names = heatmap_rownames,
                                                                                show_column_names = heatmap_colnames,
-                                                                               heatmap_legend_param = list(title = "Expression"),
+                                                                               heatmap_legend_param = list(title = "Expression", title_gp = grid::gpar(fontsize = 18), labels_gp = grid::gpar(fontsize = 18)),
                                                                                show_heatmap_legend = TRUE,
-                                                                               clustering_method_columns = cluster_method)))))
+                                                                               clustering_method_columns = cluster_method,
+                                                                               column_title_gp = grid::gpar(fontsize = 18))))))
   return(evaluation_heatmap_list)
 }
 

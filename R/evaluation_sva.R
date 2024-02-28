@@ -31,10 +31,16 @@ evaluation_sva <- function(mat,
   SVA_probability_df_longer <- tidyr::pivot_longer(SVA_probability_df, !Genes, names_to = "variable_type")
   SVA_probability_df_longer <- dplyr::rename(SVA_probability_df_longer, "probability_association_of_each_gene" = "value")
   evaluation_sva_list$Plots$svaprob <- ggplot(SVA_probability_df_longer,
-                                                  mapping = aes(x = probability_association_of_each_gene, fill = variable_type, alpha = 0.5)
-                                                  )+
-    geom_density()+
-    ggtitle(plot_title)
+                                                  mapping = aes(x = probability_association_of_each_gene, fill = variable_type, alpha = 0.5)) +
+    geom_density() +
+    ggtitle(plot_title) +
+    theme(axis.text.x = element_text(size = 18),
+          axis.title.x = element_text(size = 18),
+          axis.text.y = element_text(size = 18),
+          axis.title.y = element_text(size = 18),
+          legend.title = element_text(size = 18),
+          legend.text = element_text(size = 18),
+          plot.title = element_text(size = 18))
   evaluation_sva_list$Matrices$sv <- SVA_object$sv
 
   return(evaluation_sva_list)

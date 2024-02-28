@@ -37,8 +37,15 @@ evaluation_ev <- function(mat,
     scale_x_log10(limit = c(0.0001,100),labels = ~ format(.x, scientific = FALSE), breaks = c(0.001,0.01,0.1,1,10,100)) +
       geom_vline(xintercept = 1, linetype="dashed") +
     theme_classic() +
-    labs(x = "% Variance Explained", y = "Density", color = "Variable")+
-    ggtitle(paste0("Explanatory Variables Plot\n", plot_title))
+    labs(x = "% Variance Explained", y = "Density", color = "Variable") +
+    ggtitle(paste0("Explanatory Variables Plot\n", plot_title)) +
+    theme(axis.text.x = element_text(size = 18),
+          axis.title.x = element_text(size = 18),
+          axis.text.y = element_text(size = 18),
+          axis.title.y = element_text(size = 18),
+          legend.title = element_text(size = 18),
+          legend.text = element_text(size = 18),
+          plot.title = element_text(size = 18))
 
   return(evaluation_ev_list)
 }

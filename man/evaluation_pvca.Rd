@@ -9,7 +9,7 @@ evaluation_pvca(
   meta,
   batch.1,
   variable_of_interest,
-  topN,
+  topN_pvca,
   var_type,
   variable_choices,
   pvca_pct,
@@ -25,7 +25,7 @@ evaluation_pvca(
 
 \item{variable_of_interest}{Column name from the meta file of the column that will be used for the variable of interest information.}
 
-\item{topN}{A positive integer indicating the top number of genes to select based on variance. Default is set to 2000.}
+\item{topN_pvca}{A positive integer indicating the top number of genes to select based on variance for PVCA. Default is set to 20000.}
 
 \item{var_type}{The variance measure used to select the top genes based on variance. Default is set to MAD. Choices are "MAD", "CV", or "VAR".}
 

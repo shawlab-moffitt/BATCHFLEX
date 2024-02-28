@@ -19,7 +19,9 @@ batch_correct(
   round = FALSE,
   tolerance = 1e-08,
   par.prior = TRUE,
-  sva_nsv_method = "be"
+  sva_nsv_method = "be",
+  cores = 1,
+  parallelize = FALSE
 )
 }
 \arguments{
@@ -52,6 +54,10 @@ batch_correct(
 \item{par.prior}{Used in the ComBat correction_method, TRUE indicates parametric adjustments will be used, FALSE indicates non-parametric adjustments will be used.}
 
 \item{sva_nsv_method}{Input correction_method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek".}
+
+\item{cores}{A numeric input for the number of cores to use if parallel is set to TRUE. Default is set to 1. If none is chosen and parallelize is TRUE default is set to the number of correction methods chosen, if possible.}
+
+\item{parallelize}{A logical operator to determine if correction will be run sequentially or in parallel.}
 }
 \value{
 List object of length of correction_method
