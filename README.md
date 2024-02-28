@@ -196,7 +196,7 @@ test_merge_BatchFLEX[["batch_evaluation"]][["ComBat_adjusted"]][["batch1"]][["Pl
 ```{r, fig.width = 10, fig.height = 10}
 data(example_meta)
 data(example_mat)
-test_example <- Batch_FLEX(mat = preprocess_matrix(BatchFLEX::example_mat, quantnorm = FALSE), 
+test_example <- Batch_FLEX(mat = preprocess_matrix(BatchFLEX::example_mat), 
            meta = BatchFLEX::example_meta, 
            batch.1 = "batchflex_study", 
            variable_of_interest = "MajorCellType",
@@ -217,7 +217,7 @@ test_example$batch_evaluation$Limma_adjusted$batch1$Plots$umap
 Limma can be used with a one batch or two batches and can include the variable of interest in the model matrix. 
 
 ```{r}
-adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat, quantnorm = FALSE),
+adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
                                    meta = BatchFLEX::example_meta,
                                    correction_method = "Limma",
                                    batch.1 = "batchflex_study",
@@ -230,7 +230,7 @@ head(as.data.frame(adjusted_data), n = c(5,5))
 ComBat uses a single batch, but can also be used for non parametric data by changing the par.prior parameter.
 
 ```{r}
-adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat, quantnorm = FALSE),
+adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
                                    meta = BatchFLEX::example_meta,
                                    correction_method = "ComBat",
                                    batch.1 = "batchflex_study",
@@ -241,7 +241,7 @@ head(as.data.frame(adjusted_data), n = c(5,5))
 ##### ComBatseq
 ComBatseq is unique among the correction methods as it requies raw count data instead of log transformed or normalized data.
 ```{r}
-adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat, quantnorm = FALSE),
+adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
                                    meta = BatchFLEX::example_meta,
                                    correction_method = "ComBatseq",
                                    batch.1 = "batchflex_study",
@@ -264,7 +264,7 @@ Human:
 
 
 ```{r}
-adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat, quantnorm = FALSE),
+adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
                                    meta = BatchFLEX::example_meta,
                                    correction_method = "RUVg",
                                    batch.1 = "batchflex_study",
@@ -281,7 +281,7 @@ head(as.data.frame(adjusted_data), n = c(5,5))
 SVA is unique as it does not require batch information and generates surrogate variables that are used for adjustment. The sva_nsv_method parameter is used to choose the method of surrogate variable esimation. Default is set to "be".
 
 ```{r}
-adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat, quantnorm = FALSE),
+adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
                                    meta = BatchFLEX::example_meta,
                                    correction_method = "SVA",
                                    variable_of_interest = "MajorCellType",
@@ -294,7 +294,7 @@ Harman and Mean Centering do not require special parameters, however, using Harm
 
 
 ```{r}
-adjusted_data <- batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat, quantnorm = FALSE),
+adjusted_data <- batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
                                    meta = BatchFLEX::example_meta,
                                    correction_method = c("Harman", "Mean Centering"),
                                    batch.1 = "batchflex_study",
@@ -307,7 +307,7 @@ head(as.data.frame(adjusted_data[["Mean Centering_adjusted"]]), n = c(5,5))
 `batch_correct` can be used within the `Batch_FLEX` function and automatically pipe the output to the `batch_evaluate` functions. 
 
 ```{r, fig.width = 10, fig.height = 10}
-test_example <- Batch_FLEX(Batch_FLEX_function = c("batch_correct", "batch_evaluate"), mat = example_mat, meta = example_meta, correction_method = "Limma", evaluation_method = "pca", batch.1 = "batchflex_study")
+test_example <- Batch_FLEX(Batch_FLEX_function = c("preprocess_matrix","batch_correct", "batch_evaluate"), mat = example_mat, meta = example_meta, correction_method = "Limma", evaluation_method = "pca", batch.1 = "batchflex_study")
 head(as.data.frame(test_example$data_matrices$Limma), n = c(5,5))
 test_example$batch_evaluation$Unadjusted$batch1$Plots$pca
 test_example$batch_evaluation$Limma_adjusted$batch1$Plots$pca
@@ -322,20 +322,20 @@ BatchFLEX utilizes many different methods of evaluation to determine whether bat
 ##### Principal component analysis
 By default, pca will include all annotation types, which includes annotation by cluster and annotation by the meta file. This can be adjusted by changing the annotation parameter. If a cluster number is not provided, then BatchFLEX will use silhouette analysis to generate an ideal cluster number for each matrix file. 
 ```{r, fig.width = 10, fig.height = 10}
-test_evaluate <- batch_evaluate(evaluation_method = "pca", mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", annotation = "meta")
+test_evaluate <- batch_evaluate(evaluation_method = "pca", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", annotation = "meta")
 test_evaluate$Plots$pca
 ```
 
 ##### Cluster analysis
 By default, the cluster analysis will include an elbow plot, a silhouette plot and a dunn index plot. If all three are not desired, then the cluster_analysis_method parameter can be changed. 
 ```{r, fig.width = 10, fig.height = 10}
-test_evaluate <- batch_evaluate(evaluation_method = "cluster_analysis", mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", cluster_analysis_method = "silhouette")
+test_evaluate <- batch_evaluate(evaluation_method = "cluster_analysis", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", cluster_analysis_method = "silhouette")
 test_evaluate$Plots$cluster_analysis
 ```
 ##### Cluster heterogeneity and evenness
 BatchFLEX also includes multiple methods to assess the heterogeneity and evenness of the clustering to ensure appropriate batch correction occurs. Ideally, clustering representing the variable of interest should have relatively equal representation of each batch, which would suggest that the batch effect is not driving the clustering. By default, cluster_he will use the ward.d2 method and will use the MAD variance method.
 ```{r, fig.width = 10, fig.height = 10}
-test_evaluate <- batch_evaluate(evaluation_method = "cluster_HE", mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", plot_title = "Unadjusted")
+test_evaluate <- batch_evaluate(evaluation_method = "cluster_HE", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", plot_title = "Unadjusted")
 test_evaluate$Plots$cluster_HE
 test_evaluate$Matrices$cluster_HE
 ```
@@ -343,7 +343,7 @@ test_evaluate$Matrices$cluster_HE
 ##### Heatmap
 BatchFLEX will generate a heatmap with clustering based on the same cluster method chosen in the heterogeneity and evenness analysis. By default, this will use the top 2000 most variable genes by MAD and will be annotated by the batch.1 and variable of interest. However, the user can adjust this if desired. Additionally, the rows and columns can be labeled, however, for dense heatmaps, this is generally not recommended.
 ```{r, fig.width = 10, fig.height = 10}
-test_evaluate <- batch_evaluate(evaluation_method = "heatmap", mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
+test_evaluate <- batch_evaluate(evaluation_method = "heatmap", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
 test_evaluate$Plots$heatmap
 ```
 
@@ -351,47 +351,47 @@ test_evaluate$Plots$heatmap
 The PCA details analysis includes many helpful plots and matrices that can be used to assess the PCA. By default, `batch_evaluate` will use the batch.1 parameter when generating these files, however, this can be adjusted by altering the pca_factors parameter
 
 ```{r, fig.width = 10, fig.height = 10}
-test_evaluate <- batch_evaluate(evaluation_method = "pca_details", mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", pca_factors = "MajorCellType")
+test_evaluate <- batch_evaluate(evaluation_method = "pca_details", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", pca_factors = "MajorCellType")
 test_evaluate$Plots$pca_details
 ```
 
 ##### Multiple components PCA
 By default, the multiple components plot will include the top 5 principal components. This can be changes by altering the ncomponents parameter.
 ```{r, fig.width = 10, fig.height = 10}
-test_evaluate <- batch_evaluate(evaluation_method = "mc_pca", mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", color_by = "batch", ncomponents = 10)
+test_evaluate <- batch_evaluate(evaluation_method = "mc_pca", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", color_by = "batch", ncomponents = 10)
 test_evaluate$Plots$mc_pca
 ```
 
 ##### Relative log expression analysis
 ```{r, fig.width = 10, fig.height = 10}
-test_evaluate <- batch_evaluate(evaluation_method = "rle", mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", color_by = "variable_of_interest")
+test_evaluate <- batch_evaluate(evaluation_method = "rle", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", color_by = "variable_of_interest")
 test_evaluate$Plots$rle
 ```
 
 ##### Explanatory variables plot
 By default, the explanatory variables plot will include the batch.1 and the variable of interest groups. If another column from the meta file is desired, then the variable_choices parameter can be altered.
 ```{r, fig.width = 10, fig.height = 10}
-test_evaluate <- batch_evaluate(evaluation_method = "ev", mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", variable_choices = c("batchflex_study", "Major Lineage"))
+test_evaluate <- batch_evaluate(evaluation_method = "ev", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", variable_choices = c("batchflex_study", "Major Lineage"))
 test_evaluate$Plots$ev
 ```
 
 ##### Principal variance component analysis
 The PVCA plot is generated from the top 20000 most variable genes using MAD by default. Additionally, pvca_pct is set to 0.8, but can be adjusted if desired. If variable_choices are not selected, the batch.1 and variable of interest will be used by default.
 ```{r, fig.width = 10, fig.height = 10}
-test_evaluate <- batch_evaluate(evaluation_method = "pvca", mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
+test_evaluate <- batch_evaluate(evaluation_method = "pvca", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
 test_evaluate$Plots$ev
 ```
 
 ##### Surrogate variable analysis
 By default, SVA will use the "be" method for surrogate variable estimation. If desired, the "leek" method can be chosen by chaning the sva_nsv_method.
 ```{r, fig.width = 10, fig.height = 10}
-test_evaluate <- batch_evaluate(evaluation_method = "sva", mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", sva_nsv_method = "be")
+test_evaluate <- batch_evaluate(evaluation_method = "sva", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", sva_nsv_method = "be")
 test_evaluate$Plots$sva
 ```
 
 ##### Unform manifold approximation and projection
 ```{r, fig.width = 10, fig.height = 10}
-test_evaluate <- batch_evaluate(evaluation_method = "umap", mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
+test_evaluate <- batch_evaluate(evaluation_method = "umap", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
 test_evaluate$Plots$umap
 ```
 
@@ -399,7 +399,7 @@ test_evaluate$Plots$umap
 By default, `batch_evaluate` will include all evaluation methods that are available based on the input criteria. 
 
 ```{r, fig.width = 10, fig.height = 10}
-test_evaluate <- batch_evaluate(mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
+test_evaluate <- batch_evaluate(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
 test_evaluate$Plots
 ```
 
@@ -408,7 +408,7 @@ test_evaluate$Plots
 Additionally, `batch_evaluate` can be ran in parallel using the parallelize parameter if desired, which can reduce computational time at the expense of overhead. Default is set to FALSE.
 
 ```{r, fig.width = 10, fig.height = 10}
-test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_correct", "batch_evaluate"), correction_method = "Limma", evaluation_method = "umap", mat = example_mat, meta = example_meta, batch.1 =  "batchflex_study", variable_of_interest = "MajorCellType", parallelize = TRUE)
+test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("preprocess_matrix", "batch_correct", "batch_evaluate"), correction_method = "Limma", evaluation_method = "umap", mat = example_mat, meta = example_meta, batch.1 =  "batchflex_study", variable_of_interest = "MajorCellType", parallelize = TRUE)
 test_Batch_FLEX[["batch_evaluation"]][["Unadjusted"]][["batch1"]][["Plots"]]
 test_Batch_FLEX[["batch_evaluation"]][["Limma_adjusted"]][["batch1"]][["Plots"]]
 ```
@@ -416,7 +416,7 @@ test_Batch_FLEX[["batch_evaluation"]][["Limma_adjusted"]][["batch1"]][["Plots"]]
 ### BatchFlex easy usage
 By default, `Batch_FLEX` will run `batch_correct` and `batch_evaluate`. It will correct using all available methods except for ComBatseq, which requires a counts based matrix file. It will also use a self contained housekeeping gene list for the RUVg evaluation. By default, this is set to human, but can be changed to mouse or a user provided housekeeping gene list can be used. All available evaluation methods will be used unless a variable of interest is not provided, which eliminates the use of sva. The output is an organized list tree separated into the unadjusted and adjusted expression matrices and the the evaluation plots and matrices. The evaluation list is organized according to the  correction method. Each evaluation list contains a list of evaluation matrices and a list of evaluation plots. An example of how to access to the plots is shown below. 
 ```{r, fig.width = 10, fig.height = 10}
-example_mat_abbreviated <- example_mat[,1:100]
+example_mat_abbreviated <- BatchFLEX::preprocess_matrix(BatchFLEX::example_mat)[,1:100]
 example_meta_abbreviated <- example_meta[1:100,]
 test_Batch_FLEX <- Batch_FLEX(mat = example_mat_abbreviated, meta = example_meta_abbreviated, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
 
@@ -431,7 +431,7 @@ test_Batch_FLEX[["batch_evaluation"]][["Limma_adjusted"]][["batch1"]][["Plots"]]
 `ggpubr` has a functioned called `ggarrange` that allows for combining plots into plates, so can visualize both the unadjusted and the Limma adjusted expression together. This allows us to see the impact that 1) the study has on the expression profiles and 2) the 
 
 ```{r, fig.width = 10, fig.height = 10}
-example_mat_abbreviated <- example_mat[,1:100]
+example_mat_abbreviated <- BatchFLEX::preprocess_matrix(BatchFLEX::example_mat)[,1:100]
 example_meta_abbreviated <- example_meta[1:100,]
 test_Batch_FLEX <- Batch_FLEX(mat = example_mat_abbreviated, meta = example_meta_abbreviated, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", evaluation_method = "pca")
 
@@ -448,13 +448,13 @@ ggpubr::ggarrange(
 `BatchFLEX` includes a small function to run the Shiny app locally by downloading and temporarily storing the tar.gz file from the BATCH-FLEX-shinyApp GitHub page. This can be run alone or within the overall BatchFLEX function. 
 ```{r, eval = FALSE}
 BatchFLEX_shiny()
-test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_evaluate", "batch_correct", "BatchFLEX_export", "BatchFLEX_shiny"), correction_method = c("ComBat", "Limma", "Harman", "SVA", "RUVg"), mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
+test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("preprocess_matrix", "batch_evaluate", "batch_correct", "BatchFLEX_export", "BatchFLEX_shiny"), correction_method = c("ComBat", "Limma", "Harman", "SVA", "RUVg"), mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType")
 ```
 
 Finally, `BatchFLEX` has the ability to generate `ggarrange` plots for all evaluation methods and to export these plots along with all other plots and matrices to a BatchFLEX_analysis folder by evoking the `BatchFLEX_export` function. Because of the size, multiple heatmaps comparing the uncorrected matrix to each corrected matrix are generated instead of a single plot comparing all methods simultaneously.
 
 ```{r, fig.width = 10, fig.height = 10}
-test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_evaluate", "batch_correct", "BatchFLEX_export"), correction_method = c("ComBat", "Limma", "Harman", "SVA", "RUVg"), mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", parallelize = TRUE)
+test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("preprocess_matrix", "batch_evaluate", "batch_correct", "BatchFLEX_export"), correction_method = c("ComBat", "Limma", "Harman", "SVA", "RUVg"), mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "MajorCellType", parallelize = TRUE)
 devtools::session_info()
 ```
 
