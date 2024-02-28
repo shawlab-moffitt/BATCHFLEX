@@ -69,14 +69,13 @@ BatchFLEX_export <- function(large_list){
     }
     ggarrange_list <- list()
     heatmap_list <- list()
-    comparison_heatmap <- list()
     for (plot in 1:length(plot_list)){
       for (name19 in 1:length(names_1_batch_evaluation_batch[[1]])){
         plot_name <- names(plot_list)[[plot]]
         if (plot_name == "heatmap"){
           for (batch_heatmap in 1:length(plot_list[[plot]][[1]][[name19]])){
             correction_name <- names(plot_list[[plot]][[1]][[name19]])[[batch_heatmap]]
-            if ("Unadjusted" %in% correction_name){
+            if (grepl("Unadjusted", correction_name)){
               comparison_heatmap <- plot_list[[plot]][[1]][[name19]][[batch_heatmap]]
             }else{
               heatmap_list[[correction_name]] <- plot_list[[plot]][[1]][[name19]][[batch_heatmap]]
