@@ -224,10 +224,15 @@ Batch_FLEX = function(Batch_FLEX_function = c("batch_correct", "batch_evaluate")
           cores <- parallel_matrices
         }
       }
-      cl <- parallel::makePSOCKcluster(cores)
-      parallel::clusterEvalQ(cl, {
-        library(BatchFLEX)
-      })
+      if(Sys.info()['sysname']=="Windows"){
+        cl <- parallel::makePSOCKcluster(cores)
+        parallel::clusterEvalQ(cl,
+                               library(BatchFLEX)
+        )
+      }else {
+        cl <- parallel::makeForkCluster(cores)
+      }
+
       doParallel::registerDoParallel(cl)
       parallel_batch1_list <- foreach::foreach (matrix = 1:length(Batch_FLEX_list$data_matrices)) %dopar% {
         plot_title <- plot_titles[[matrix]]
