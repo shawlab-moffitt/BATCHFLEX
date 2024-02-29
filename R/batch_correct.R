@@ -87,10 +87,14 @@ batch_correct = function(mat = NULL,
         cores <- parallel_matrices
       }
     }
-    cl <- parallel::makePSOCKcluster(cores, outfile = "debug.txt")
-    parallel::clusterEvalQ(cl, {
-      library(BatchFLEX)
-    })
+    if(Sys.info()['sysname']=="Windows"){
+      cl <- parallel::makePSOCKcluster(cores)
+      parallel::clusterEvalQ(cl,
+                             library(BatchFLEX)
+      )
+    }else {
+      cl <- parallel::makeForkCluster(cores)
+    }
     doParallel::registerDoParallel(cl)
     parallel_matrices <- foreach::foreach(method = correction_method) %dopar% {
       if (method == "Limma"){
