@@ -50,7 +50,7 @@ BatchFLEX_shiny()
 test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("preprocess_matrix", "batch_evaluate", "batch_correct", "BatchFLEX_export", "BatchFLEX_shiny"), correction_method = c("ComBat", "Limma", "Harman", "SVA", "RUVg"), mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage")
 ```
 
-`ggpubr` has a functioned called `ggarrange` that allows for combining plots into plates to visualize all correction methods simultaneously. This allows the user to easily evaluate the correction methods and to identify the most appropriate correction method for their dataset.
+`ggpubr` has a function called `ggarrange` that allows for combining plots into plates to visualize all correction methods simultaneously. This allows the user to easily evaluate the correction methods and to identify the most appropriate correction method for their dataset.
 
 ```{r, fig.width = 10, fig.height = 10, results = 'hide'}
 example_mat_abbreviated <- BatchFLEX::preprocess_matrix(BatchFLEX::example_mat)[,1:100]
