@@ -2,7 +2,8 @@
 
 An R package for correct batch effects in numeric data (typically RNA sequencing data). Companion to the BatchFlex Shiny Application at:
 
-[shiny link]()
+[Shiny GitHub Package](https://github.com/shawlab-moffitt/BATCH-FLEX-ShinyApp)
+[Live Shiny IO](https://shawlab-moffitt.shinyapps.io/batch_flex/)
 
 To install package:
 
