@@ -21,8 +21,16 @@ adjust_harman(mat, meta, batch.1, variable_of_interest, log2_transformed)
 an adjusted expression matrix
 }
 \description{
-Wrapper for \code{Harman::harman} and \code{Harman::reconstructData}
+Remove batch effects from expression data using Harman from \code{Harman}.
 }
 \examples{
 set.seed(333)
+adjusted_data <- batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
+meta = BatchFLEX::example_meta,
+correction_method = c("Harman"),
+batch.1 = "batchflex_study",
+variable_of_interest = "Major_Lineage")
+head(as.data.frame(adjusted_data[["Harman_adjusted"]]), n = c(5,5))
+
+
 }

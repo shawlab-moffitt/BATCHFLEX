@@ -1,6 +1,6 @@
 #' Adjust Mean Centering
 #'
-#' Wrapper for `bapred::meancenter`
+#' Remove batch effects from expression data using Mean Centering from `bapred`.
 #'
 #' @param mat Numeric matrix with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
@@ -12,6 +12,13 @@
 #'
 #' @examples
 #' set.seed(333)
+#' adjusted_data <- batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
+#' meta = BatchFLEX::example_meta,
+#' correction_method = "Mean Centering",
+#' batch.1 = "batchflex_study",
+#' variable_of_interest = "Major_Lineage")
+#' head(as.data.frame(adjusted_data[["Mean Centering_adjusted"]]), n = c(5,5))
+#'
 adjust_mean_centering = function(mat,
                                  meta,
                                  batch.1,

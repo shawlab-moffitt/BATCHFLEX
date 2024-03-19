@@ -1,5 +1,7 @@
 #' Pre Process Matrix
 #'
+#' Used to preprocess any expression matrices prior to batch_correction or batch_evaluation.
+#'
 #' @param mat Numeric matrix or data frame. The features can be rownames or the first column followed by the sample names as the column names with numeric count data as the values.
 #' @param raw.counts Logical. TRUE indicates the input data is raw counts. FALSE indicated the input data is not raw counts.
 #' @param raw.norm.method Character string of what method to use for raw count normalization. Supported methods are "TMM" or "upperquartile". If raw.counts is FALSE this will be ignored.
@@ -12,6 +14,8 @@
 #'
 #' @examples
 #' set.seed(101)
+#' preprocess_matrix(mat = BatchFLEX::example_mat)
+#'
 preprocess_matrix = function(mat = NULL,
                              raw.counts = FALSE,
                              raw.norm.method = NULL,

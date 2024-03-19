@@ -1,6 +1,6 @@
 #' Adjust_sva
 #'
-#' Wrapper for `sva::sva`
+#' Remove batch effects from expression data using sva from `sva`.
 #'
 #' @param mat Numeric matrix with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
@@ -12,6 +12,13 @@
 #'
 #' @examples
 #' set.seed(333)
+#' adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
+#' meta = BatchFLEX::example_meta,
+#' correction_method = "SVA",
+#' variable_of_interest = "Major_Lineage",
+#' sva_nsv_method = "leek")
+#' head(as.data.frame(adjusted_data), n = c(5,5))
+#'
 adjust_sva = function(mat,
                       meta,
                       variable_of_interest,

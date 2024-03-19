@@ -10,8 +10,10 @@ BatchFLEX_shiny()
 Message indicating BatchFLEX is starting
 }
 \description{
-BatchFLEX_shiny
+Used to run a shiny version of \code{Batch_FLEX} locally.
 }
 \examples{
 set.seed(333)
+BatchFLEX_shiny()
+
 }

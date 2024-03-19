@@ -1,5 +1,7 @@
 #' BatchFLEX
 #'
+#' Parent function of `BatchFLEX` used to preprocess data, simulate data, merge data, batch correct, batch evaluate, export data, and analyze data using a Shiny application.
+#'
 #' @param Batch_FLEX_function A Character vector of BatchFLEX functions in c("retrieve_data", "merge_data", "simulate_data", "preprocess_data", "batch_correct", "batch_evaluate").
 #' @param num_samples An integer setting the number of samples to simulate.
 #' @param num_genes An integer setting the number of genes to simulate.
@@ -67,6 +69,8 @@
 #'
 #' @examples
 #' set.seed(333)
+#' test_Batch_FLEX <- Batch_FLEX(mat = example_mat_abbreviated, meta = example_meta_abbreviated, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage")
+#'
 Batch_FLEX = function(Batch_FLEX_function = c("batch_correct", "batch_evaluate"),
                       num_samples = 1000,
                       num_genes = 20000,

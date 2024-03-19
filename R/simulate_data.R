@@ -1,5 +1,7 @@
 #' Simulate Data
 #'
+#' Generates simulated data based on the linear model framework introduced by Gagnon-Bartsch and Speed.
+#'
 #' @param BatchFLEX_function A Character vector of BatchFLEX functions in c("retrieve_data", "simulate_data", "preprocess_data", "batch_correct", "batch_evaluate").
 #' @param num_samples An integer setting the number of samples to simulate.
 #' @param num_genes An integer setting the number of genes to simulate.
@@ -22,7 +24,12 @@
 #' @export
 #'
 #' @examples
-#' set.seed(3333)
+#' set.seed(333)
+#' simulated_data = simulate_data()
+#' head(as.data.frame(simulated_data$sim_matrix), n = c(5,5))
+#' head(simulated_data$sim_meta, n = c(5,5))
+#' test_simulate_BatchFLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_correct", "batch_evaluate"), correction_method = "ComBat", evaluation_method = "pca", mat = simulated_data$sim_matrix, meta = simulated_data$sim_meta, batch.1 = "batch", color_by = "batch")
+
 simulate_data <- function(num_samples = 100,
                           num_genes = 10000,
                           num_control = 9000,

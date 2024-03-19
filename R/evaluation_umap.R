@@ -1,6 +1,8 @@
 
 #' Evaluation umap
 #'
+#' Generates an annotated umap plot from a meta and expression matrix using `umap`.
+#'
 #' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param batch.1 Column name from the meta file of the column that will be used for batch information
@@ -13,6 +15,9 @@
 #'
 #' @examples
 #' set.seed(333)
+#' test_evaluate <- batch_evaluate(evaluation_method = "umap", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage")
+#' test_evaluate$Plots$umap
+#'
 evaluation_umap = function(mat,
                            meta,
                            batch.1,

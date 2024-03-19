@@ -63,8 +63,15 @@ batch_correct(
 List object of length of correction_method
 }
 \description{
-Batch Correct
+Remove batch effects from expression data using multiple batch correction methods included in \code{Batch_FLEX}.
 }
 \examples{
 set.seed(333)
+adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
+meta = BatchFLEX::example_meta,
+batch.1 = "batchflex_study",
+batch.2 = NULL,
+variable_of_interest = "Major_Lineage")
+head(as.data.frame(adjusted_data), n = c(5,5))
+
 }

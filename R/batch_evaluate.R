@@ -1,5 +1,7 @@
 #' Batch Evaluate
 #'
+#' Evaluate uncorrected and batch corrected expression matrices using multiple evaluation methods included in `Batch_FLEX`.
+#'
 #' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names.
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix.
 #' @param evaluation_method A character vector of batch correction methods in c("pca", "cluster_analysis", "mc_pca", "pca_details", "rle", "ev", "sva", "umap").
@@ -27,6 +29,9 @@
 #'
 #' @examples
 #' set.seed(333)
+#' test_evaluate <- batch_evaluate(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage")
+#' test_evaluate$Plots
+#'
 batch_evaluate = function(mat = NULL,
                           meta = NULL,
                           evaluation_method = "all",

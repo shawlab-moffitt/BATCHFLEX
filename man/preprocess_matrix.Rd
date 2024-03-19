@@ -30,8 +30,10 @@ preprocess_matrix(
 A numeric matrix that has been processed through the users input choices.
 }
 \description{
-Pre Process Matrix
+Used to preprocess any expression matrices prior to batch_correction or batch_evaluation.
 }
 \examples{
 set.seed(101)
+preprocess_matrix(mat = BatchFLEX::example_mat)
+
 }

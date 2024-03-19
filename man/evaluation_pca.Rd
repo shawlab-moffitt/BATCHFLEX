@@ -36,8 +36,11 @@ evaluation_pca(
 A list object of PCA plots for each annotation method selected
 }
 \description{
-Evaluation Pincipal Component Analysis
+Generates an annotated PCA plot from a meta and expression matrix using \code{stats::prcomp} and \code{ggplot2}.
 }
 \examples{
 set.seed(333)
+test_evaluate <- batch_evaluate(evaluation_method = "pca", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage", annotation = "meta")
+test_evaluate$Plots$pca
+
 }

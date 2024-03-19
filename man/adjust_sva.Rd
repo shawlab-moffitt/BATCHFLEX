@@ -19,8 +19,15 @@ adjust_sva(mat, meta, variable_of_interest, sva_nsv_method)
 an adjusted expression matrix
 }
 \description{
-Wrapper for \code{sva::sva}
+Remove batch effects from expression data using sva from \code{sva}.
 }
 \examples{
 set.seed(333)
+adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
+meta = BatchFLEX::example_meta,
+correction_method = "SVA",
+variable_of_interest = "Major_Lineage",
+sva_nsv_method = "leek")
+head(as.data.frame(adjusted_data), n = c(5,5))
+
 }

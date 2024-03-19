@@ -23,8 +23,11 @@ evaluation_rle(mat, meta, batch.1, variable_of_interest, color_by, plot_title)
 A list object of RLE plots
 }
 \description{
-Evaluation Relative Log Expression
+Generates an annotated RLE plot from a meta and expression matrix using \code{scater::plotRLE}.
 }
 \examples{
 set.seed(333)
+test_evaluate <- batch_evaluate(evaluation_method = "rle", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage", color_by = "variable_of_interest")
+test_evaluate$Plots$rle
+
 }

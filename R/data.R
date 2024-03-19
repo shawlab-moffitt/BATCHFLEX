@@ -64,9 +64,21 @@
 #' @format ## `example_meta`
 #' a data frame containing sample level information line name and study
 #' \describe{
-#'   \item{Name}{sample name}
-#'   \item{Study}{GSE study that the sampel came from}
-#'   \item{CellType}{cell type that was assigned to the sample}
+#'   \item{SampleID}{sample ID}
+#'   \item{Study}{GSE study that the sample came from}
+#'   \item{MajorCellType}{Major cell type that was assigned to the sample}
+#'   \item{Major_Lineage}{Major lineage that was assigned to the sample}
+#'   \item{Cell Family}{Cell Family that was assigned to the sample}
+#'   \item{GEOname}{Unique GEO name for each sample}
+#'   \item{Organism}{Species sample was taken from}
+#'   \item{GeneticBackground}{Organism strain}
+#'   \item{Sex}{Sex of organism that the sample was taken from}
+#'   \item{Tissue Source}{Tissue source for the sample}
+#'   \item{Exclusion Marker}{Any exclusion markers used to differentiate cells}
+#'   \item{Treatment}{Treatment administered to the organism}
+#'   \item{CellType}{Specific cell type that was assigned to the sample}
+#'   \item{Phenotype_Marker}{Phenotypic marker used to identify the cell family}
+#'   \item{Separation Method}{Method of separation used for each sample}
 #' }
 #'
 "example_meta"

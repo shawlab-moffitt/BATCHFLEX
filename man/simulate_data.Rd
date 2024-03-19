@@ -62,8 +62,12 @@ simulate_data(
 A list of a simulated matrix and a simulated meta file
 }
 \description{
-Simulate Data
+Generates simulated data based on the linear model framework introduced by Gagnon-Bartsch and Speed.
 }
 \examples{
-set.seed(3333)
+set.seed(333)
+simulated_data = simulate_data()
+head(as.data.frame(simulated_data$sim_matrix), n = c(5,5))
+head(simulated_data$sim_meta, n = c(5,5))
+test_simulate_BatchFLEX <- Batch_FLEX(Batch_FLEX_function = c("batch_correct", "batch_evaluate"), correction_method = "ComBat", evaluation_method = "pca", mat = simulated_data$sim_matrix, meta = simulated_data$sim_meta, batch.1 = "batch", color_by = "batch")
 }

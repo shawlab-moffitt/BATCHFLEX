@@ -47,7 +47,8 @@ Imports:
     stats,
     statVisual,
     gridExtra,
-    doParallel
+    doParallel,
+    RecordLinkage
 Depends: 
     R (>= 2.10),
     ggfortify,

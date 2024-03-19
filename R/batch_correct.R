@@ -1,5 +1,7 @@
 #' Batch Correct
 #'
+#' Remove batch effects from expression data using multiple batch correction methods included in `Batch_FLEX`.
+#'
 #' @param mat A Numeric matrix after preprocessing with features as rownames and sample names as the column names.
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix.
 #' @param batch.1 Column name from the meta file of the column that will be used for batch one information.
@@ -23,6 +25,13 @@
 #'
 #' @examples
 #' set.seed(333)
+#' adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
+#' meta = BatchFLEX::example_meta,
+#' batch.1 = "batchflex_study",
+#' batch.2 = NULL,
+#' variable_of_interest = "Major_Lineage")
+#' head(as.data.frame(adjusted_data), n = c(5,5))
+#'
 batch_correct = function(mat = NULL,
                          meta = NULL,
                          correction_method = "all",
@@ -43,8 +52,9 @@ batch_correct = function(mat = NULL,
 
   #checks to make sure the data is in the right format
   if (is.null(mat)) stop("Must provide matrix")
-  if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix"))
-    if (!prep_matrix) stop("Must be numeric matrix")
+  if (!all(apply(mat,2,is.numeric)) | !is(mat,"matrix")){
+    stop("Must be numeric matrix")
+  }
   if (is.null(meta)) stop("Must provide meta data")
 
   if (is.null(batch.1) & !"SVA" %in% correction_method) {

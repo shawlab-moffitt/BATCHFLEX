@@ -39,8 +39,12 @@ evaluation_cluster_HE(
 A list object of cluster HE plots and matrices.
 }
 \description{
-Evaluation Cluster Heterogeneity and Evenness
+Calculate and plot the heterogeneity and evenness scores from \code{tabula} of \code{hclust} generated clusters from expression matrices.
 }
 \examples{
 set.seed(333)
+test_evaluate <- batch_evaluate(evaluation_method = "cluster_HE", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", plot_title = "Unadjusted")
+test_evaluate$Plots$cluster_HE
+test_evaluate$Matrices$cluster_HE[-1]
+
 }

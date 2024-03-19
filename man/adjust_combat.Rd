@@ -21,8 +21,15 @@ adjust_combat(mat, meta, batch.1, log2_transformed, par.prior)
 an adjusted expression matrix
 }
 \description{
-Wrapper for \code{sva::ComBat}
+Remove batch effects from expression data using Combat from \code{sva}.
 }
 \examples{
 set.seed(333)
+adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
+meta = BatchFLEX::example_meta,
+correction_method = "ComBat",
+batch.1 = "batchflex_study",
+par.prior = TRUE)
+head(as.data.frame(adjusted_data), n = c(5,5))
+
 }

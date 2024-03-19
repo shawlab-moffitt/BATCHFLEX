@@ -1,6 +1,6 @@
 #' Adjust RUVg
 #'
-#' Wrapper for `RUVSeq::RUVg`
+#' Remove batch effects from expression data using RUVg from `RUVseq`.
 #'
 #' @param mat Numeric matrix with features as rownames and sample names as the column names
 #' @param housekeeping Name of housekeeping gene set or character vector of housekeeping genes
@@ -15,6 +15,18 @@
 #'
 #' @examples
 #' set.seed(333)
+#' adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
+#' meta = BatchFLEX::example_meta,
+#' correction_method = "RUVg",
+#' batch.1 = "batchflex_study",
+#' housekeeping = BatchFLEX::hsiao_mouse,
+#' k = 2,
+#' drop = 0,
+#' center = FALSE,
+#' round = FALSE,
+#' tolerance = 1e-8)
+#' head(as.data.frame(adjusted_data), n = c(5,5))
+#'
 adjust_ruvg = function(mat,
                        housekeeping,
                        k,

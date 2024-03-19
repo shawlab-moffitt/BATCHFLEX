@@ -34,8 +34,20 @@ adjust_ruvg(
 an adjusted expression matrix
 }
 \description{
-Wrapper for \code{RUVSeq::RUVg}
+Remove batch effects from expression data using RUVg from \code{RUVseq}.
 }
 \examples{
 set.seed(333)
+adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
+meta = BatchFLEX::example_meta,
+correction_method = "RUVg",
+batch.1 = "batchflex_study",
+housekeeping = BatchFLEX::hsiao_mouse,
+k = 2,
+drop = 0,
+center = FALSE,
+round = FALSE,
+tolerance = 1e-8)
+head(as.data.frame(adjusted_data), n = c(5,5))
+
 }

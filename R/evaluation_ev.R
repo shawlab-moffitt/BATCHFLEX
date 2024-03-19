@@ -1,5 +1,8 @@
 #' Evaluation Explanatory Variables
 #'
+#' Plot the percentage of variance explained by each specified variable from a meta and expression matrix file.
+#' Calculated from `scater::getVarianceExplained`.
+#'
 #' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param variable_choices Used by the explanatory variables function to select which variables to plot. Default is a combination of the batch and variable of interest
@@ -12,6 +15,9 @@
 #'
 #' @examples
 #' set.seed(333)
+#' test_evaluate <- batch_evaluate(evaluation_method = "ev", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage", variable_choices = c("batchflex_study", "Major_Lineage"))
+#' test_evaluate$Plots$ev
+#'
 evaluation_ev <- function(mat,
                           meta,
                           variable_choices,
