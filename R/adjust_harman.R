@@ -1,6 +1,6 @@
 #' Adjust Harmon
 #'
-#' Wrapper for `Harman::harman` and `Harman::reconstructData`
+#' Remove batch effects from expression data using Harman from `Harman`.
 #'
 #' @param mat Numeric matrix with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
@@ -13,6 +13,14 @@
 #'
 #' @examples
 #' set.seed(333)
+#' adjusted_data <- batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
+#' meta = BatchFLEX::example_meta,
+#' correction_method = c("Harman"),
+#' batch.1 = "batchflex_study",
+#' variable_of_interest = "Major_Lineage")
+#' head(as.data.frame(adjusted_data[["Harman_adjusted"]]), n = c(5,5))
+#'
+#'
 adjust_harman = function(mat,
                          meta,
                          batch.1,

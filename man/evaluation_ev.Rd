@@ -29,8 +29,12 @@ evaluation_ev(
 A list object of explanatory variables plots
 }
 \description{
-Evaluation Explanatory Variables
+Plot the percentage of variance explained by each specified variable from a meta and expression matrix file.
+Calculated from \code{scater::getVarianceExplained}.
 }
 \examples{
 set.seed(333)
+test_evaluate <- batch_evaluate(evaluation_method = "ev", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage", variable_choices = c("batchflex_study", "Major_Lineage"))
+test_evaluate$Plots$ev
+
 }

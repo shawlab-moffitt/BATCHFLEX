@@ -39,8 +39,11 @@ evaluation_pvca(
 A list object of PVCA plots.
 }
 \description{
-Evaluation PVCA
+Generates a bar plot based on PVCA calculations from a meta and expression matrix using \code{statVisual::PVCA}.
 }
 \examples{
 set.seed(333)
+test_evaluate <- batch_evaluate(evaluation_method = "pvca", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage")
+test_evaluate$Plots$pvca
+
 }

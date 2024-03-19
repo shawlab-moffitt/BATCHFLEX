@@ -1,6 +1,6 @@
 #' Adjust ComBat_Seq
 #'
-#' Wrapper for `sva::ComBat_seq`
+#' Remove batch effects from expression data using CombatSeq from `sva`.
 #'
 #' @param mat Numeric matrix with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
@@ -13,6 +13,13 @@
 #'
 #' @examples
 #' set.seed(333)
+#' adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
+#' meta = BatchFLEX::example_meta,
+#' correction_method = "ComBatseq",
+#' batch.1 = "batchflex_study",
+#' variable_of_interest = "Major_Lineage")
+#' head(as.data.frame(adjusted_data), n = c(5,5))
+#'
 adjust_combatseq = function(mat, meta, batch.1, variable_of_interest, log2_transformed){
   if (is.null(batch.1)) stop("Mean Centering requires a batch.1 input")
   if (is.null(variable_of_interest)){

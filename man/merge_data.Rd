@@ -11,7 +11,7 @@ merge_data(
 )
 }
 \arguments{
-\item{merge_matrix_files}{A list of matrix files to be merged. If supplied as a named list, batchflex will add a named column to the meta file with the specified names. If not, batch flex will add a generic name per meta file.}
+\item{merge_matrix_files}{A list of matrix files (as data frames) to be merged. If supplied as a named list, batchflex will add a named column to the meta file with the specified names. If not, batch flex will add a generic name per meta file.}
 
 \item{merge_meta_files}{A list of meta files to be merged}
 
@@ -21,8 +21,28 @@ merge_data(
 A list of merged matrix and meta files
 }
 \description{
-merge_data
+Merges multiple expression matrices and generates a simple meta file to be used by \code{Batch_FLEX}, if none is provided.
+If meta files are provided, they will be merged and a simple meta file will not be generated.
+Samples from the merged meta file and matrix file will be matched using \code{RecordLinkage::levenshteinSim} generated scores and will be ordered similarly.
 }
 \examples{
 set.seed(333)
+matrices_to_be_merged <- list("GSE112876" = BatchFLEX::GSE112876_matrix,
+"GSE15907" = BatchFLEX::GSE15907_matrix,
+"GSE37448" = BatchFLEX::GSE37448_matrix,
+"GSE60336" = BatchFLEX::GSE60336_matrix,
+"GSE75195" = BatchFLEX::GSE75195_matrix,
+"GSE75202" = BatchFLEX::GSE75202_matrix,
+"GSE75203" = BatchFLEX::GSE75203_matrix)
+meta_files_to_be_merged <- list(BatchFLEX::GSE112876_meta,
+                               BatchFLEX::GSE15907_meta,
+                               BatchFLEX::GSE37448_meta,
+                               BatchFLEX::GSE60336_meta,
+                               BatchFLEX::GSE75195_meta,
+                               BatchFLEX::GSE75202_meta,
+                               BatchFLEX::GSE75203_meta)
+test_merge <- merge_data(merge_matrix_files = matrices_to_be_merged, merge_meta_files = meta_files_to_be_merged)
+head(as.data.frame(test_merge$merged_matrix), n = c(5,5))
+head(test_merge$merged_meta, n = c(5,5))
+
 }

@@ -17,8 +17,11 @@ evaluation_cluster_analysis(mat, cluster_analysis_method, plot_title)
 A list object of cluster plots for each selected cluster analysis method
 }
 \description{
-Evaluation Cluster Analysis
+Generates cluster analysis plots using wss, silhouette, and Dunn indexes calculated from expression matrices.
 }
 \examples{
 set.seed(333)
+test_evaluate <- batch_evaluate(evaluation_method = "cluster_analysis", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage", cluster_analysis_method = "silhouette")
+test_evaluate$Plots$cluster_analysis
+
 }

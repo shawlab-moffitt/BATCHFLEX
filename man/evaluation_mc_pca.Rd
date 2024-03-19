@@ -33,8 +33,11 @@ evaluation_mc_pca(
 A list object of multiple components plots
 }
 \description{
-Evaluation Multiple Components Plot
+Generates a multiple components PCA plot from a meta and matrix file using \code{scater::plotPCA}.
 }
 \examples{
 set.seed(333)
+test_evaluate <- batch_evaluate(evaluation_method = "mc_pca", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage", color_by = "batch", ncomponents = 10)
+test_evaluate$Plots$mc_pca
+
 }

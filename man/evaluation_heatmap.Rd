@@ -45,8 +45,11 @@ evaluation_heatmap(
 A list object of heatmap plots.
 }
 \description{
-Evaluation Heatmap
+Generates an annotated heatmap from a meta and expression matrix file using \code{ComplexHeatmap}.
 }
 \examples{
 set.seed(333)
+test_evaluate <- batch_evaluate(evaluation_method = "heatmap", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage")
+test_evaluate$Plots$heatmap
+
 }

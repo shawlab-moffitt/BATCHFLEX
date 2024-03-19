@@ -1,5 +1,7 @@
 #' Evaluation Relative Log Expression
 #'
+#' Generates an annotated RLE plot from a meta and expression matrix using `scater::plotRLE`.
+#'
 #' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param batch.1 Column name from the meta file of the column that will be used for batch information
@@ -12,6 +14,9 @@
 #'
 #' @examples
 #' set.seed(333)
+#' test_evaluate <- batch_evaluate(evaluation_method = "rle", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage", color_by = "variable_of_interest")
+#' test_evaluate$Plots$rle
+#'
 evaluation_rle <- function(mat,
                            meta,
                            batch.1,

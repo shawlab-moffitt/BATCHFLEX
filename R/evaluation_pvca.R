@@ -1,5 +1,7 @@
 #' Evaluation PVCA
 #'
+#' Generates a bar plot based on PVCA calculations from a meta and expression matrix using `statVisual::PVCA`.
+#'
 #' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names.
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix.
 #' @param batch.1 Column name from the meta file of the column that will be used for batch information.
@@ -15,6 +17,9 @@
 #'
 #' @examples
 #' set.seed(333)
+#' test_evaluate <- batch_evaluate(evaluation_method = "pvca", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage")
+#' test_evaluate$Plots$pvca
+#'
 evaluation_pvca <- function(mat,
                             meta,
                             batch.1,

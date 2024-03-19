@@ -21,8 +21,11 @@ evaluation_pca_details(mat, meta, batch.1, pca_factors, plot_title)
 A list object of PCA details including a scree plot, a matrix of pca components, a matrix of contributions grouped by factor, and a matrix of contribution counts
 }
 \description{
-Evaluation PCA Details
+Generates multiple analysis plots and matrices for PCA generated from a meta and expression matrix file. Analyses includes a scree plot, a contribution matrix, and a counts matrix.
 }
 \examples{
 set.seed(333)
+test_evaluate <- batch_evaluate(evaluation_method = "pca_details", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage", pca_factors = "Major_Lineage")
+test_evaluate$Plots$pca_details
+
 }

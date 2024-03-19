@@ -33,8 +33,16 @@ adjust_limma(
 an adjusted expression matrix
 }
 \description{
-Wrapper for \code{limma::removeBatchEffects}
+Remove batch effects from expression data using \code{removeBatchEffect} from \code{limma}.
 }
 \examples{
 set.seed(333)
+adjusted_data <-  batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
+meta = BatchFLEX::example_meta,
+correction_method = "Limma",
+batch.1 = "batchflex_study",
+batch.2 = NULL,
+variable_of_interest = "Major_Lineage")
+head(as.data.frame(adjusted_data), n = c(5,5))
+
 }

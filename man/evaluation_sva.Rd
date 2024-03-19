@@ -21,8 +21,12 @@ evaluation_sva(mat, meta, variable_of_interest, sva_nsv_method, plot_title)
 A list object of probability association plots and surrogate variable matrices
 }
 \description{
-Evaluation Surrogate Variable Analysis
+Generates a density plot (\code{ggplot2}) of associated probabilities calculated from \code{sva} using a meta and expression matrix.
+Also generates a matrix of surrogate variables calculated from \code{sva}.
 }
 \examples{
 set.seed(333)
+test_evaluate <- batch_evaluate(evaluation_method = "sva", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage", sva_nsv_method = "be")
+test_evaluate$Plots$sva
+
 }

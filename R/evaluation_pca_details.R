@@ -1,5 +1,7 @@
 #' Evaluation PCA Details
 #'
+#' Generates multiple analysis plots and matrices for PCA generated from a meta and expression matrix file. Analyses includes a scree plot, a contribution matrix, and a counts matrix.
+#'
 #' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param batch.1 Column name from the meta file of the column that will be used for batch information
@@ -11,6 +13,9 @@
 #'
 #' @examples
 #' set.seed(333)
+#' test_evaluate <- batch_evaluate(evaluation_method = "pca_details", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage", pca_factors = "Major_Lineage")
+#' test_evaluate$Plots$pca_details
+#'
 evaluation_pca_details <- function(mat,
                                    meta,
                                    batch.1,

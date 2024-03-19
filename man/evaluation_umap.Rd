@@ -23,8 +23,11 @@ evaluation_umap(mat, meta, batch.1, variable_of_interest, color_by, plot_title)
 A list object of UMAP plots for each annotation method selected
 }
 \description{
-Evaluation umap
+Generates an annotated umap plot from a meta and expression matrix using \code{umap}.
 }
 \examples{
 set.seed(333)
+test_evaluate <- batch_evaluate(evaluation_method = "umap", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage")
+test_evaluate$Plots$umap
+
 }

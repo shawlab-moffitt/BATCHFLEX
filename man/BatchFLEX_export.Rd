@@ -13,8 +13,10 @@ BatchFLEX_export(large_list)
 A message depicting output location
 }
 \description{
-BatchFLEX_export
+Export function for a \code{Batch_FLEX} generated list.
 }
 \examples{
 set.seed(333)
+test_Batch_FLEX <- Batch_FLEX(Batch_FLEX_function = c("preprocess_matrix", "batch_evaluate", "batch_correct", "BatchFLEX_export", "BatchFLEX_shiny"), correction_method = c("ComBat", "Limma", "Harman", "SVA", "RUVg"), mat = example_mat, meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage")
+
 }

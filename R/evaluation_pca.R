@@ -1,5 +1,7 @@
 #' Evaluation Pincipal Component Analysis
 #'
+#' Generates an annotated PCA plot from a meta and expression matrix using `stats::prcomp` and `ggplot2`.
+#'
 #' @param mat A Numeric matrix or list of matrices after pre-processing and/or batch correction with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
 #' @param annotation Used to select whether a cluster or meta annotated PCA plot is generated. cluster = "cluster", meta = "meta", all = c("cluster", "meta")
@@ -14,6 +16,9 @@
 #'
 #' @examples
 #' set.seed(333)
+#' test_evaluate <- batch_evaluate(evaluation_method = "pca", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage", annotation = "meta")
+#' test_evaluate$Plots$pca
+#'
 evaluation_pca = function(mat,
                           meta,
                           annotation,

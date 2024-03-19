@@ -19,8 +19,15 @@ adjust_mean_centering(mat, meta, batch.1, log2_transformed)
 an adjusted expression matrix
 }
 \description{
-Wrapper for \code{bapred::meancenter}
+Remove batch effects from expression data using Mean Centering from \code{bapred}.
 }
 \examples{
 set.seed(333)
+adjusted_data <- batch_correct(mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat),
+meta = BatchFLEX::example_meta,
+correction_method = "Mean Centering",
+batch.1 = "batchflex_study",
+variable_of_interest = "Major_Lineage")
+head(as.data.frame(adjusted_data[["Mean Centering_adjusted"]]), n = c(5,5))
+
 }
