@@ -73,6 +73,7 @@ BatchFLEX_export <- function(large_list){
     }
     ggarrange_list <- list()
     heatmap_list <- list()
+    comparison_heatmap <- list()
     for (plot in 1:length(plot_list)){
       for (name19 in 1:length(names_1_batch_evaluation_batch[[1]])){
         plot_name <- names(plot_list)[[plot]]
