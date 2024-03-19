@@ -95,7 +95,7 @@ merge_data <- function(merge_matrix_files = NULL,
   merged_meta$BestMatchID <- rownames(match_scores)[apply(match_scores, 2, which.max)]
   merged_meta$BestMatchScore <- apply(match_scores, 2, max)
   merged_meta <- merged_meta |> dplyr::relocate(BestMatchID)
-  merged_mata <- merged_meta |> dplyr::relocate(BestMatchScore, .before = OrigMetaID)
+  merged_meta <- merged_meta |> dplyr::relocate(BestMatchScore, .before = OrigMetaID)
   merged_meta <- merged_meta[match(colnames(merged_matrix), merged_meta$BestMatchID),]
   merge_data$merged_meta <- merged_meta
   return(merge_data)
