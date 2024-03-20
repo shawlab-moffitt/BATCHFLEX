@@ -44,8 +44,10 @@ merge_data <- function(merge_matrix_files = NULL,
   }
   num_matrix_samples <- sum(unlist(lapply(merge_matrix_files, ncol))) - length(merge_matrix_files)
   num_meta_samples <- sum(unlist(lapply(merge_meta_files, nrow)))
-  if (num_matrix_samples != num_meta_samples){
-    stop("Number of matrix and meta samples are not equivalent. Please check the input files.")
+  if (!is.null(merge_meta_files)){
+    if (num_matrix_samples != num_meta_samples){
+      stop("Number of matrix and meta samples are not equivalent. Please check the input files.")
+    }
   }
   merge_data <- list()
   merged_matrix <- base::merge(merge_matrix_files[[1]], merge_matrix_files[[2]], all = keep_all_genes)
