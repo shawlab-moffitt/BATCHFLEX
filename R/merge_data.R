@@ -63,7 +63,7 @@ merge_data <- function(merge_matrix_files = NULL,
     study_vector <- vector()
     merged_meta <- data.frame()
     merged_meta <- rbind(merged_meta, as.data.frame(colnames(merged_matrix)))
-    names(merged_meta) <- "SampleID"
+    names(merged_meta) <- "OrigMetaID"
     for (study_number in 1:length(merge_matrix_files)){
       batchflex_study <- paste0("Study_", study_number, sep = "")
       if (!is.null(names(merge_matrix_files))){
