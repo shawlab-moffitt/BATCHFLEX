@@ -1,4 +1,4 @@
-#' merge_data
+#' Merge data
 #'
 #' Merges multiple expression matrices and generates a simple meta file to be used by `Batch_FLEX`, if none is provided.
 #' If meta files are provided, they will be merged and a simple meta file will not be generated.
@@ -46,7 +46,7 @@ merge_data <- function(merge_matrix_files = NULL,
   num_meta_samples <- sum(unlist(lapply(merge_meta_files, nrow)))
   if (!is.null(merge_meta_files)){
     if (num_matrix_samples != num_meta_samples){
-      stop("Number of matrix and meta samples are not equivalent. Please check the input files.")
+      stop(paste("Number of matrix and meta samples are not equivalent. Please check the input files. ", "Matrix samples are ", num_matrix_samples, ". ", "Meta samples are ", num_meta_samples, ". ", sep = ""))
     }
   }
   merge_data <- list()

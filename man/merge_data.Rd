@@ -2,7 +2,7 @@
 % Please edit documentation in R/merge_data.R
 \name{merge_data}
 \alias{merge_data}
-\title{merge_data}
+\title{Merge data}
 \usage{
 merge_data(
   merge_matrix_files = NULL,

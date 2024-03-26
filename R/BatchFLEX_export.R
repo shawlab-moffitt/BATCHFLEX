@@ -22,109 +22,131 @@ BatchFLEX_export <- function(large_list){
   for (name1 in 1:length(names_1)){
     assign(paste0("names_1_", names_1[[name1]]), purrr::map_depth(large_list[[names_1[name1]]], 0, names) %>% unlist(use.names = F))
   }
-  for (name2 in 1:length(names_1_data_matrices)){
-    file_name <- paste0(directory, "/", names_1_data_matrices[[name2]], "_matrix_", gsub("-", "_", Sys.Date()),".tsv", sep = "")
-    matrix_tobesaved <- as.data.frame(large_list[[names_1[[1]]]][[names_1_data_matrices[[name2]]]])
-    matrix_tobesaved$Genes <- row.names(matrix_tobesaved)
-    matrix_tobesaved <- matrix_tobesaved |> dplyr::relocate("Genes")
-    readr::write_tsv(matrix_tobesaved, file = file_name)
+  if ("process_merge_data" %in% names_1){
+    file_name_pmd <- paste0(directory, "/", "files_used_in_merge", gsub("-", "_", Sys.Date()),".tsv", sep = "")
+    readr::write_tsv(large_list[["process_merge_data"]], file = file_name_pmd)
   }
-  names_1_batch_evaluation_batch <- list()
-  for (name3 in 1:length(names_1_batch_evaluation)){
-    names_1_batch_evaluation_batch[[names_1_batch_evaluation[name3]]] <- purrr::map_depth(large_list[[2]][[name3]], 0, names) %>% unlist(use.names = F)
-  }
-
-  names_1_batch_evaluation_batch_data <- list()
-  for (name4 in 1:length(names_1_batch_evaluation_batch)){
-    names_1_batch_evaluation_batch_data[[names_1_batch_evaluation[name4]]] <- purrr::map_depth(large_list[[2]][[names_1_batch_evaluation[name4]]][[names_1_batch_evaluation_batch[[name4]]]], 0, names) %>% unlist(use.names = F)
-  }
-
-  names_1_batch_evaluation_batch_data_evaluations <- list()
-  for (name5 in 1:length(names_1_batch_evaluation_batch)){
-    for (name6 in 1:length(names_1_batch_evaluation_batch_data[[name5]])){
-      for (name7 in 1:length(names_1_batch_evaluation_batch_data[[name6]])){
-        names_1_batch_evaluation_batch_data_evaluations[[names_1_batch_evaluation[name5]]][[names_1_batch_evaluation_batch_data[[name6]][[name7]]]] <- purrr::map_depth(large_list[[2]][[names_1_batch_evaluation[name5]]][[names_1_batch_evaluation_batch[[name5]]]][[names_1_batch_evaluation_batch_data[[name6]][[name7]]]], 0, names) %>% unlist(use.names = F)
-      }
+  if ("merge_data" %in% names_1){
+    if ("merged_meta" %in% names_1_merge_data){
+      file_name_mmeta <- paste0(directory, "/", "merged_meta", gsub("-", "_", Sys.Date()),".tsv", sep = "")
+      readr::write_tsv(large_list[["merge_data"]][["merged_meta"]], file = file_name_mmeta)
+    }
+    if ("merged_matrix"  %in% names_1_merge_data){
+      file_name_mmatrix <- paste0(directory, "/", "merged_matrix", gsub("-", "_", Sys.Date()),".tsv", sep = "")
+      merge_matrix_tobesaved <- as.data.frame(large_list[["merge_data"]][["merged_matrix"]])
+      merge_matrix_tobesaved$Genes <- row.names(merge_matrix_tobesaved)
+      merge_matrix_tobesaved <- merge_matrix_tobesaved |> dplyr::relocate("Genes")
+      readr::write_tsv(merge_matrix_tobesaved, file = file_name_mmatrix)
     }
   }
-  names_1_batch_evaluation_batch_data_evaluations_plots <- list()
-  for (name8 in 1:length(names_1_batch_evaluation)){
-    for (name9 in 1:length(names_1_batch_evaluation_batch[[name8]])){
-      for (name10 in 1:length(names_1_batch_evaluation_batch_data[[name9]])){
-        for (name12 in 1:length(names_1_batch_evaluation_batch_data_evaluations[[name9]][[name10]])){
-          for (name13 in 1:length(names_1_batch_evaluation_batch_data_evaluations[[name9]][[name10]][[name12]])){
-            names_1_batch_evaluation_batch_data_evaluations_plots[[names_1_batch_evaluation[[name8]]]][[names_1_batch_evaluation_batch[[name8]][[name9]]]][[names_1_batch_evaluation_batch_data[[name9]][[name10]]]][[names_1_batch_evaluation_batch_data_evaluations[[name9]][[name10]][[name12]][[name13]]]] <- purrr::map_depth(large_list[[2]][[names_1_batch_evaluation[[name8]]]][[names_1_batch_evaluation_batch[[name8]][[name9]]]][[names_1_batch_evaluation_batch_data[[name9]][[name10]]]][[names_1_batch_evaluation_batch_data_evaluations[[name9]][[name10]][[name12]]]], 0, names) %>% unlist(use.names = F)
-          }
+  if ("data_matrices" %in% names_1){
+    for (name2 in 1:length(names_1_data_matrices)){
+      file_name <- paste0(directory, "/", names_1_data_matrices[[name2]], "_matrix_", gsub("-", "_", Sys.Date()),".tsv", sep = "")
+      matrix_tobesaved <- as.data.frame(large_list[["data_matrices"]][[names_1_data_matrices[[name2]]]])
+      matrix_tobesaved$Genes <- row.names(matrix_tobesaved)
+      matrix_tobesaved <- matrix_tobesaved |> dplyr::relocate("Genes")
+      readr::write_tsv(matrix_tobesaved, file = file_name)
+    }
+  }
+  if ("batch_evaluation" %in% names_1){
+    names_1_batch_evaluation_batch <- list()
+    for (name3 in 1:length(names_1_batch_evaluation)){
+      names_1_batch_evaluation_batch[[names_1_batch_evaluation[name3]]] <- purrr::map_depth(large_list[["batch_evaluation"]][[name3]], 0, names) %>% unlist(use.names = F)
+    }
+
+    names_1_batch_evaluation_batch_data <- list()
+    for (name4 in 1:length(names_1_batch_evaluation_batch)){
+      names_1_batch_evaluation_batch_data[[names_1_batch_evaluation[name4]]] <- purrr::map_depth(large_list[["batch_evaluation"]][[names_1_batch_evaluation[name4]]][[names_1_batch_evaluation_batch[[name4]]]], 0, names) %>% unlist(use.names = F)
+    }
+
+    names_1_batch_evaluation_batch_data_evaluations <- list()
+    for (name5 in 1:length(names_1_batch_evaluation_batch)){
+      for (name6 in 1:length(names_1_batch_evaluation_batch_data[[name5]])){
+        for (name7 in 1:length(names_1_batch_evaluation_batch_data[[name6]])){
+          names_1_batch_evaluation_batch_data_evaluations[[names_1_batch_evaluation[name5]]][[names_1_batch_evaluation_batch_data[[name6]][[name7]]]] <- purrr::map_depth(large_list[["batch_evaluation"]][[names_1_batch_evaluation[name5]]][[names_1_batch_evaluation_batch[[name5]]]][[names_1_batch_evaluation_batch_data[[name6]][[name7]]]], 0, names) %>% unlist(use.names = F)
         }
       }
     }
-  }
-
-  if ("Plots" %in% names(names_1_batch_evaluation_batch_data_evaluations[[1]])){
-    plot_list <- list()
-    for (name14 in 1:length(names_1_batch_evaluation)){
-      for (name15 in 1:length(names_1_batch_evaluation_batch[[name14]])){
-        for (name16 in 1:length(names_1_batch_evaluation_batch_data_evaluations[[name14]][["Plots"]])){
-          for (name17 in 1:length(names_1_batch_evaluation_batch_data_evaluations_plots[[name14]][[name15]][["Plots"]][[name16]])){
-            plot_list[[names_1_batch_evaluation_batch_data_evaluations_plots[[name14]][[name15]][["Plots"]][[name16]][[name17]]]][[names_1_batch_evaluation_batch_data_evaluations[[name14]][["Plots"]][[name16]]]][[names_1_batch_evaluation_batch[[name14]][[name15]]]][[names_1_batch_evaluation[name14]]] <- large_list[[2]][[name14]][[name15]][["Plots"]][[name16]][[name17]]
-          }
-        }
-      }
-    }
-    ggarrange_list <- list()
-    heatmap_list <- list()
-    comparison_heatmap <- list()
-    for (plot in 1:length(plot_list)){
-      for (name19 in 1:length(names_1_batch_evaluation_batch[[1]])){
-        plot_name <- names(plot_list)[[plot]]
-        if (plot_name == "heatmap"){
-          for (batch_heatmap in 1:length(plot_list[[plot]][[1]][[name19]])){
-            correction_name <- names(plot_list[[plot]][[1]][[name19]])[[batch_heatmap]]
-            if (grepl("Unadjusted", correction_name)){
-              comparison_heatmap <- plot_list[[plot]][[1]][[name19]][[batch_heatmap]]
-            }else{
-              heatmap_list[[correction_name]] <- plot_list[[plot]][[1]][[name19]][[batch_heatmap]]
+    names_1_batch_evaluation_batch_data_evaluations_plots <- list()
+    for (name8 in 1:length(names_1_batch_evaluation)){
+      for (name9 in 1:length(names_1_batch_evaluation_batch[[name8]])){
+        for (name10 in 1:length(names_1_batch_evaluation_batch_data[[name9]])){
+          for (name12 in 1:length(names_1_batch_evaluation_batch_data_evaluations[[name9]][[name10]])){
+            for (name13 in 1:length(names_1_batch_evaluation_batch_data_evaluations[[name9]][[name10]][[name12]])){
+              names_1_batch_evaluation_batch_data_evaluations_plots[[names_1_batch_evaluation[[name8]]]][[names_1_batch_evaluation_batch[[name8]][[name9]]]][[names_1_batch_evaluation_batch_data[[name9]][[name10]]]][[names_1_batch_evaluation_batch_data_evaluations[[name9]][[name10]][[name12]][[name13]]]] <- purrr::map_depth(large_list[["batch_evaluation"]][[names_1_batch_evaluation[[name8]]]][[names_1_batch_evaluation_batch[[name8]][[name9]]]][[names_1_batch_evaluation_batch_data[[name9]][[name10]]]][[names_1_batch_evaluation_batch_data_evaluations[[name9]][[name10]][[name12]]]], 0, names) %>% unlist(use.names = F)
             }
           }
-          for (corrected_heatmap_plot in 1:length(heatmap_list)){
-            comparison_name <- names(heatmap_list)[[corrected_heatmap_plot]]
-            comparison_list <- list(comparison_heatmap, heatmap_list[[corrected_heatmap_plot]])
-            ggarrange_list[[plot_name]][[comparison_name]] <- ggpubr::ggarrange(plotlist = comparison_list)
-          }
-        }else{
-          ggarrange_list[[plot_name]] <- ggpubr::ggarrange(plotlist = plot_list[[plot]][[1]][[name19]], common.legend = if(plot_name == "pca_clust" | plot_name == "cluster_HE") FALSE else TRUE)
         }
       }
     }
-  }
 
-  if ("Matrices" %in% names(names_1_batch_evaluation_batch_data_evaluations[[1]])){
-    matrices_list <- list()
-    for (name20 in 1:length(names_1_batch_evaluation)){
-      for (name21 in 1:length(names_1_batch_evaluation_batch[[name20]])){
-        for (name22 in 1:length(names_1_batch_evaluation_batch_data_evaluations[[name20]][["Matrices"]])){
-          for (name23 in 1:length(names_1_batch_evaluation_batch_data_evaluations_plots[[name20]][[name21]][["Matrices"]][[name22]])){
-            matrices_list[[names_1_batch_evaluation_batch_data_evaluations_plots[[name20]][[name21]][["Matrices"]][[name22]][[name23]]]][[names_1_batch_evaluation_batch_data_evaluations[[name20]][["Matrices"]][[name22]]]][[names_1_batch_evaluation_batch[[name20]][[name21]]]][[names_1_batch_evaluation[[name20]]]] <- large_list[[2]][[name20]][[name21]][["Matrices"]][[name22]][[name23]]
+    if ("Plots" %in% names(names_1_batch_evaluation_batch_data_evaluations[[1]])){
+      plot_list <- list()
+      for (name14 in 1:length(names_1_batch_evaluation)){
+        for (name15 in 1:length(names_1_batch_evaluation_batch[[name14]])){
+          for (name16 in 1:length(names_1_batch_evaluation_batch_data_evaluations[[name14]][["Plots"]])){
+            for (name17 in 1:length(names_1_batch_evaluation_batch_data_evaluations_plots[[name14]][[name15]][["Plots"]][[name16]])){
+              plot_list[[names_1_batch_evaluation_batch_data_evaluations_plots[[name14]][[name15]][["Plots"]][[name16]][[name17]]]][[names_1_batch_evaluation_batch_data_evaluations[[name14]][["Plots"]][[name16]]]][[names_1_batch_evaluation_batch[[name14]][[name15]]]][[names_1_batch_evaluation[name14]]] <- large_list[["batch_evaluation"]][[name14]][[name15]][["Plots"]][[name16]][[name17]]
+            }
           }
         }
       }
-    }
-    for (matrix in 1:length(matrices_list)){
-      for (name24 in 1:length(names_1_batch_evaluation_batch[[1]])){
-        for (name25 in 1:length(names_1_batch_evaluation)){
-          file_name <- paste0(directory, "/", names_1_batch_evaluation[[name25]], "_", names_1_batch_evaluation_batch[[name24]], "_", names(matrices_list)[[matrix]], "_matrix_", gsub("-", "_", Sys.Date()),".tsv", sep = "")
-          readr::write_tsv(as.data.frame(matrices_list[[matrix]][[1]][[name24]][[name25]]), file = file_name)
+      ggarrange_list <- list()
+      heatmap_list <- list()
+      comparison_heatmap <- list()
+      for (plot in 1:length(plot_list)){
+        for (name19 in 1:length(names_1_batch_evaluation_batch[[1]])){
+          plot_name <- names(plot_list)[[plot]]
+          if (plot_name == "heatmap"){
+            for (batch_heatmap in 1:length(plot_list[[plot]][[1]][[name19]])){
+              correction_name <- names(plot_list[[plot]][[1]][[name19]])[[batch_heatmap]]
+              if (grepl("Unadjusted", correction_name)){
+                comparison_heatmap <- plot_list[[plot]][[1]][[name19]][[batch_heatmap]]
+              }else{
+                heatmap_list[[correction_name]] <- plot_list[[plot]][[1]][[name19]][[batch_heatmap]]
+              }
+            }
+            for (corrected_heatmap_plot in 1:length(heatmap_list)){
+              comparison_name <- names(heatmap_list)[[corrected_heatmap_plot]]
+              comparison_list <- list(comparison_heatmap, heatmap_list[[corrected_heatmap_plot]])
+              ggarrange_list[[plot_name]][[comparison_name]] <- ggpubr::ggarrange(plotlist = comparison_list)
+            }
+          }else{
+            ggarrange_list[[plot_name]] <- ggpubr::ggarrange(plotlist = plot_list[[plot]][[1]][[name19]], common.legend = if(plot_name == "pca_clust" | plot_name == "cluster_HE") FALSE else TRUE)
+          }
         }
       }
     }
-  }
-  grDevices::pdf(paste0(directory,"/", "Combined_BatchFLEX_plots_", gsub("-", "_", Sys.Date()),".pdf", sep = ""), width = 24, height = 16)
-  print(ggarrange_list)
-  dev.off()
 
-  grDevices::pdf(paste0(directory,"/", "Individual_BatchFLEX_plots_", gsub("-", "_", Sys.Date()),".pdf", sep = ""), width = 12, height = 8)
-  print(plot_list)
-  dev.off()
+    if ("Matrices" %in% names(names_1_batch_evaluation_batch_data_evaluations[[1]])){
+      matrices_list <- list()
+      for (name20 in 1:length(names_1_batch_evaluation)){
+        for (name21 in 1:length(names_1_batch_evaluation_batch[[name20]])){
+          for (name22 in 1:length(names_1_batch_evaluation_batch_data_evaluations[[name20]][["Matrices"]])){
+            for (name23 in 1:length(names_1_batch_evaluation_batch_data_evaluations_plots[[name20]][[name21]][["Matrices"]][[name22]])){
+              matrices_list[[names_1_batch_evaluation_batch_data_evaluations_plots[[name20]][[name21]][["Matrices"]][[name22]][[name23]]]][[names_1_batch_evaluation_batch_data_evaluations[[name20]][["Matrices"]][[name22]]]][[names_1_batch_evaluation_batch[[name20]][[name21]]]][[names_1_batch_evaluation[[name20]]]] <- large_list[["batch_evaluation"]][[name20]][[name21]][["Matrices"]][[name22]][[name23]]
+            }
+          }
+        }
+      }
+      for (matrix in 1:length(matrices_list)){
+        for (name24 in 1:length(names_1_batch_evaluation_batch[[1]])){
+          for (name25 in 1:length(names_1_batch_evaluation)){
+            file_name <- paste0(directory, "/", names_1_batch_evaluation[[name25]], "_", names_1_batch_evaluation_batch[[name24]], "_", names(matrices_list)[[matrix]], "_matrix_", gsub("-", "_", Sys.Date()),".tsv", sep = "")
+            readr::write_tsv(as.data.frame(matrices_list[[matrix]][[1]][[name24]][[name25]]), file = file_name)
+          }
+        }
+      }
+    }
+    grDevices::pdf(paste0(directory,"/", "Combined_BatchFLEX_plots_", gsub("-", "_", Sys.Date()),".pdf", sep = ""), width = 24, height = 16)
+    print(ggarrange_list)
+    dev.off()
+
+    grDevices::pdf(paste0(directory,"/", "Individual_BatchFLEX_plots_", gsub("-", "_", Sys.Date()),".pdf", sep = ""), width = 12, height = 8)
+    print(plot_list)
+    dev.off()
+  }
+
 
   return(print(paste0("All plots and matrices have been saved to", directory, sep = " ")))
 }
