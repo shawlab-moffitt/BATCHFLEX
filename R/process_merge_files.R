@@ -77,7 +77,7 @@ process_merge_files <- function(files_tobe_merged_path,
     raw_matrix_final <- apply(raw_matrix_final, 2, as.numeric)
     if (all_transnormed == FALSE){
       mean_expression <- apply(raw_matrix_final, 2, function(x) mean(abs(x)))
-      percent_above10 <- length(median_expression[which(median_expression > 10)])/length(median_expression)
+      percent_above10 <- length(mean_expression[which(mean_expression > 10)])/length(mean_expression)
       if (percent_above10 > 0.5){
         raw_matrix_final <- log2(raw_matrix_final + 1)
         raw_matrix_final <- as.matrix(raw_matrix_final)
