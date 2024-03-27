@@ -88,117 +88,172 @@ batch_evaluate = function(mat = NULL,
 
   if ("pca" %in% evaluation_method){
     cat("\tConducting principal component analysis\n")
-    batch_evaluation_list$Plots$pca <-  evaluation_pca(mat,
-                                                       meta,
-                                                       annotation,
-                                                       cluster_number,
-                                                       batch.1,
-                                                       variable_of_interest,
-                                                       color_by,
-                                                       plot_title)
+    pca <- try(evaluation_pca(mat,
+                              meta,
+                              annotation,
+                              cluster_number,
+                              batch.1,
+                              variable_of_interest,
+                              color_by,
+                              plot_title))
+    if(inherits(pca, "try-error")){
+      message("PCA did not work. Skipping for now.")
+    }else {
+      batch_evaluation_list$Plots$pca <- pca
+    }
   }
   if ("cluster_analysis" %in% evaluation_method){
     cat("\tConducting cluster analysis\n")
-    batch_evaluation_list$Plots$cluster_analysis <- evaluation_cluster_analysis(mat,
-                                                                                cluster_analysis_method,
-                                                                                plot_title)
+    cluster_analysis <- try(evaluation_cluster_analysis(mat,
+                                                        cluster_analysis_method,
+                                                        plot_title))
+    if(inherits(cluster_analysis, "try-error")){
+      message("Cluster Analysis did not work. Skipping for now.")
+    }else {
+      batch_evaluation_list$Plots$cluster_analysis <- cluster_analysis
+    }
   }
   if ("mc_pca" %in% evaluation_method){
     cat("\tConducting multiple components PCA analysis\n")
-    batch_evaluation_list$Plots$mc_pca <- evaluation_mc_pca(mat,
-                                                            meta,
-                                                            batch.1,
-                                                            variable_of_interest,
-                                                            ncomponents,
-                                                            color_by,
-                                                            plot_title)
+    mc_pca <- try(evaluation_mc_pca(mat,
+                                    meta,
+                                    batch.1,
+                                    variable_of_interest,
+                                    ncomponents,
+                                    color_by,
+                                    plot_title))
+    if(inherits(mc_pca, "try-error")){
+      message("Multiple components PCA did not work. Skipping for now.")
+    }else {
+      batch_evaluation_list$Plots$mc_pca <- mc_pca
+    }
   }
   if ("pca_details" %in% evaluation_method){
     cat("\tConducting PCA details analysis\n")
-    evaluation_pca_details_list <- evaluation_pca_details(mat,
-                                                          meta,
-                                                          batch.1,
-                                                          pca_factors,
-                                                          plot_title)
-    batch_evaluation_list$Plots$pca_details <- evaluation_pca_details_list$Plots
-    batch_evaluation_list$Matrices$pca_details <- evaluation_pca_details_list$Matrices
+    pca_details <- try(evaluation_pca_details(mat,
+                                          meta,
+                                          batch.1,
+                                          pca_factors,
+                                          plot_title))
+    if(inherits(pca_details, "try-error")){
+      message("PCA detils did not work. Skipping for now.")
+    }else {
+      evaluation_pca_details_list <- pca_details
+      batch_evaluation_list$Plots$pca_details <- evaluation_pca_details_list$Plots
+      batch_evaluation_list$Matrices$pca_details <- evaluation_pca_details_list$Matrices
+    }
   }
   if ("rle" %in% evaluation_method){
     cat("\tConducting relative log expression analysis\n")
-    batch_evaluation_list$Plots$rle <- evaluation_rle(mat,
-                                                      meta,
-                                                      batch.1,
-                                                      variable_of_interest,
-                                                      color_by,
-                                                      plot_title)
+    rle <- try(evaluation_rle(mat,
+                              meta,
+                              batch.1,
+                              variable_of_interest,
+                              color_by,
+                              plot_title))
+    if(inherits(rle, "try-error")){
+      message("Relative Log Expression did not work. Skipping for now.")
+    }else {
+      batch_evaluation_list$Plots$rle <- rle
+    }
   }
   if ("ev" %in% evaluation_method){
     cat("\tConducting explanatory variables analysis\n")
-    batch_evaluation_list$Plots$ev <- evaluation_ev(mat,
-                                                    meta,
-                                                    variable_choices,
-                                                    batch.1,
-                                                    variable_of_interest,
-                                                    plot_title)
+    ev <- try(evaluation_ev(mat,
+                            meta,
+                            variable_choices,
+                            batch.1,
+                            variable_of_interest,
+                            plot_title))
+    if(inherits(ev, "try-error")){
+      message("Explanatory Variables did not work. Skipping for now.")
+    }else {
+      batch_evaluation_list$Plots$ev <- ev
+    }
   }
   if ("sva" %in% evaluation_method){
     cat("\tConducting surrogate variable analysis\n")
-    evaluation_sva_list <- evaluation_sva(mat,
-                                          meta,
-                                          variable_of_interest,
-                                          sva_nsv_method,
-                                          plot_title)
-    batch_evaluation_list$Plots$sva <- evaluation_sva_list$Plots
-    batch_evaluation_list$Matrices$sva <- evaluation_sva_list$Matrices
+    sva_final <- try(evaluation_sva(mat,
+                                    meta,
+                                    variable_of_interest,
+                                    sva_nsv_method,
+                                    plot_title))
+    if(inherits(sva_final, "try-error")){
+      message("SVA analysis did not work. Skipping for now.")
+    }else {
+      evaluation_sva_list <- sva_final
+      batch_evaluation_list$Plots$sva <- evaluation_sva_list$Plots
+      batch_evaluation_list$Matrices$sva <- evaluation_sva_list$Matrices
+    }
   }
   if ("umap" %in% evaluation_method){
     cat("\tConducting uniform manifold approimation and projection analysis\n")
-    batch_evaluation_list$Plots$umap <- evaluation_umap(mat,
-                                                        meta,
-                                                        batch.1,
-                                                        variable_of_interest,
-                                                        color_by,
-                                                        plot_title)
+    umap_final <- try(evaluation_umap(mat,
+                                      meta,
+                                      batch.1,
+                                      variable_of_interest,
+                                      color_by,
+                                      plot_title))
+    if(inherits(umap_final, "try-error")){
+      message("UMAP did not work. Skipping for now.")
+    }else {
+      batch_evaluation_list$Plots$umap <- umap_final
+    }
   }
   if ("cluster_HE" %in% evaluation_method){
     cat("\tConducting heterogeneity and evenness cluster analysis\n")
-    evluation_cluster_HE_list <- evaluation_cluster_HE(mat,
-                                                       meta,
-                                                       batch.1,
-                                                       cluster_number,
-                                                       topN,
-                                                       cluster_method,
-                                                       var_type,
-                                                       fill_percentage,
-                                                       plot_title)
-    batch_evaluation_list$Plots$cluster_HE <- evluation_cluster_HE_list$Plots
-    batch_evaluation_list$Matrices$cluster_HE <- evluation_cluster_HE_list$Matrices
+    cluster_HE <- try(evaluation_cluster_HE(mat,
+                                            meta,
+                                            batch.1,
+                                            cluster_number,
+                                            topN,
+                                            cluster_method,
+                                            var_type,
+                                            fill_percentage,
+                                            plot_title))
+    if(inherits(cluster_HE, "try-error")){
+      message("Heterogeneity and Evenness analysis did not work. Skipping for now.")
+    }else {
+      evluation_cluster_HE_list <- cluster_HE
+      batch_evaluation_list$Plots$cluster_HE <- evluation_cluster_HE_list$Plots
+      batch_evaluation_list$Matrices$cluster_HE <- evluation_cluster_HE_list$Matrices
+    }
   }
   if ("heatmap" %in% evaluation_method){
     cat("\tConducting heatmap analysis\n")
-    batch_evaluation_list$Plots$heatmap <- evaluation_heatmap(mat,
-                                                              meta,
-                                                              batch.1,
-                                                              variable_of_interest,
-                                                              topN,
-                                                              cluster_method,
-                                                              var_type,
-                                                              heatmap_annotation,
-                                                              heatmap_rownames,
-                                                              heatmap_colnames,
-                                                              plot_title)
+    heatmap_final <- try(evaluation_heatmap(mat,
+                                            meta,
+                                            batch.1,
+                                            variable_of_interest,
+                                            topN,
+                                            cluster_method,
+                                            var_type,
+                                            heatmap_annotation,
+                                            heatmap_rownames,
+                                            heatmap_colnames,
+                                            plot_title))
+    if(inherits(heatmap_final, "try-error")){
+      message("Heatmap did not work. Skipping for now.")
+    }else {
+      batch_evaluation_list$Plots$heatmap <- heatmap_final
+    }
   }
   if ("pvca" %in% evaluation_method){
     cat("\tConducting principal variance component analysis analysis\n")
-    batch_evaluation_list$Plots$pvca <- evaluation_pvca(mat,
-                                                        meta,
-                                                        batch.1,
-                                                        variable_of_interest,
-                                                        topN_pvca,
-                                                        var_type,
-                                                        variable_choices,
-                                                        pvca_pct,
-                                                        plot_title)
+    pvca <- try(evaluation_pvca(mat,
+                            meta,
+                            batch.1,
+                            variable_of_interest,
+                            topN_pvca,
+                            var_type,
+                            variable_choices,
+                            pvca_pct,
+                            plot_title))
+    if(inherits(pvca, "try-error")){
+      message("PVCA did not work. Skipping for now.")
+    }else {
+      batch_evaluation_list$Plots$pvca <- pvca
+    }
   }
   return(batch_evaluation_list)
 }
