@@ -250,7 +250,7 @@ head(as.data.frame(BatchFLEX::example_meta), n = c(5,5))
 test_example$batch_evaluation$Unadjusted$batch1$Plots$umap
 test_example$batch_evaluation$Limma_adjusted$batch1$Plots$umap
 ```
-#### Example File
+#### Example with reading input files
 Here's an example of reading in a matrix and meta file for analysis.
 ```
 library(BatchFLEX)
