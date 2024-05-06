@@ -250,7 +250,24 @@ head(as.data.frame(BatchFLEX::example_meta), n = c(5,5))
 test_example$batch_evaluation$Unadjusted$batch1$Plots$umap
 test_example$batch_evaluation$Limma_adjusted$batch1$Plots$umap
 ```
-
+#### Example File
+Here's an example of reading in a matrix and meta file for analysis.
+```
+library(BatchFLEX)
+meta <- read.delim("2809_BladderCancerSamples_JoshTimMetaShort_20240430.tsv", fill = TRUE)
+matrix <- read.delim("merged_matrix2024_04_25_tsfilterd_v2.tsv")
+matrix_numeric <- as.matrix(matrix[,-1])
+rownames(matrix_numeric) <- matrix[,1]
+test_bladder <- Batch_FLEX(Batch_FLEX_function = c("preprocess_matrix", "batch_correct"), 
+           mat = matrix_numeric, 
+           meta = meta, 
+           batch.1 = "batchflex_study",
+           correction_method = "Limma",
+           log2 = FALSE,
+           quantnorm = TRUE,
+           remove.duplicates = FALSE)
+test_preprocess <- preprocess_matrix(matrix_numeric, log2 = FALSE, quantnorm = TRUE)
+```
 ### Batch correct
 
 #### Batch correct used individually
