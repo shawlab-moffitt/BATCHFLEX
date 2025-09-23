@@ -92,17 +92,18 @@ evaluation_pvca <- function(mat,
 
   pv_df <- data.frame("Data" = as.vector(pv$dat), "Label" = pv$label)
 
-  final_pvca <- ggplot(data = pv_df, aes = aes(x = Label, y = Data))+
+  final_pvca <- ggplot(data = pv_df, mapping = aes(x = Label, y = Data))+
     geom_col() +
-    geom_point(size = 5)+
+    geom_text(aes(label = round(Data, 3)), vjust = -0.5)+
     ggtitle(plot_title)+
-    theme(axis.text.x = element_text(size = 12),
+    theme(axis.text.x = element_text(size = 14, face = "bold", angle = 45, hjust = 1),
           axis.title.x = element_text(size = 18),
           axis.text.y = element_text(size = 18),
           axis.title.y = element_text(size = 18),
           legend.title = element_text(size = 18),
           legend.text = element_text(size = 18),
-          plot.title = element_text(size = 18))
+          plot.title = element_text(size = 18))+
+    ylab("Proportion of Variance")
 
   final_pvca$layers[[2]]$aes_params$size <- 5
 
