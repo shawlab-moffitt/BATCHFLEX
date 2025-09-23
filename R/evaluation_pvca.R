@@ -78,20 +78,33 @@ evaluation_pvca <- function(mat,
   dataset_pvca <- dataset_pvca %>% dplyr::relocate(any_of(featColName_pvca))
   matrix_pvca <- as.matrix(dataset_pvca[,-1])
 
-  final_pvca <- statVisual::PVCA(
-    clin_data = meta,
-    clin_subjid = colnames(meta)[1],
-    gene_data = matrix_pvca,
+  rownames(meta) <- meta[[1]]
+  eset <- Biobase::ExpressionSet(
+    assayData = matrix_pvca,
+    phenoData = Biobase::AnnotatedDataFrame(meta)
+  )
+
+  pv <- pvca::pvcaBatchAssess(
+    abatch = eset,
     batch.factors = variable_choices,
-    pct_threshold = pvca_pct) +
-    ggtitle(plot_title) +
-    theme(axis.text.x = element_text(size = 12),
+    threshold = pvca_pct
+  )
+
+  pv_df <- data.frame("Data" = as.vector(pv$dat), "Label" = pv$label)
+
+  final_pvca <- ggplot(data = pv_df, mapping = aes(x = Label, y = Data))+
+    geom_col() +
+    geom_text(aes(label = round(Data, 3)), vjust = -0.5)+
+    ggtitle(plot_title)+
+    theme(axis.text.x = element_text(size = 14, face = "bold", angle = 45, hjust = 1),
           axis.title.x = element_text(size = 18),
           axis.text.y = element_text(size = 18),
           axis.title.y = element_text(size = 18),
           legend.title = element_text(size = 18),
           legend.text = element_text(size = 18),
-          plot.title = element_text(size = 18))
+          plot.title = element_text(size = 18))+
+    ylab("Proportion of Variance")
+
   final_pvca$layers[[2]]$aes_params$size <- 5
 
   evaluation_pvca_list$pvca <- final_pvca

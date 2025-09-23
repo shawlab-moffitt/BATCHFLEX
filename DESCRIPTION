@@ -45,10 +45,10 @@ Imports:
     bapred,
     grDevices,
     stats,
-    statVisual,
     gridExtra,
     doParallel,
-    RecordLinkage
+    RecordLinkage,
+    pvca
 Depends: 
     R (>= 2.10),
     ggfortify,
