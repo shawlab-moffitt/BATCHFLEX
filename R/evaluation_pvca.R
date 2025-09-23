@@ -78,6 +78,7 @@ evaluation_pvca <- function(mat,
   dataset_pvca <- dataset_pvca %>% dplyr::relocate(any_of(featColName_pvca))
   matrix_pvca <- as.matrix(dataset_pvca[,-1])
 
+  rownames(meta) <- meta[[1]]
   eset <- Biobase::ExpressionSet(
     assayData = matrix_pvca,
     phenoData = Biobase::AnnotatedDataFrame(meta)
@@ -89,9 +90,9 @@ evaluation_pvca <- function(mat,
     threshold = pvca_pct
   )
 
-  pv_df <- pv$datPVCA
+  pv_df <- data.frame("Data" = as.vector(pv$dat), "Label" = pv$label)
 
-  final_pvca <- ggplot(pv_df, aes(x = label, y = weight))+
+  final_pvca <- ggplot(data = pv_df, aes = aes(x = Label, y = Data))+
     geom_col() +
     geom_point(size = 5)+
     ggtitle(plot_title)+
