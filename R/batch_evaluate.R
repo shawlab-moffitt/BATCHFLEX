@@ -67,6 +67,12 @@ batch_evaluate = function(mat = NULL,
   if (is.null(batch.1) & !"sva" %in% evaluation_method){
     stop("Please select column name in the meta file for the batch information")
   }
+  if(!is.null(batch.1))
+    if(!(batch.1 %in% colnames(meta)))
+      stop("batch.1 needs to be a column name in the metadata")
+  if(!is.null(variable_of_interest))
+    if(!(variable_of_interest %in% colnames(meta)))
+      stop("variable of interest needs to be a column name in the metadata")
   if (is.null(variable_of_interest)){
     message("Missing variable of interest. Some correction methods and evaluation techniques are not available.")
   }

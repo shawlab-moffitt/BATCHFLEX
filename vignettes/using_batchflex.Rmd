@@ -421,7 +421,7 @@ test_evaluate$Plots$ev
 ##### Principal variance component analysis
 The PVCA plot is generated from the top 20000 most variable genes using MAD by default. Additionally, pvca_pct is set to 0.8, but can be adjusted if desired. If variable_choices are not selected, the batch.1 and variable of interest will be used by default.
 ```{r, fig.width = 10, fig.height = 10}
-test_evaluate <- batch_evaluate(evaluation_method = "pvca", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage")
+test_evaluate <- batch_evaluate(evaluation_method = "pvca", mat = BatchFLEX::preprocess_matrix(BatchFLEX::example_mat), meta = example_meta, batch.1 = "batchflex_study", variable_of_interest = "Major_Lineage", pvca_pct = 0.5)
 test_evaluate$Plots$pvca
 ```
 
