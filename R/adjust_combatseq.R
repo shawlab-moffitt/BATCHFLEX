@@ -21,7 +21,19 @@
 #' head(as.data.frame(adjusted_data), n = c(5,5))
 #'
 adjust_combatseq = function(mat, meta, batch.1, variable_of_interest, log2_transformed){
-  if (is.null(batch.1)) stop("Mean Centering requires a batch.1 input")
+  if (is.null(batch.1)) stop("ComBat-seq requires a batch.1 input")
+
+  if (
+    !identical(log2_transformed, FALSE) ||
+    any(!is.finite(mat)) ||
+    any(mat < 0) ||
+    any(mat != floor(mat))
+  ) {
+    stop(
+      "ComBat-seq requires raw integer counts ",
+      "and log2_transformed = FALSE."
+    )
+  }
   if (is.null(variable_of_interest)){
     model_matrix <- NULL
   } else {
@@ -29,7 +41,7 @@ adjust_combatseq = function(mat, meta, batch.1, variable_of_interest, log2_trans
     model_matrix <- stats::model.matrix(reformulate(total_covariates), data = as.data.frame(meta))
   }
   combatseq_corrected <- sva::ComBat_seq(
-    if(!log2_transformed) log2(mat) else {mat},
+    counts = mat,
     batch = meta[[batch.1]],
     covar_mod = model_matrix
   )

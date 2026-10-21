@@ -19,6 +19,7 @@
 #' @param sva_nsv_method Input correction_method for the num.sv function in sva. Default is set to "be", but can be manually set to "leek".
 #' @param cores A numeric input for the number of cores to use if parallel is set to TRUE. Default is set to 1. If none is chosen and parallelize is TRUE default is set to the number of correction methods chosen, if possible.
 #' @param parallelize A logical operator to determine if correction will be run sequentially or in parallel.
+#' @param covariates Column name from the meta file of undesirable numerical variables that should be removed
 #'
 #' @return List object of length of correction_method
 #' @export
@@ -48,7 +49,8 @@ batch_correct = function(mat = NULL,
                          par.prior = TRUE,
                          sva_nsv_method = "be",
                          cores = 1,
-                         parallelize = FALSE) {
+                         parallelize = FALSE,
+                         covariates = NULL) {
 
   #checks to make sure the data is in the right format
   if (is.null(mat)) stop("Must provide matrix")
@@ -109,11 +111,11 @@ batch_correct = function(mat = NULL,
     parallel_matrices <- foreach::foreach(method = correction_method) %dopar% {
       if (method == "Limma"){
         cat("\tAdjusting Limma\n")
-        corrected_mat <- adjust_limma(mat, meta, variable_of_interest, batch.1, batch.2)
+        corrected_mat <- adjust_limma(mat, meta, variable_of_interest, batch.1, batch.2, log2_transformed = log2_transformed, covariates = covariates)
       }
       if(method == "ComBat"){
         cat("\tAdjusting ComBat\n")
-        corrected_mat <- adjust_combat(mat, meta, batch.1, log2_transformed, par.prior)
+        corrected_mat <- adjust_combat(mat, meta, batch.1, log2_transformed, par.prior, variable_of_interest = variable_of_interest)
       }
       if(method == "Mean Centering"){
         cat("\tAdjusting Mean Centering\n")
@@ -146,11 +148,11 @@ batch_correct = function(mat = NULL,
   if (parallelize == FALSE){
     if ("Limma" %in% correction_method){
       cat("\tAdjusting Limma\n")
-      batch_corrected_list$Limma_adjusted <- adjust_limma(mat, meta, variable_of_interest, batch.1, batch.2)
+      batch_corrected_list$Limma_adjusted <- adjust_limma(mat, meta, variable_of_interest, batch.1, batch.2, log2_transformed = log2_transformed, covariates = covariates)
     }
     if("ComBat" %in% correction_method){
       cat("\tAdjusting ComBat\n")
-      batch_corrected_list$ComBat_adjusted = adjust_combat(mat, meta, batch.1, log2_transformed, par.prior)
+      batch_corrected_list$ComBat_adjusted = adjust_combat(mat, meta, batch.1, log2_transformed, par.prior, variable_of_interest = variable_of_interest)
     }
     if("Mean Centering" %in% correction_method){
       cat("\tAdjusting Mean Centering\n")

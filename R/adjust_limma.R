@@ -4,10 +4,11 @@
 #'
 #' @param mat Numeric matrix with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
-#' @param variable_of_interest Column name from the meta file of the column that will be used for variable_of_interest information
+#' @param variable_of_interest Column name from the meta file of the column that will be used for variable_of_interest information that should be retained
 #' @param batch.1 Column name from the meta file of the column that will be used for batch one information
 #' @param batch.2 Column name from the meta file of the column that will be used for batch two information
 #' @param log2_transformed whether data is log2 transformed already or not
+#' @param covariates Column name from the meta file of undesirable numerical variables that should be removed
 #' @param ... other parameters to pass to `limma::removeBatchEffects`
 #'
 #' @return an adjusted expression matrix
@@ -29,13 +30,23 @@ adjust_limma = function(mat,
                         batch.1,
                         batch.2,
                         log2_transformed = TRUE,
+                        covariates = NULL,
                         ...){
+
+
   if (is.null(variable_of_interest)){
     model_matrix <- NULL
   } else {
     total_covariates <- paste0(variable_of_interest,collapse = "+")
     model_matrix <- stats::model.matrix(reformulate(total_covariates), data = as.data.frame(meta))
   }
+
+  if (is.null(covariates)){
+    covariate_model_matrix <- NULL
+  } else {
+    covariate_model_matrix <- stats::model.matrix(stats::reformulate(covariates),data = as.data.frame(meta))[, -1L, drop = FALSE]
+  }
+
   #get the values associated with batch 1 and batch 2
   #input for 'removeBatchEffect is vectors
   b1 = if(is.null(batch.1)) NULL else {meta[[batch.1]]}
@@ -44,7 +55,8 @@ adjust_limma = function(mat,
     if(!log2_transformed) log2(mat) else {mat},
     batch = b1,
     batch2 = b2,
-    covariates = model_matrix,
+    design = model_matrix,
+    covariates = covariate_model_matrix,
     ...
   )
 }

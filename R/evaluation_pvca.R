@@ -38,8 +38,8 @@ evaluation_pvca <- function(mat,
   if (is.null(variable_choices)){
     variable_choices = c(batch.1, variable_of_interest)
   }
-  if (!(length(variable_choices) <= 2)) {
-    message("PVCA requires at least two variable choices")
+  if (length(variable_choices) <= 2) {
+    stop("PVCA requires at least two variable choices")
   }
   if (pvca_pct < 0 | pvca_pct > 1){
     stop("pvca percent should be between 0 and 1")
@@ -71,6 +71,28 @@ evaluation_pvca <- function(mat,
     colnames(out) <- c("Gene", "CV", colnames(mat))
     dataset_pvca <- mat[names(evaluation_cv_pvca),]
   }
+
+  if (!is.matrix(dataset_pvca) || nrow(dataset_pvca) < 2L) {
+    stop("PVCA requires at least two selected genes.")
+  }
+
+  gene_sd <- apply(dataset_pvca, 1L, stats::sd)
+  keep <- is.finite(gene_sd) & gene_sd > 0
+
+  if (sum(keep) < 2L) {
+    stop("Too few variable genes remain for PVCA.")
+  }
+
+  if (any(!keep)) {
+    message(
+      "PVCA excluded ", sum(!keep),
+      " constant or invalid genes."
+    )
+  }
+
+  dataset_pvca <- dataset_pvca[keep, , drop = FALSE]
+  zdataset_pvca <- t(apply(dataset_pvca, 1, scale))
+
   zdataset_pvca <- t(apply(dataset_pvca, 1, scale))
   colnames(zdataset_pvca) <- colnames(dataset_pvca)
   dataset_pvca <- as.data.frame(zdataset_pvca)
@@ -78,7 +100,22 @@ evaluation_pvca <- function(mat,
   dataset_pvca <- dataset_pvca %>% dplyr::relocate(any_of(featColName_pvca))
   matrix_pvca <- as.matrix(dataset_pvca[,-1])
 
-  rownames(meta) <- meta[[1]]
+  sample_index <- match(
+    colnames(matrix_pvca),
+    as.character(meta[[1L]])
+  )
+
+  if (anyDuplicated(meta[[1L]]) || anyNA(sample_index)) {
+    stop(
+      "PVCA needs unique metadata sample IDs ",
+      "matching every expression sample."
+    )
+  }
+
+  meta <- meta[sample_index, , drop = FALSE]
+  rownames(meta) <- colnames(matrix_pvca)
+
+
   eset <- Biobase::ExpressionSet(
     assayData = matrix_pvca,
     phenoData = Biobase::AnnotatedDataFrame(meta)
