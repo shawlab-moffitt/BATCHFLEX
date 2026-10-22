@@ -38,7 +38,7 @@ evaluation_pvca <- function(mat,
   if (is.null(variable_choices)){
     variable_choices = c(batch.1, variable_of_interest)
   }
-  if (length(variable_choices) <= 2) {
+  if (length(unique(variable_choices)) < 2) {
     stop("PVCA requires at least two variable choices")
   }
   if (pvca_pct < 0 | pvca_pct > 1){
