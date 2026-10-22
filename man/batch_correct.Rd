@@ -21,7 +21,8 @@ batch_correct(
   par.prior = TRUE,
   sva_nsv_method = "be",
   cores = 1,
-  parallelize = FALSE
+  parallelize = FALSE,
+  covariates = NULL
 )
 }
 \arguments{
@@ -58,6 +59,8 @@ batch_correct(
 \item{cores}{A numeric input for the number of cores to use if parallel is set to TRUE. Default is set to 1. If none is chosen and parallelize is TRUE default is set to the number of correction methods chosen, if possible.}
 
 \item{parallelize}{A logical operator to determine if correction will be run sequentially or in parallel.}
+
+\item{covariates}{Column name from the meta file of undesirable numerical variables that should be removed}
 }
 \value{
 List object of length of correction_method

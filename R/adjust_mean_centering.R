@@ -1,6 +1,6 @@
 #' Adjust Mean Centering
 #'
-#' Remove batch effects from expression data using Mean Centering from `bapred`.
+#' Center each feature within each batch to zero mean using base R.
 #'
 #' @param mat Numeric matrix with features as rownames and sample names as the column names
 #' @param meta Data frame of sample data with the first column being sample names that match the column names of the matrix
@@ -24,8 +24,21 @@ adjust_mean_centering = function(mat,
                                  batch.1,
                                  log2_transformed){
   if (is.null(batch.1)) stop("Mean Centering requires a batch.1 input")
-  mean_centering_batch = meta[[batch.1]]
-  mean_centering_data = t(if(!log2_transformed) log2(mat) else {mat})
-  mean_center <- bapred::meancenter(as.matrix(mean_centering_data), as.factor(mean_centering_batch))
-  t(mean_center$xadj)
+  m <- as.matrix(if (!log2_transformed) log2(mat) else mat)
+  batch <- as.factor(meta[[batch.1]])
+
+  if (length(batch) != ncol(m) || anyNA(batch)) {
+    stop("Batch metadata must contain one nonmissing value per sample.")
+  }
+
+  if (any(!is.finite(m))) {
+    stop("Mean Centering requires finite expression values after transformation.")
+  }
+
+  for (idx in split(seq_len(ncol(m)), batch, drop = TRUE)) {
+    block <- m[, idx, drop = FALSE]
+    m[, idx] <- sweep(block, 1L, rowMeans(block), FUN = "-")
+  }
+
+  m
 }

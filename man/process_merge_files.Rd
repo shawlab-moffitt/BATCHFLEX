@@ -25,5 +25,6 @@ Process Merge Files
 }
 \examples{
 set.seed(333)
+test_process_merge <- Batch_FLEX(Batch_FLEX_function = c("process_merge_files", "merge_data"), files_tobe_merged_path = "path_to_folder_containing_matrix_and_meta_files")
 
 }

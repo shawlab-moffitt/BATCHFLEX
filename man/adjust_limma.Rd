@@ -11,6 +11,7 @@ adjust_limma(
   batch.1,
   batch.2,
   log2_transformed = TRUE,
+  covariates = NULL,
   ...
 )
 }
@@ -19,13 +20,15 @@ adjust_limma(
 
 \item{meta}{Data frame of sample data with the first column being sample names that match the column names of the matrix}
 
-\item{variable_of_interest}{Column name from the meta file of the column that will be used for variable_of_interest information}
+\item{variable_of_interest}{Column name from the meta file of the column that will be used for variable_of_interest information that should be retained}
 
 \item{batch.1}{Column name from the meta file of the column that will be used for batch one information}
 
 \item{batch.2}{Column name from the meta file of the column that will be used for batch two information}
 
 \item{log2_transformed}{whether data is log2 transformed already or not}
+
+\item{covariates}{Column name from the meta file of undesirable numerical variables that should be removed}
 
 \item{...}{other parameters to pass to \code{limma::removeBatchEffects}}
 }

@@ -4,7 +4,14 @@
 \alias{adjust_combat}
 \title{Adjust ComBat}
 \usage{
-adjust_combat(mat, meta, batch.1, log2_transformed, par.prior)
+adjust_combat(
+  mat,
+  meta,
+  batch.1,
+  log2_transformed,
+  par.prior,
+  variable_of_interest = NULL
+)
 }
 \arguments{
 \item{mat}{Numeric matrix with features as rownames and sample names as the column names}
@@ -16,6 +23,8 @@ adjust_combat(mat, meta, batch.1, log2_transformed, par.prior)
 \item{log2_transformed}{whether data is log2 transformed already or not}
 
 \item{par.prior}{Used in the ComBat method, TRUE indicates parametric adjustments will be used, FALSE indicates non-parametric adjustments will be used}
+
+\item{variable_of_interest}{Column name from the meta file of the column that will be used for variable_of_interest information that should be retained}
 }
 \value{
 an adjusted expression matrix

@@ -19,7 +19,7 @@ adjust_mean_centering(mat, meta, batch.1, log2_transformed)
 an adjusted expression matrix
 }
 \description{
-Remove batch effects from expression data using Mean Centering from \code{bapred}.
+Center each feature within each batch to zero mean using base R.
 }
 \examples{
 set.seed(333)
